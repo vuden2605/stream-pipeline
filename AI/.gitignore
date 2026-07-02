@@ -1,0 +1,7 @@
+/.github
+*.npy
+runs/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

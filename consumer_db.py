@@ -1,7 +1,13 @@
-import asyncio, json, logging
+import asyncio, json, logging, sys
 import asyncpg
 from aiokafka import AIOKafkaConsumer, TopicPartition
 from config import KAFKA_BROKER, TOPIC_COUNTS, DB_URL
+
+# Console Windows mặc định dùng codepage cp125x, không encode được tiếng Việt
+# có dấu trong log → crash UnicodeEncodeError. Ép UTF-8 để chạy được mọi nơi.
+if sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("consumer_db")

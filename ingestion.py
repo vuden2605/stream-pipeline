@@ -1,4 +1,4 @@
-import asyncio, aiohttp, time, logging, hashlib, random, signal, json
+import asyncio, aiohttp, time, logging, hashlib, random, signal, json, sys
 from datetime import datetime, timezone, timedelta
 import aioboto3
 from aiokafka import AIOKafkaProducer
@@ -7,6 +7,13 @@ from config import (
     CAMERAS, INTERVAL_SECONDS, BROWSER_HEADERS,
     AWS_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY, BUCKET_NAME,
 )
+
+# Console Windows mặc định dùng codepage cp125x, không encode được ký tự
+# box-drawing (━) hay tiếng Việt có dấu trong log → crash UnicodeEncodeError.
+# Ép stdout/stderr sang UTF-8 để chạy được trên mọi console, mọi OS.
+if sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 MAX_CONCURRENT_REQUESTS = 30
 COOKIE_REFRESH_INTERVAL = 3600
