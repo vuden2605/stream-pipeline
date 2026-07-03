@@ -37,6 +37,43 @@ with open(_CAMERAS_FILE, encoding="utf-8") as _f:
 _CAMERA_LIMIT = os.getenv("CAMERA_LIMIT")
 _CAMERA_LIMIT = int(_CAMERA_LIMIT) if _CAMERA_LIMIT else None
 
+
+def _extract_edge_id(zone: dict) -> str | None:
+    # Dùng GraphId đầy đủ của Valhalla (edge_id_full.value) làm edge_id DUY
+    # NHẤT trong toàn bộ pipeline (Kafka/Redis/Flink) — KHÔNG dùng "id" ngắn
+    # (edge_id_full.id) nữa. "id" chỉ là số thứ tự cục bộ trong 1 tile bản đồ
+    # (vd 2 tile khác nhau đều có thể có edge "id"=100015 riêng), không xác
+    # định duy nhất 1 con đường trên toàn thành phố — còn "value" mới là
+    # GraphId toàn cục thật (gộp tile_id+level+id), khớp đúng định dạng
+    # default_traffic.json và Valhalla graph thật dùng.
+    #
+    # cameras_with_zones_merged.json không đồng nhất: ~68% zone có "edge_id"
+    # là dict lồng (chính là nội dung edge_id_full, value nằm trong đó luôn),
+    # ~32% còn lại "edge_id" là số nguyên ngắn, value nằm ở "edge_id_full"
+    # riêng — cần xử lý cả 2 dạng.
+    eid = zone.get("edge_id")
+    if isinstance(eid, dict):
+        value = eid.get("value")
+    else:
+        full = zone.get("edge_id_full") or {}
+        value = full.get("value")
+    return str(value) if value is not None else None
+
+
+def _build_edges(cam: dict) -> list[dict]:
+    edges = []
+    for zone in cam.get("zones", {}).values():
+        edge_id = _extract_edge_id(zone)
+        if edge_id is None:
+            continue
+        edges.append({
+            "edge_id":   edge_id,
+            "way_id":    zone.get("way_id"),
+            "direction": zone.get("side"),
+        })
+    return edges
+
+
 CAMERAS = [
     {
         "id": cam["cam_id"],
@@ -44,18 +81,23 @@ CAMERAS = [
             "https://giaothong.hochiminhcity.gov.vn:8007/Render/CameraHandler.ashx"
             f"?id={cam['cam_id']}&bg=black&w=500&h=500"
         ),
-        "edges": [
-            {
-                "edge_id":   str(zone["edge_id"]),
-                "way_id":    zone.get("way_id"),
-                "direction": zone.get("side"),
-            }
-            for zone in cam.get("zones", {}).values()
-        ],
+        "edges": _build_edges(cam),
     }
     for cam in _camera_configs
     if cam.get("zones")
 ][:_CAMERA_LIMIT]
+
+# Tốc độ mặc định (free-flow) từng edge, theo GraphId đầy đủ — dùng làm cơ sở
+# nhân với TWF thay vì hardcode 50km/h. Nếu edge không có trong file này,
+# consumer_ai.py tự fallback về TWF_MAX_SPEED_KMH.
+_DEFAULT_TRAFFIC_FILE = Path(__file__).parent / "default_traffic.json"
+with open(_DEFAULT_TRAFFIC_FILE, encoding="utf-8") as _f:
+    _default_traffic = json.load(_f)
+
+DEFAULT_EDGE_SPEED_KMH = {
+    str(entry["edge_id"]): entry["speed_kph"]
+    for entry in _default_traffic
+}
 
 BROWSER_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",

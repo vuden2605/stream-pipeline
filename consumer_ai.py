@@ -22,7 +22,7 @@ from src.data import config_loader
 from config import (
     KAFKA_BROKER, TOPIC_RAW_IMAGES, TRAFFIC_EVENT_TOPIC,
     AI_MODEL_PATH, CONFIDENCE, TWF_MAX_SPEED_KMH,
-    CAMERAS,
+    CAMERAS, DEFAULT_EDGE_SPEED_KMH,
     AWS_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY, BUCKET_NAME,
 )
 
@@ -100,11 +100,9 @@ async def process_frame(producer, s3_client, msg) -> None:
             hciWeights=_HCI_WEIGHTS,
             cameraThresholds=cameraThresholds,
         )
-        speed_kmh = round(twf * TWF_MAX_SPEED_KMH, 2)
-
         log.info(
-            "[%s] TWF=%.2f HCI=%.2f MEU=%.2f occupancy=%.1f%% -> speed=%.1fkm/h",
-            cam_id, twf, hci, meu, preciseOccupancyRatio, speed_kmh,
+            "[%s] TWF=%.2f HCI=%.2f MEU=%.2f occupancy=%.1f%%",
+            cam_id, twf, hci, meu, preciseOccupancyRatio,
         )
 
         edges = CAMERA_EDGE_MAP.get(cam_id)
@@ -114,6 +112,18 @@ async def process_frame(producer, s3_client, msg) -> None:
 
         for edge_id in edges:
             meta = EDGE_META.get(edge_id, {})
+            # speed_kmh = TWF x tốc độ mặc định (free-flow) của CHÍNH edge đó,
+            # tra trong default_traffic.json bằng đúng edge_id (giờ edge_id đã
+            # LÀ GraphId đầy đủ, khớp thẳng với key của default_traffic.json,
+            # không cần trường graph_value riêng nữa — xem config.py). Mỗi edge
+            # của cùng 1 camera có thể có tốc độ mặc định khác nhau (khác
+            # road_class), nên phải tính riêng từng edge — không dùng chung 1
+            # speed cho cả camera. Edge không có trong default_traffic.json
+            # (phần lớn, ~67%) thì fallback về TWF_MAX_SPEED_KMH (mặc định 50).
+            default_speed = DEFAULT_EDGE_SPEED_KMH.get(edge_id)
+            base_speed_kmh = default_speed if default_speed is not None else TWF_MAX_SPEED_KMH
+            speed_kmh = round(twf * base_speed_kmh, 2)
+
             traffic_event = {
                 "event_id":    f"cam_{edge_id}_{ts_ms}",
                 # Tái dùng nhánh "gps" của Flink job (EWMA speed) cho speed suy ra

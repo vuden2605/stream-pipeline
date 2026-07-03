@@ -48,10 +48,28 @@ BATCH_WINDOW_MS        = int(os.getenv("BATCH_WINDOW_MS",    str(30_000)))
 _CAMERAS_FILE = Path(__file__).parent / "cameras_with_zones_merged.json"
 with open(_CAMERAS_FILE, encoding="utf-8") as _f:
     _camera_configs = json.load(_f)
+
+
+def _extract_edge_id(zone: dict) -> str | None:
+    # Phải khớp CHÍNH XÁC logic config.py:_extract_edge_id — dùng GraphId đầy
+    # đủ (edge_id_full.value) làm edge_id, KHÔNG dùng "id" ngắn (chỉ là số
+    # thứ tự cục bộ trong 1 tile, không xác định duy nhất 1 con đường toàn
+    # thành phố). consumer_ai.py giờ publish edge_id = GraphId đầy đủ, nên
+    # TOTAL_EDGES ở đây phải đếm đúng cùng không gian ID đó.
+    eid = zone.get("edge_id")
+    if isinstance(eid, dict):
+        value = eid.get("value")
+    else:
+        full = zone.get("edge_id_full") or {}
+        value = full.get("value")
+    return str(value) if value is not None else None
+
+
 TOTAL_EDGES = len({
-    str(zone["edge_id"])
+    edge_id
     for cam in _camera_configs
     for zone in cam.get("zones", {}).values()
+    if (edge_id := _extract_edge_id(zone)) is not None
 }) or 1  # tránh chia/so sánh với 0 nếu file rỗng
 
 # EWMA params
