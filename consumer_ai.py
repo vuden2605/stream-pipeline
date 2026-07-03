@@ -1,24 +1,34 @@
-import asyncio, json, io, logging, signal
+import asyncio, json, io, logging, signal, sys
 import numpy as np
 import aioboto3
 from PIL import Image
+from pathlib import Path
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
-from ultralytics import YOLO
+
+# Console Windows mặc định dùng codepage cp125x, không encode được tiếng Việt
+# có dấu trong log → crash UnicodeEncodeError. Ép UTF-8 để chạy được mọi nơi.
+if sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
+# Thư mục AI/ có package riêng (src/core, src/data) import kiểu tương đối
+# ("from src.core... import ...") — cần thêm AI/ vào sys.path để dùng được
+# từ consumer_ai.py chạy ở root repo.
+sys.path.insert(0, str(Path(__file__).parent / "AI"))
+from src.core.detector import TrafficDetector
+from src.core import metrics
+from src.data import config_loader
+
 from config import (
     KAFKA_BROKER, TOPIC_RAW_IMAGES, TRAFFIC_EVENT_TOPIC,
-    MODEL_PATH, CONFIDENCE,
-    CLASS_NAMES as LABEL_MAP,
+    AI_MODEL_PATH, CONFIDENCE, TWF_MAX_SPEED_KMH,
+    CAMERAS, DEFAULT_EDGE_SPEED_KMH,
     AWS_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY, BUCKET_NAME,
 )
-from pathlib import Path
-
-CAMERA_CONFIG_PATH = Path("cameras.json")
-with open(CAMERA_CONFIG_PATH, "r", encoding="utf-8") as f:
-    camera_configs = json.load(f)
 
 CAMERA_EDGE_MAP = {
     cam["id"]: [e["edge_id"] for e in cam.get("edges", [])]
-    for cam in camera_configs
+    for cam in CAMERAS
 }
 
 EDGE_META = {
@@ -26,16 +36,20 @@ EDGE_META = {
         "way_id":    edge.get("way_id"),
         "direction": edge.get("direction"),
     }
-    for cam in camera_configs
+    for cam in CAMERAS
     for edge in cam.get("edges", [])
 }
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("consumer_ai")
 
-model = YOLO(MODEL_PATH)
-log.info("Model loaded: %s", MODEL_PATH)
-log.info("Class mapping: %s", LABEL_MAP)
+detector = TrafficDetector(AI_MODEL_PATH)
+log.info("AI model loaded: %s", AI_MODEL_PATH)
+
+# Config tĩnh (hệ số MEU, trọng số HCI) — nạp 1 lần, dùng chung cho mọi camera.
+# Ngưỡng riêng từng camera (meuMax/orMax/hciMax) tra theo cam_id trong process_frame.
+_MEU_COEFFICIENTS = config_loader.getMeuCoefficients()
+_HCI_WEIGHTS = config_loader.getHciWeights()
 
 CONCURRENCY = 4
 _sem = asyncio.Semaphore(CONCURRENCY)
@@ -60,45 +74,75 @@ async def process_frame(producer, s3_client, msg) -> None:
         image_data = await download_from_s3(s3_client, s3_key)
         image      = np.array(Image.open(io.BytesIO(image_data)).convert("RGB"))
 
-        results = (await asyncio.to_thread(model, image, conf=CONFIDENCE, verbose=False))[0]
+        r0 = await asyncio.to_thread(detector.predict, image, conf=CONFIDENCE, save=False)
 
-        counts: dict[str, int] = {}
-        for box in results.boxes:
-            cls_id   = int(box.cls[0])
-            cls_name = LABEL_MAP.get(cls_id, f"class_{cls_id}")
-            counts[cls_name] = counts.get(cls_name, 0) + 1
+        # Tiền điều kiện Road Mask cần vài chu kỳ tích luỹ heatmap mới có ý nghĩa
+        # (xem AI/src/core/metrics.py). "Tạm thời" gọi lại mỗi frame giống AI/main.py
+        # gốc — production thật nên chuyển sang lịch định kỳ (vd hàng ngày/hàng tháng).
+        await asyncio.to_thread(metrics.updateHeatmapByCameraId, r0, cam_id)
+        await asyncio.to_thread(metrics.generateAndSaveRoadMask, cam_id, 1)
 
-        total = sum(counts.values())
+        preciseOccupancyRatio = metrics.calculatePreciseOccupancyRatio(r0, cam_id)
+        rawOccupancyRatio     = metrics.calculateOccupancyRatio(r0)
+        meu                   = metrics.calculateMotorcycleEquivalentUnit(r0, _MEU_COEFFICIENTS)
 
-        # ── LOG KẾT QUẢ ĐẾM ─────────────────────────────────────────────
-        count_str = ", ".join(f"{k}={v}" for k, v in sorted(counts.items())) or "none"
-        log.info("[%s] detected %d vehicles | %s", cam_id, total, count_str)
-        # ─────────────────────────────────────────────────────────────────
+        cameraThresholds = config_loader.getCameraThresholds(cam_id)
+        hci = metrics.calculateHybridCongestionIndex(
+            meu, rawOccupancyRatio,
+            cameraThresholds.get("meuMax", 1.0), cameraThresholds.get("orMax", 1.0),
+            _HCI_WEIGHTS,
+        )
+        twf = metrics.calculateTrafficWeightFactor(
+            preciseOccupancyRatio=preciseOccupancyRatio,
+            r=r0,
+            cameraId=cam_id,
+            meuCoefficients=_MEU_COEFFICIENTS,
+            hciWeights=_HCI_WEIGHTS,
+            cameraThresholds=cameraThresholds,
+        )
+        log.info(
+            "[%s] TWF=%.2f HCI=%.2f MEU=%.2f occupancy=%.1f%%",
+            cam_id, twf, hci, meu, preciseOccupancyRatio,
+        )
 
         edges = CAMERA_EDGE_MAP.get(cam_id)
         if not edges:
-            log.warning("[%s] no edge mapping — result discarded (total=%d)", cam_id, total)
+            log.warning("[%s] no edge mapping — result discarded", cam_id)
             return
 
         for edge_id in edges:
             meta = EDGE_META.get(edge_id, {})
+            # speed_kmh = TWF x tốc độ mặc định (free-flow) của CHÍNH edge đó,
+            # tra trong default_traffic.json bằng đúng edge_id (giờ edge_id đã
+            # LÀ GraphId đầy đủ, khớp thẳng với key của default_traffic.json,
+            # không cần trường graph_value riêng nữa — xem config.py). Mỗi edge
+            # của cùng 1 camera có thể có tốc độ mặc định khác nhau (khác
+            # road_class), nên phải tính riêng từng edge — không dùng chung 1
+            # speed cho cả camera. Edge không có trong default_traffic.json
+            # (phần lớn, ~67%) thì fallback về TWF_MAX_SPEED_KMH (mặc định 50).
+            default_speed = DEFAULT_EDGE_SPEED_KMH.get(edge_id)
+            base_speed_kmh = default_speed if default_speed is not None else TWF_MAX_SPEED_KMH
+            speed_kmh = round(twf * base_speed_kmh, 2)
+
             traffic_event = {
-                "event_id":       f"cam_{edge_id}_{ts_ms}",
-                "source_type":    "camera",
-                "edge_id":        edge_id,
-                "way_id":         meta.get("way_id"),
-                "timestamp":      ts_ms,
-                "vehicle_counts": counts,
-                "total_vehicles": total,
-                "speed_kmh":      None,  # Placeholder, có thể bổ sung nếu có model đo tốc độ
-                "confidence":      None
+                "event_id":    f"cam_{edge_id}_{ts_ms}",
+                # Tái dùng nhánh "gps" của Flink job (EWMA speed) cho speed suy ra
+                # từ camera qua TWF — không có nguồn GPS thật trong hệ thống này.
+                "source_type": "gps",
+                "edge_id":     edge_id,
+                "way_id":      meta.get("way_id"),
+                "timestamp":   ts_ms,
+                "speed_kmh":   speed_kmh,
+                # AI/metrics.py chưa có điểm tin cậy riêng cho TWF — đặt cố định 1.0,
+                # có thể cải tiến sau (vd suy từ conf trung bình của detection).
+                "confidence":  1.0,
             }
             await producer.send_and_wait(
                 TRAFFIC_EVENT_TOPIC,
                 key=edge_id.encode("utf-8"),
                 value=json.dumps(traffic_event).encode(),
             )
-            log.info("[%s] -> published edge=%s  total=%d", cam_id, edge_id, total)
+            log.info("[%s] -> published edge=%s speed=%.1fkm/h", cam_id, edge_id, speed_kmh)
 
 
 async def main():
