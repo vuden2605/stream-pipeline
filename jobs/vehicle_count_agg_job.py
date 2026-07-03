@@ -192,10 +192,15 @@ class DeduplicateFunction(KeyedProcessFunction):
         ttl = (
             StateTtlConfig
             .new_builder(StateTime.milliseconds(DEDUP_TTL_MS))
-            # OnWriteOnly: TTL chạy từ lần ghi đầu tiên, không reset khi đọc.
-            # Đảm bảo fingerprint tự xoá sau DEDUP_TTL_MS kể từ lúc event gốc
-            # được nhận, bất kể có bao nhiêu duplicate đến sau.
-            .set_update_type(StateTtlConfig.UpdateType.OnWriteOnly)
+            # [FIX] PyFlink 1.18 không có StateTtlConfig.UpdateType.OnWriteOnly
+            # (chỉ có Disabled/OnCreateAndWrite/OnReadAndWrite) — code gốc dùng
+            # tên không tồn tại, khiến open() luôn AttributeError và job crash-loop
+            # (RESTARTING vô hạn) ngay khi TaskManager khởi tạo operator này.
+            # OnCreateAndWrite tương đương ý định "OnWriteOnly" ở đây: mỗi
+            # dedup_key chỉ .put() đúng 1 lần duy nhất (put() chỉ gọi khi
+            # contains() còn False), nên "tạo" và "ghi (duy nhất)" là cùng 1
+            # thời điểm — TTL chạy từ đó, không reset khi đọc qua contains().
+            .set_update_type(StateTtlConfig.UpdateType.OnCreateAndWrite)
             .set_state_visibility(StateTtlConfig.StateVisibility.NeverReturnExpired)
             .build()
         )
