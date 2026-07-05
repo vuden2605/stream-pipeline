@@ -39,24 +39,17 @@ _CAMERA_LIMIT = int(_CAMERA_LIMIT) if _CAMERA_LIMIT else None
 
 
 def _extract_edge_id(zone: dict) -> str | None:
-    # Dùng GraphId đầy đủ của Valhalla (edge_id_full.value) làm edge_id DUY
-    # NHẤT trong toàn bộ pipeline (Kafka/Redis/Flink) — KHÔNG dùng "id" ngắn
-    # (edge_id_full.id) nữa. "id" chỉ là số thứ tự cục bộ trong 1 tile bản đồ
-    # (vd 2 tile khác nhau đều có thể có edge "id"=100015 riêng), không xác
-    # định duy nhất 1 con đường trên toàn thành phố — còn "value" mới là
-    # GraphId toàn cục thật (gộp tile_id+level+id), khớp đúng định dạng
-    # default_traffic.json và Valhalla graph thật dùng.
-    #
-    # cameras_with_zones_merged.json không đồng nhất: ~68% zone có "edge_id"
-    # là dict lồng (chính là nội dung edge_id_full, value nằm trong đó luôn),
-    # ~32% còn lại "edge_id" là số nguyên ngắn, value nằm ở "edge_id_full"
-    # riêng — cần xử lý cả 2 dạng.
-    eid = zone.get("edge_id")
-    if isinstance(eid, dict):
-        value = eid.get("value")
-    else:
-        full = zone.get("edge_id_full") or {}
-        value = full.get("value")
+    # Lấy GraphId đầy đủ của Valhalla từ zone["mapped_edge"]["edge_id"]["value"]
+    # — đây là edge do Valhalla map-matching trả về, nguồn đáng tin cậy duy
+    # nhất, luôn có mặt và luôn đồng nhất 1 schema ở mọi zone (khác với
+    # zone["edge_id"]/zone["edge_id_full"] ở cấp trên, vốn không đồng nhất
+    # giữa các zone). Dùng "value" (GraphId toàn cục = tile_id+level+id),
+    # KHÔNG dùng "id" ngắn (chỉ là số thứ tự cục bộ trong 1 tile bản đồ, không
+    # xác định duy nhất 1 con đường trên toàn thành phố) — "value" mới khớp
+    # đúng định dạng default_traffic.json và Valhalla graph thật dùng.
+    mapped = zone.get("mapped_edge") or {}
+    eid = mapped.get("edge_id") or {}
+    value = eid.get("value")
     return str(value) if value is not None else None
 
 

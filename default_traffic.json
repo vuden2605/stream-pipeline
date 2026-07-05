@@ -1,183 +1,648 @@
 [
   {
-    "edge_id": 20267167225,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 39493856761,
-    "speed_kph": 50,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 84557187208,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 86234908808,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 97106544776,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 97442089096,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 126735108232,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 164651616392,
-    "speed_kph": 94,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 166396446856,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 174147520648,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 237196570105,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 237230124537,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 293399971976,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 295883271665,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 298936453256,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 298970007688,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 300949719176,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 318968449160,
-    "speed_kph": 84,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 324639148168,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 327390883313,
-    "speed_kph": 43,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 331987568776,
-    "speed_kph": 74,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 336181872776,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 336785852552,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 340711721096,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 343765174408,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 344838916232,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 347858815112,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 348529903752,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 371279808648,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 387083946120,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 387184609416,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 396714339825,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 396982503560,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 398324952561,
+    "edge_id": 9831738865,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 399566194824,
+    "edge_id": 14395141617,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 14462250481,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 26743172593,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 31977663985,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 33118514673,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 37883244017,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 42882854385,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 48922652145,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 49392414193,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 55901974001,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 66941382137,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 67683941074,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 67717495506,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 106003102418,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 114152196232,
     "speed_kph": 73,
     "road_class": "trunk"
   },
   {
-    "edge_id": 400002402440,
+    "edge_id": 115662145672,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 117104986248,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 118246108657,
+    "speed_kph": 77,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 121735497864,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 122641467528,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 122675021960,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 124654733448,
     "speed_kph": 90,
     "road_class": "trunk"
+  },
+  {
+    "edge_id": 125023832200,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 125795855857,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 125862964721,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 129117744625,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 142673463432,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 143143497201,
+    "speed_kph": 40,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 148344162440,
+    "speed_kph": 70,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 154987939976,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 155692583048,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 155893909640,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 159886887048,
+    "speed_kph": 72,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 160490866824,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 164416735368,
+    "speed_kph": 70,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 167470188680,
+    "speed_kph": 70,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 168543930504,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 171563829384,
+    "speed_kph": 60,
+    "road_class": "motorway"
+  },
+  {
+    "edge_id": 172167809160,
+    "speed_kph": 37,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 172234918024,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 178811586696,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 178878695560,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 178945804424,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 179784665224,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 179885328520,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 184146741384,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 184213850248,
+    "speed_kph": 72,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 186260670600,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 186999139825,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 210788960392,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 210889623688,
+    "speed_kph": 30,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 220016429192,
+    "speed_kph": 37,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 220049983624,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 220351973512,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 220687517832,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 220754626696,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 220821735560,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 220989507720,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 223271209096,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 223707416712,
+    "speed_kph": 37,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 223942569457,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 229579442312,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 230787401864,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 231626262664,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 232330905736,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 232398014600,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 240786622600,
+    "speed_kph": 72,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 243672303752,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 244410501256,
+    "speed_kph": 40,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 245048035464,
+    "speed_kph": 70,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 248705468552,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 248739022984,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 249712101512,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 250181863560,
+    "speed_kph": 94,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 250416744584,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 256758532232,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 256892749960,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 257630947464,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 257832274056,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 259006679176,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 261254826120,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 261590642161,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 261925914760,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 264308279432,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 264375388296,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 264409214449,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 268469029000,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 268502855153,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 270549675505,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 272462006408,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 273300867208,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 274441717896,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 274508826760,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 275146360968,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 275851004040,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 276052330632,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 284642536953,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 284676091385,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 286420921841,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 303500127729,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 303533682161,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 310882102769,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 312257834481,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 313532902905,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 319303993480,
+    "speed_kph": 37,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 322055728625,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 322257055217,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 323666341361,
+    "speed_kph": 40,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 323733450225,
+    "speed_kph": 40,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 326887566833,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 339168488945,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 344234936456,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 346348865672,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 346449528968,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 354267711624,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 364568922248,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 367756593288,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 368461508081,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 369266814449,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 369333923313,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 374774091218,
+    "speed_kph": 50,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 374941874906,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 376481017329,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 380171733128,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 391110749689,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 393727723656,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 394231311857,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 394264866289,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
     "edge_id": 402490063570,
@@ -185,623 +650,368 @@
     "road_class": "service_other"
   },
   {
-    "edge_id": 407082387592,
-    "speed_kph": 77,
-    "road_class": "trunk"
+    "edge_id": 413055348217,
+    "speed_kph": 60,
+    "road_class": "secondary"
   },
   {
-    "edge_id": 407585975793,
-    "speed_kph": 50,
-    "road_class": "tertiary"
+    "edge_id": 416717142738,
+    "speed_kph": 30,
+    "road_class": "residential"
   },
   {
-    "edge_id": 407921248392,
+    "edge_id": 437818247304,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 408625891464,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 408693000328,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 421343021192,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 425000454280,
-    "speed_kph": 77,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 425034008712,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 425403107464,
+    "edge_id": 443757381768,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 426711730312,
-    "speed_kph": 50,
+    "edge_id": 455098779784,
+    "speed_kph": 113,
     "road_class": "primary"
   },
   {
-    "edge_id": 433925933192,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 434127259784,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 444764014728,
-    "speed_kph": 60,
+    "edge_id": 455132334216,
+    "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 450736703624,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 451441346696,
+    "edge_id": 466003970184,
     "speed_kph": 60,
     "road_class": "trunk"
   },
   {
-    "edge_id": 452145989768,
-    "speed_kph": 56,
-    "road_class": "primary"
+    "edge_id": 466071079048,
+    "speed_kph": 60,
+    "road_class": "trunk"
   },
   {
-    "edge_id": 549017906673,
+    "edge_id": 475164601841,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 591195827697,
-    "speed_kph": 50,
-    "road_class": "tertiary"
+    "edge_id": 475433037297,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
-    "edge_id": 591229382129,
-    "speed_kph": 50,
-    "road_class": "tertiary"
+    "edge_id": 476171234801,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
-    "edge_id": 642366064776,
-    "speed_kph": 70,
+    "edge_id": 476808497288,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 477680912520,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 477681184241,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 481875216520,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 482076543112,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 482277869704,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 483653601416,
+    "speed_kph": 60,
     "road_class": "primary"
   },
   {
-    "edge_id": 646929739249,
+    "edge_id": 483989145736,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 487545915528,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 489358126577,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 489659844744,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 490028943496,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 493350832264,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 494994999432,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 501034797192,
+    "speed_kph": 89,
+    "road_class": "motorway"
+  },
+  {
+    "edge_id": 501101906056,
+    "speed_kph": 84,
+    "road_class": "motorway"
+  },
+  {
+    "edge_id": 517610686600,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 530562697352,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 530596251784,
+    "speed_kph": 37,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 534824110216,
+    "speed_kph": 72,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 537676236936,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 551534217352,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 551668435080,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 556332501128,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 559318845576,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 559654389896,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 572170193032,
+    "speed_kph": 50,
+    "road_class": "motorway"
+  },
+  {
+    "edge_id": 577404684424,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 578310654088,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 579954821256,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 627434614257,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 641028520658,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 641062075090,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 654580149745,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 654647258609,
     "speed_kph": 40,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 653975898248,
-    "speed_kph": 70,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 654949248497,
-    "speed_kph": 60,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 658572855432,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 660284131464,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 669645817992,
-    "speed_kph": 70,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 677329782920,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 713971222664,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 727829203080,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 727963420808,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 756149415409,
-    "speed_kph": 50,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 756249806984,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 767826357745,
+    "edge_id": 656224316913,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 864798394504,
-    "speed_kph": 60,
-    "road_class": "primary"
+    "edge_id": 670686277105,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
-    "edge_id": 866308343944,
-    "speed_kph": 75,
-    "road_class": "primary"
+    "edge_id": 670820494833,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
-    "edge_id": 872213923976,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 873119893640,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 881810491528,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 883119114376,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 884293519496,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 885233043592,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 886742993032,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 888085170312,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 891407059080,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 896406669448,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 899124578440,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 905902845425,
-    "speed_kph": 50,
+    "edge_id": 677330054641,
+    "speed_kph": 63,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 906171009160,
+    "edge_id": 686087761393,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 698570010097,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 698637118961,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 730245393905,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 730547383793,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 730815819249,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 730849373681,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 731357051602,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 733198183921,
+    "speed_kph": 89,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 783563386353,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 807856523400,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 906640771208,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 906909206664,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 910902184072,
-    "speed_kph": 75,
+    "edge_id": 808326285448,
+    "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 911304837256,
-    "speed_kph": 75,
+    "edge_id": 842954459272,
+    "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 913318103176,
-    "speed_kph": 75,
+    "edge_id": 869865113736,
+    "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 916136675464,
-    "speed_kph": 75,
+    "edge_id": 870334875784,
+    "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 916639991944,
+    "edge_id": 904828831880,
     "speed_kph": 80,
     "road_class": "primary"
   },
   {
-    "edge_id": 917076199560,
+    "edge_id": 904963049608,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 927847172232,
     "speed_kph": 80,
     "road_class": "primary"
   },
   {
-    "edge_id": 917210417288,
+    "edge_id": 928753141896,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 928920914056,
     "speed_kph": 80,
     "road_class": "primary"
   },
   {
-    "edge_id": 918988802184,
-    "speed_kph": 80,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 920263870600,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 921505384584,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 921538939016,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 927981389960,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 933048380913,
-    "speed_kph": 60,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 934994266248,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 939725441160,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 943080884360,
-    "speed_kph": 89,
-    "road_class": "motorway"
-  },
-  {
-    "edge_id": 943483537544,
-    "speed_kph": 100,
-    "road_class": "motorway"
-  },
-  {
-    "edge_id": 943651309704,
-    "speed_kph": 100,
-    "road_class": "motorway"
-  },
-  {
-    "edge_id": 943785527432,
-    "speed_kph": 89,
-    "road_class": "motorway"
-  },
-  {
-    "edge_id": 943852636296,
-    "speed_kph": 89,
-    "road_class": "motorway"
-  },
-  {
-    "edge_id": 944557279368,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 949154508273,
-    "speed_kph": 60,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 949288726001,
-    "speed_kph": 60,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 951670818952,
-    "speed_kph": 80,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 952409016456,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 953382094984,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 955798285809,
-    "speed_kph": 60,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 958918576264,
-    "speed_kph": 100,
-    "road_class": "motorway"
-  },
-  {
-    "edge_id": 961569376392,
-    "speed_kph": 64,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 964555992561,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 965931452552,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 966535432328,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 968112490632,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 971635705992,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 977105350129,
-    "speed_kph": 60,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 978011048072,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 978044602504,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 978111711368,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 979286116488,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 979755878536,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 981769144456,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 985862785160,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 987775387784,
-    "speed_kph": 80,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 988245149832,
-    "speed_kph": 80,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 988882684040,
-    "speed_kph": 80,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 993278314632,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 993513195656,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 993848739976,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 995862005896,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 998009489544,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 999150340232,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 999183894664,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1000492517512,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1003344644232,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1006934968456,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1007840938120,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1008881125512,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1015793338504,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1017403951240,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1019786315912,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1020423850120,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1021564700808,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1021933799560,
-    "speed_kph": 45,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1023074650248,
-    "speed_kph": 64,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1027805825160,
-    "speed_kph": 38,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1027872934024,
-    "speed_kph": 38,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1027940042888,
-    "speed_kph": 38,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1032503445640,
+    "edge_id": 1039314995336,
     "speed_kph": 60,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1038945896584,
+    "edge_id": 1040355182728,
     "speed_kph": 90,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1039717648520,
-    "speed_kph": 29,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1043609962632,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1044415269000,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1044448823432,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1044515932296,
-    "speed_kph": 90,
+    "edge_id": 1040992716936,
+    "speed_kph": 60,
     "road_class": "trunk"
   },
   {
@@ -810,403 +1020,953 @@
     "road_class": "service_other"
   },
   {
-    "edge_id": 1046260762760,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1048911562888,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1057031735432,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1057065289864,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1065990768776,
+    "edge_id": 1047066069128,
     "speed_kph": 90,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1067064510600,
+    "edge_id": 1051528808584,
     "speed_kph": 60,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1070822606984,
+    "edge_id": 1051763689608,
     "speed_kph": 90,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1070923270280,
+    "edge_id": 1051864352904,
     "speed_kph": 90,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1074345822344,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1074916247688,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1075855771784,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1084949022856,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1085049686152,
+    "edge_id": 1051931461768,
     "speed_kph": 60,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1085217458312,
+    "edge_id": 1052199897224,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1055219796104,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1063306414216,
     "speed_kph": 90,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1088438683784,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1090619721864,
-    "speed_kph": 45,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1091525691528,
+    "edge_id": 1063709067400,
     "speed_kph": 90,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1096021985416,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1096927955080,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1099142547592,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1101793347720,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1101860456584,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1108772669576,
-    "speed_kph": 77,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1109309540488,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1110920153224,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1112497211528,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1112631429256,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1112664983688,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1113235409032,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1113268963464,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1129945516168,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1131119921288,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1138468341896,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1138535450760,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1138669668488,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1138770331784,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1147125385352,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1150648600712,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1151151917192,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1151319689352,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1151588124808,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1152359876744,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1154171816072,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1154507360392,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1155077785736,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1165647431816,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1166888945800,
-    "speed_kph": 64,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1167794915464,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1168096905352,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1168264677512,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1175244271089,
+    "edge_id": 1065319951857,
     "speed_kph": 40,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 1184001977841,
+    "edge_id": 1066930564593,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1067232282760,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1069682028017,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1071930174961,
     "speed_kph": 40,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 1189068697073,
+    "edge_id": 1074077658609,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1077399547377,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1079144377841,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1079412813297,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1079446367729,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1081492916360,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1084513086961,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1085251284465,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1085922373105,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1087029669361,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1087063223793,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1091056201201,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1098203295217,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1098975047153,
     "speed_kph": 40,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 1192826521736,
+    "edge_id": 1108001189361,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1119140989064,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1119409424520,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1120114067592,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1124811959793,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1128603610609,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1128838491633,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1128905328776,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1132965686769,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1134408527345,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1141287185905,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1153836543473,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1156420234737,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1156453789169,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1157795966449,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1166889217521,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1166922771953,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1183028899313,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1183901314545,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1184102641137,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1190477983217,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1192289922545,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1209402682865,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1209436237297,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1212959452657,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1212993007089,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1218495933937,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1220844744177,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1220911853041,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1220945407473,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1221012244616,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1221045799048,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1221683333256,
     "speed_kph": 60,
     "road_class": "primary"
   },
   {
-    "edge_id": 1192860076168,
+    "edge_id": 1222958401672,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1223193282696,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1223428163720,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1223998589064,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1225110518482,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 1225407875208,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1227588913288,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1228058947057,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1228092501489,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1228193164785,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1228360936945,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1228796872840,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1228830427272,
     "speed_kph": 60,
     "road_class": "primary"
   },
   {
-    "edge_id": 1196953716872,
+    "edge_id": 1229065308296,
+    "speed_kph": 94,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1229098862728,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1229400852616,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1229837331953,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1229971277960,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1230004832392,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1230843693192,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1231078574216,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1231582162417,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1231783217288,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1234937333896,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1235004442760,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1237219035272,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1237286144136,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1238997691889,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1240373151880,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1241010686088,
     "speed_kph": 75,
     "road_class": "primary"
   },
   {
-    "edge_id": 1203396167816,
+    "edge_id": 1241178458248,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1241916927473,
+    "speed_kph": 60,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1242050873480,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1242117982344,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1242588016113,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1242621570545,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1243627931784,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1244366129288,
+    "speed_kph": 80,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1244567455880,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1244970109064,
     "speed_kph": 75,
     "road_class": "primary"
   },
   {
-    "edge_id": 1207691135112,
+    "edge_id": 1245272098952,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1245708306568,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1247620909192,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1248291997832,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1249835501704,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1249969991153,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1250506862065,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1253291608200,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1254634057201,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1254868938225,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1256009517192,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1257049976305,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1259734330865,
+    "speed_kph": 60,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1259902103025,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1260505811080,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1261110062577,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1261143617009,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1261412052465,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1261445606897,
+    "speed_kph": 60,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1261680487921,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1262519348721,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1262754229745,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1263055947912,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1263056219633,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1263391763953,
+    "speed_kph": 60,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1263525709960,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1263794145416,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1263928363144,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1264599451784,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1265069485553,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1265404758152,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1266545608840,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1266612717704,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1266948533745,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1267149860337,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1267787122824,
     "speed_kph": 29,
     "road_class": "primary"
   },
   {
-    "edge_id": 1208026679432,
+    "edge_id": 1268055558280,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1208899094664,
-    "speed_kph": 50,
-    "road_class": "trunk"
+    "edge_id": 1268089112712,
+    "speed_kph": 57,
+    "road_class": "primary"
   },
   {
-    "edge_id": 1208899366385,
+    "edge_id": 1268189776008,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1268357548168,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1268391374321,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1268559146481,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 1211818330248,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1219200305288,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1222522194056,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1223495272584,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1223965034632,
+    "edge_id": 1269599333873,
     "speed_kph": 60,
-    "road_class": "trunk"
+    "road_class": "secondary"
   },
   {
-    "edge_id": 1234736279025,
+    "edge_id": 1269699997169,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1269968432625,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 1242890006001,
-    "speed_kph": 40,
+    "edge_id": 1271176120456,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1271746545800,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1272384351729,
+    "speed_kph": 60,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 1251211505137,
+    "edge_id": 1272619232753,
+    "speed_kph": 60,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1272686341617,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1272753178760,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1272954505352,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1272988331505,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1273021614216,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1273390712968,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1273524930696,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1273961138312,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1274095356040,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1275034880136,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1275370424456,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1276108893681,
     "speed_kph": 50,
     "road_class": "secondary"
   },
   {
-    "edge_id": 1263760862705,
+    "edge_id": 1277148809352,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1277484353672,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1277517908104,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1277719234696,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1277987670152,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1278121887880,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1278390323336,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1278423877768,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1278792976520,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1279262738568,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1279296293000,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1283624814728,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1283993913480,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1284866328712,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1285872961672,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1285973624968,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1286544322033,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1287148301809,
     "speed_kph": 50,
-    "road_class": "tertiary"
+    "road_class": "secondary"
   },
   {
-    "edge_id": 1265740302472,
-    "speed_kph": 57,
+    "edge_id": 1288053999752,
+    "speed_kph": 50,
     "road_class": "primary"
   },
   {
-    "edge_id": 1266344553969,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 1288288880776,
+    "speed_kph": 29,
+    "road_class": "primary"
   },
   {
-    "edge_id": 1266378108401,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1267720285681,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1276377057416,
+    "edge_id": 1289429731464,
     "speed_kph": 60,
     "road_class": "primary"
   },
   {
-    "edge_id": 1283859695752,
-    "speed_kph": 57,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1284329457800,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1291610769544,
+    "edge_id": 1291879205000,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1292953218545,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 1294932658312,
+    "speed_kph": 29,
+    "road_class": "primary"
   },
   {
-    "edge_id": 1300100040840,
-    "speed_kph": 36,
+    "edge_id": 1294999767176,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1295402420360,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1296207726728,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1296610379912,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1299965823112,
+    "speed_kph": 29,
     "road_class": "primary"
   },
   {
@@ -1215,309 +1975,1014 @@
     "road_class": "primary"
   },
   {
-    "edge_id": 1303220603016,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1308824193160,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1310032152712,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1311307221128,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1322883771889,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1322917326321,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1338117484017,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1338285256177,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1341506481649,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1348922011121,
-    "speed_kph": 60,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1351841246705,
-    "speed_kph": 48,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1356303714440,
-    "speed_kph": 94,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1359122286728,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1359894310385,
-    "speed_kph": 20,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1360968052209,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1364222560392,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1364793257457,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1369658650097,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1371604807153,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1372443667953,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1373148039304,
+    "edge_id": 1300536248456,
     "speed_kph": 60,
     "road_class": "primary"
   },
   {
-    "edge_id": 1373316083185,
-    "speed_kph": 50,
-    "road_class": "tertiary"
+    "edge_id": 1300670466184,
+    "speed_kph": 57,
+    "road_class": "primary"
   },
   {
-    "edge_id": 1374993804785,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 1300737575048,
+    "speed_kph": 57,
+    "road_class": "primary"
   },
   {
-    "edge_id": 1376872852977,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1377074179569,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1379892751857,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1382308670961,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1382543551985,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1382912650737,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1383315032200,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1383482804360,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1386368485512,
+    "edge_id": 1302113306760,
     "speed_kph": 60,
     "road_class": "primary"
   },
   {
-    "edge_id": 1387375118472,
-    "speed_kph": 73,
+    "edge_id": 1302851775985,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1303254157448,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1305771011569,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1308220213384,
+    "speed_kph": 60,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1388583078024,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1389187057800,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1390327908488,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1393716906120,
+    "edge_id": 1308555757704,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1397072621041,
+    "edge_id": 1309293955208,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1309461727368,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1309562390664,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1310267033736,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1310569023624,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1310736795784,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1310770350216,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1315568633992,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1315803515016,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1316910811272,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1318454315144,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1318554978440,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1319326730376,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1320501135496,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1320903788680,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1321239604721,
     "speed_kph": 40,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 1399219832968,
-    "speed_kph": 72,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1399991584904,
-    "speed_kph": 57,
+    "edge_id": 1322816391304,
+    "speed_kph": 60,
     "road_class": "primary"
   },
   {
-    "edge_id": 1408245975176,
-    "speed_kph": 75,
+    "edge_id": 1323118381192,
+    "speed_kph": 60,
     "road_class": "primary"
   },
   {
-    "edge_id": 1414554208392,
-    "speed_kph": 57,
+    "edge_id": 1323353262216,
+    "speed_kph": 60,
     "road_class": "primary"
   },
   {
-    "edge_id": 1415560841352,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1427405555848,
+    "edge_id": 1324225677448,
     "speed_kph": 80,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1428680624264,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1431767632008,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1432472275080,
-    "speed_kph": 50,
+    "edge_id": 1324997429384,
+    "speed_kph": 80,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1435391510664,
-    "speed_kph": 72,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1435492445681,
+    "edge_id": 1325568126449,
     "speed_kph": 40,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 1436398415345,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1436968840689,
+    "edge_id": 1326474096113,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 1437035949553,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 1327044521457,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
-    "edge_id": 1440894437512,
+    "edge_id": 1327111358600,
     "speed_kph": 50,
     "road_class": "primary"
   },
   {
-    "edge_id": 1444048825841,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 1327379794056,
+    "speed_kph": 57,
+    "road_class": "primary"
   },
   {
-    "edge_id": 1444115934705,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 1328520644744,
+    "speed_kph": 60,
+    "road_class": "primary"
   },
   {
-    "edge_id": 1444652805617,
+    "edge_id": 1328889743496,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1330903281137,
     "speed_kph": 50,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 1444853860488,
+    "edge_id": 1333117601928,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1333453146248,
+    "speed_kph": 94,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1334124234888,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1444988078216,
+    "edge_id": 1334124506609,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1334191615473,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1334728486385,
+    "speed_kph": 77,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1334895986824,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1445189404808,
+    "edge_id": 1334929541256,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1334996650120,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1335097313416,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1335164694001,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1335567075464,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1336171055240,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1336506599560,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1445860493448,
+    "edge_id": 1336640817288,
+    "speed_kph": 80,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1337714559112,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1339090290824,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1339123845256,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1339560052872,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1340600240264,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1340734457992,
+    "speed_kph": 94,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1341640427656,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1342311516296,
+    "speed_kph": 80,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1342747723912,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1344660326536,
+    "speed_kph": 80,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1345130088584,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1345767622792,
+    "speed_kph": 80,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1345969221105,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1346036329969,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1348519086216,
     "speed_kph": 73,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1449014610056,
+    "edge_id": 1349659936904,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1350163253384,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1350398134408,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1350398406129,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1350733678728,
     "speed_kph": 57,
     "road_class": "primary"
+  },
+  {
+    "edge_id": 1351707028977,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1351941910001,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1352746944648,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1353116315121,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1353183152264,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1353183423985,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1353485142152,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1354894428296,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1355297081480,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1356035278984,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1356068833416,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1357612609009,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1357780109448,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1357947881608,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1358182762632,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1358954514568,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1358988069000,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1360867117192,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1360867388913,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1361169107080,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1361974413448,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1363719243912,
+    "speed_kph": 80,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1363819907208,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1364256114824,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1364323223688,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1364390332552,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1364725876872,
+    "speed_kph": 80,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1364893649032,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1365766064264,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1366739414513,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1367208904840,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1368886898161,
+    "speed_kph": 30,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1372175232497,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1372242069640,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1372611168392,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1372678277256,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1372812494984,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1374288889992,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1374456662152,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1376335710344,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1376705080817,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1376738635249,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1377308788872,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1377979877512,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1378449639560,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1378818738312,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1380060252296,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1384757872776,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1384824981640,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1387106954737,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1388046478833,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1389388384392,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1389522602120,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1390932159985,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1392106293384,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1392374728840,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1393112926344,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1393180035208,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1395260409992,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1395830835336,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1397206567048,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1397240121480,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1400025139336,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1401165990024,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1401300207752,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1401333762184,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1401400871048,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1402139068552,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1403145701512,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1403347028104,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1403716126856,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1405796501640,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1406635362440,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1406836689032,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1406903797896,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1407306451080,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1407507777672,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1410896775304,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1413514021000,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1413581129864,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1413916674184,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1420728223880,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1422875707528,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1423949449352,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1424285265393,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1424519874696,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1426063650289,
+    "speed_kph": 94,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1426466031752,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1427539773576,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1427707545736,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1428143753352,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1428748004849,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1428881950856,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1430794553480,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1431062988936,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1431230761096,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1431465642120,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1431801186440,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1432338329073,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1432740710536,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1433848006792,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1436062599304,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1436599470216,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1436867905672,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1436968568968,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1438444963976,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1439216987633,
+    "speed_kph": 25,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1439686477960,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1439753858545,
+    "speed_kph": 25,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1441833961608,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1441934624904,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1442102397064,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1443276802184,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1445323622536,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1445357176968,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1447504660616,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1450558113928,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1450658777224,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1451262757000,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1452437162120,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1452906924168,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1453007587464,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1453812893832,
+    "speed_kph": 80,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1454953744520,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1455021125105,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1455087962248,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1455121516680,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1455222179976,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1455289560561,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
     "edge_id": 1455428139738,
@@ -1525,219 +2990,804 @@
     "road_class": "service_other"
   },
   {
-    "edge_id": 1455893540337,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1456665020552,
+    "edge_id": 1456027486344,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1457436772488,
-    "speed_kph": 57,
+    "edge_id": 1458376296584,
+    "speed_kph": 80,
     "road_class": "primary"
   },
   {
-    "edge_id": 1459852691592,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1460859324552,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1461866229233,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1467536928241,
-    "speed_kph": 20,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1471294752904,
+    "edge_id": 1458745395336,
     "speed_kph": 50,
     "road_class": "primary"
   },
   {
-    "edge_id": 1474650196104,
-    "speed_kph": 40,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1478542510216,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1478676727944,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1482099551729,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1486461356168,
+    "edge_id": 1459416483976,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1488709503112,
+    "edge_id": 1459550701704,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1489145710728,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1496427022472,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1496762566792,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1497031273969,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1497970798065,
-    "speed_kph": 60,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1503540562056,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1520586213512,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1534209584625,
-    "speed_kph": 60,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1535148837000,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1535987969521,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1539208923272,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1540987308168,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1549141306865,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1557026326664,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1558032959624,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1558469167240,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1560784423048,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1564106311816,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1569743728113,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1581823051912,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1582057932936,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1587829295240,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1589909670024,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1592526915720,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1594070419592,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1596822154737,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1598231440881,
+    "edge_id": 1459819408881,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 1600043380209,
+    "edge_id": 1461295532168,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1461496858760,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1461631076488,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1462402828424,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1463208134792,
+    "speed_kph": 30,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1464315431048,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1465020074120,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1465154291848,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1465657608328,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1466194479240,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1467805091976,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1469382150280,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1469516368008,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1469549922440,
+    "speed_kph": 72,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1470120347784,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1470153902216,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1471999395976,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1477099669640,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1479683360904,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1479851133064,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1480991983752,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1482032171144,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1482770368648,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1484548753544,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1485387886065,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1485890930824,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1486394247304,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1486897835505,
+    "speed_kph": 25,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1488004860040,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1488307121649,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1490454333576,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1490655660168,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1490789877896,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1494313093256,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1495319726216,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1495353280648,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1495420389512,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1495554607240,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1495655270536,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1496628349064,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1496796392945,
     "speed_kph": 40,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 1600747751560,
+    "edge_id": 1496829675656,
     "speed_kph": 57,
     "road_class": "primary"
+  },
+  {
+    "edge_id": 1497131665544,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1497366546568,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1498675169416,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1500218673288,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1500822924785,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1501023979656,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1504446531720,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1505453164680,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1505553827976,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1506426243208,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1507365767304,
+    "speed_kph": 94,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1507533539464,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1507835529352,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1508036855944,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1508204628104,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1508473063560,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1509244815496,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1509714577544,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1511056754824,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1511392299144,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1513640446088,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1513707554952,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1516190582920,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1516459018376,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1519076264072,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1519109818504,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1519512471688,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1520418441352,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1521592846472,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1522398152840,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1522532370568,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1522599751153,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1522901469320,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1523203459208,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1523237013640,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1523773884552,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1524679854216,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1524981844104,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1525149616264,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1526760229000,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1527767133681,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1530048563336,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1530417662088,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1537061439624,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1538806270088,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1539443804296,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1539510913160,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1539611576456,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1542262376584,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1543570999432,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1544275642504,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1546523789448,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1547295541384,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1547530694129,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1547563976840,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1547597531272,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1547597802993,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1547664640136,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1549644623345,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1549711460488,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1549745014920,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1549812123784,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1550080559240,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1550147668104,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1550181222536,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1551020355057,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1552966240392,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1554174199944,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1554241308808,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1554476189832,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1558603384968,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1559744235656,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1559912007816,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1560113334408,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1560247552136,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1560281106568,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1564576073864,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1564710291592,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1564911618184,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1565716924552,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1565784033416,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1566287621617,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1568703269000,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1568837758449,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1574709784049,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1574977947784,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1575011502216,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1575045056648,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1575581927560,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1575649036424,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1576085244040,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1576253287921,
+    "speed_kph": 51,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1576454342792,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1576722778248,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1579407132808,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1580380211336,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1580849973384,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1584612702930,
+    "speed_kph": 20,
+    "road_class": "service_other"
+  },
+  {
+    "edge_id": 1586218682504,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1589607680136,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1590211931633,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1590815639688,
+    "speed_kph": 80,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1590882748552,
+    "speed_kph": 80,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1591520554481,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1591554108913,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1592493633009,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1592795622897,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1592862731761,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1592996949489,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1594339126769,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1598466050184,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1601855047816,
+    "speed_kph": 73,
+    "road_class": "trunk"
   },
   {
     "edge_id": 1604203858056,
@@ -1745,367 +3795,1747 @@
     "road_class": "primary"
   },
   {
-    "edge_id": 1606720712177,
+    "edge_id": 1604506119665,
     "speed_kph": 50,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 1613330663560,
-    "speed_kph": 50,
-    "road_class": "trunk"
+    "edge_id": 1605311426033,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
-    "edge_id": 1613464881288,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1614370850952,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1614437959816,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1618196056200,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1618598709384,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1626685327496,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1626718881928,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1626785990792,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1628530821256,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1628564375688,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1629235464328,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1631080958088,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1631483611272,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1632322472072,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1637254973576,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1641717713032,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1645140265096,
+    "edge_id": 1605848025224,
     "speed_kph": 73,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1645207373960,
-    "speed_kph": 72,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1646952204424,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1650542528648,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1654602614920,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1657455013361,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1657522122225,
-    "speed_kph": 39,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1663863638152,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1666782873736,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1666950645896,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1667453962376,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1667655288968,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1677486737544,
-    "speed_kph": 50,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 1686177607153,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1688257710216,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1688291264648,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1696109447304,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1702787050993,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1702921268721,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1704263446001,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1715235745265,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1717450337777,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1722315730417,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1722349284849,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1722382839281,
-    "speed_kph": 63,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1728187756017,
-    "speed_kph": 40,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1730469457393,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1730570120689,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 1735267741169,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1736542809585,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1736576364017,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1774996188657,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1804960296433,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1841803062769,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1878242904200,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1878377393649,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1880356833416,
-    "speed_kph": 57,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1884685355144,
-    "speed_kph": 50,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1888275679368,
+    "edge_id": 1606519113864,
     "speed_kph": 73,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1890758707336,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1902469204104,
-    "speed_kph": 38,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1902536584689,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1902570139121,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1902603693553,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 1906831280264,
-    "speed_kph": 60,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 1925118445704,
+    "edge_id": 1606586222728,
     "speed_kph": 50,
     "road_class": "trunk"
   },
   {
-    "edge_id": 1925588207752,
+    "edge_id": 1607391800817,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1607492464113,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1607526018545,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1609136359560,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1610377873544,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1925722425480,
+    "edge_id": 1612391411185,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1612424965617,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1612458520049,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1612626020488,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1613766871176,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1615411310065,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1615444864497,
+    "speed_kph": 25,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1616082398705,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1616551889032,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1616652824049,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1618263436785,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1618363828360,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1618430937224,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1620276702705,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1620545138161,
+    "speed_kph": 25,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1620645801457,
+    "speed_kph": 25,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1622625241224,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1925923752072,
+    "edge_id": 1623833200776,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1624168745096,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1624202299528,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1625343421937,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1625477367944,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1931628005512,
+    "edge_id": 1625510922376,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1933137954952,
+    "edge_id": 1626618490353,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1626652044785,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1626819545224,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1627087980680,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1627289307272,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1627591297160,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1627960395912,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1629738780808,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1630007216264,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1631919818888,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1631953373320,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1632087591048,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1632356026504,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1633261996168,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1636215057905,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1636583884936,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1636617439368,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1637590517896,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1637959616648,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1639066912904,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1639704447112,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1639805110408,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1639905773704,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1640476199048,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1640744634504,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1641214396552,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1642791454856,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1643529652360,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1643730978952,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1646482442376,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1648495980017,
+    "speed_kph": 30,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1648730589320,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1650475419784,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1651381389448,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1653159774344,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1656984979592,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1657689622664,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1658427820168,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1660105541768,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1664333400200,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1664568552945,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1665071597704,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1665071869425,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1666044676232,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1666984200328,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1668192159880,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1670306089096,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1670373197960,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1670876786161,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1679097350280,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1679130904712,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1680775071880,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1685170702472,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1687385294984,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1687418849416,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1689935431816,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1690405465585,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1690640346609,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1691848306161,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1695035977201,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1700102424712,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1700538632328,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1701310655985,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1701880809608,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1703860521096,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1710001253873,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1711913856497,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1713188653192,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1716007225480,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1718288926856,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1719127787656,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1719228722673,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1721107499144,
     "speed_kph": 75,
     "road_class": "primary"
   },
   {
-    "edge_id": 1937869129864,
+    "edge_id": 1721375934600,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1724731377800,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1725436020872,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 1950351378568,
+    "edge_id": 1726711089288,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1727617058952,
     "speed_kph": 50,
     "road_class": "primary"
   },
   {
-    "edge_id": 1962297028081,
-    "speed_kph": 50,
+    "edge_id": 1727785102833,
+    "speed_kph": 94,
     "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1730032978056,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1730368794097,
+    "speed_kph": 30,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1731576753649,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1731878743537,
+    "speed_kph": 25,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1732180461704,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1733388692977,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1735468796040,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1737784323569,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1740199970952,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1740300634248,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1740367743112,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1741139766769,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1741676365960,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1742079019144,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1742213508593,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1743253424264,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1744260057224,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1745468016776,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1745635788936,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1746206214280,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1746642421896,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1746675976328,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1747212847240,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1747682609288,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1747716163720,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1747917490312,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1748555024520,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1749427439752,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1749595211912,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1750400518280,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1750601844872,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1751843358856,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1752044685448,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1752581556360,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1753588189320,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1753622015473,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1753823342065,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1755400128648,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1756104771720,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1756876523656,
+    "speed_kph": 80,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1757077850248,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1758118037640,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1759661541512,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1760668174472,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1765130913928,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1765466458248,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1766506645640,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1766573754504,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1768151084529,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1768453074417,
+    "speed_kph": 77,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1769056782472,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1769593653384,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1769895643272,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1769895914993,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1771271374984,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1772445780104,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1775801223304,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1776975628424,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1777881598088,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1778116479112,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1780364626056,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1780498843784,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1780867942536,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1780901496968,
+    "speed_kph": 113,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1783954950280,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1784290494600,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1784726973937,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1785297127560,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1785565563016,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1786303760520,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1788652570760,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1789357213832,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1790128965768,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1792276449416,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1792612265457,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1792645819889,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1796537862280,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1796739188872,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1799020890248,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1799322880136,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1800631502984,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1801738799240,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1801873016968,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1802208561288,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1802476996744,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1802711877768,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1802745432200,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1803148085384,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1803282303112,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1805899548808,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1805899820529,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1807745042568,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1809489873032,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1809624090760,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1809758308488,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1809825417352,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1810664278152,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1814321711240,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1814992799880,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1816267868296,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1816334977160,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1816737630344,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1817677154440,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1817744263304,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1818415623665,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1818449178097,
+    "speed_kph": 75,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1819556202632,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1819757529224,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1820327954568,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1820965488776,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1821569468552,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1823918278792,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1823951833224,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1824623193585,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1825327564936,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1828179691656,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1828649453704,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1828750388721,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1831535134856,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1834118826120,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1834152652273,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1835427448968,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1835561666696,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1835930765448,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1836299864200,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1842004117640,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1842943641736,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1843346294920,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1845594441864,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1846030649480,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1850862487688,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1852305328264,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1852372708849,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1852607318152,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1853311961224,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1853647505544,
+    "speed_kph": 40,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1854788356232,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1856398968968,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1856499632264,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1856700958856,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1858043136136,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1858512898184,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1860425500808,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1861197252744,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1864955620849,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1866163308680,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1866364635272,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1868277237896,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1868344346760,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1872236660872,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1873210011121,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1873780436465,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1873948208625,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1877471152264,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1880558160008,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1880658823304,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1882906970248,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1884417191409,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1891966666888,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1892033775752,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1893677942920,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1894248368264,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1895791872136,
+    "speed_kph": 94,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1895926089864,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1896093862024,
+    "speed_kph": 70,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1897704474760,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1897872246920,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1898744933873,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1898912706033,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1898979814897,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1899013369329,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1903979425265,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1904482741745,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1906193746056,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1906327963784,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1906462181512,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1913911265416,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1914079037576,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1914112592008,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1914716571784,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1915354105992,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1916293630088,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1917065382024,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1917669361800,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1919917508744,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1920991250568,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1921729719793,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1923239669233,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1923306778097,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1923440995825,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1923474550257,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1926158633096,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1926192187528,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1931024297457,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1931124960753,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1937936510449,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1938238500337,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1938942871688,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1940318603400,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1943774709896,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1943774981617,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1944714233992,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1945083332744,
+    "speed_kph": 80,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1945586649224,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1945720866952,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1946794608776,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1949344745608,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1949411854472,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1950854695048,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1952834406536,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1954579508721,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1955418097800,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1955619696113,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1956156295304,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1957632690312,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1959914391688,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1961088796808,
+    "speed_kph": 57,
+    "road_class": "primary"
   },
   {
     "edge_id": 1963739596936,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1963806705800,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1963974477960,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1964209358984,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1965954461169,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1965988015601,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1968101673096,
+    "speed_kph": 72,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1970215602312,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1970349820040,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1971255789704,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1971322898568,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1971624888456,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1971725551752,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1971725823473,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1971792932337,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1971826215048,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1971826486769,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1971994258929,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1974242405873,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 1974409906312,
     "speed_kph": 57,
     "road_class": "primary"
   },
@@ -2115,14 +5545,94 @@
     "road_class": "primary"
   },
   {
-    "edge_id": 1974879940081,
-    "speed_kph": 46,
+    "edge_id": 1975080994952,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1975483648136,
+    "speed_kph": 40,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1976154736776,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1976356063368,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1976356335089,
+    "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 1983704755697,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 1976389889521,
+    "speed_kph": 75,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1976523835528,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 1976557661681,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1977329413617,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1977496914056,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1977765349512,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1978973309064,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1980047050888,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1981322119304,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1981389228168,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1983570266248,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1983603820680,
+    "speed_kph": 63,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1983670929544,
+    "speed_kph": 50,
+    "road_class": "primary"
   },
   {
     "edge_id": 1984073582728,
@@ -2130,209 +5640,599 @@
     "road_class": "primary"
   },
   {
-    "edge_id": 1988871866504,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 2008669253105,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2008837025265,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2008904134129,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2008937688561,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2025144207496,
+    "edge_id": 1984912443528,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 2028700977288,
+    "edge_id": 1985415760008,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 2031654039025,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2039874603144,
+    "edge_id": 1985449314440,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 2039908157576,
+    "edge_id": 1985650641032,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 2040075929736,
+    "edge_id": 1985784858760,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 2040545691784,
-    "speed_kph": 60,
+    "edge_id": 1985919076488,
+    "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 2045947955336,
+    "edge_id": 1986120403080,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1987965896840,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1988368550024,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1989207410824,
     "speed_kph": 60,
     "road_class": "trunk"
   },
   {
-    "edge_id": 2048162819569,
+    "edge_id": 1993234214385,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 2049269844104,
+    "edge_id": 1993267768817,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 1993603041416,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1994005694600,
     "speed_kph": 60,
     "road_class": "primary"
   },
   {
-    "edge_id": 2052323297416,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 2052457515144,
+    "edge_id": 1994139912328,
     "speed_kph": 50,
     "road_class": "primary"
   },
   {
-    "edge_id": 2054135236744,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 2054336563336,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 2055812958344,
-    "speed_kph": 73,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 2061517211784,
-    "speed_kph": 73,
+    "edge_id": 1995381426312,
+    "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 2086280654321,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 1995817633928,
+    "speed_kph": 57,
+    "road_class": "primary"
   },
   {
-    "edge_id": 2086481980913,
+    "edge_id": 1995851188360,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1998602651784,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 1998636206216,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2001588996232,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2001756768392,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2002025203848,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2002092312712,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2002293639304,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2002360748168,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2003837143176,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2004038741489,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 2087488342152,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 2089736489096,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 2094266337416,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 2094400555144,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 2094870317192,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 2096380266632,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 2096782919816,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 2102789163144,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 2103158533617,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2103359588488,
-    "speed_kph": 60,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 2104399775880,
-    "speed_kph": 75,
-    "road_class": "primary"
-  },
-  {
-    "edge_id": 2109768485000,
-    "speed_kph": 90,
-    "road_class": "trunk"
-  },
-  {
-    "edge_id": 2114365713905,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2124666924529,
+    "edge_id": 2004441394673,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 2127787486705,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 2005414201480,
+    "speed_kph": 57,
+    "road_class": "primary"
   },
   {
-    "edge_id": 2130471569544,
+    "edge_id": 2005548419208,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2005581973640,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2005883963528,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2006018181256,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2006085290120,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2007427467400,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2010078267528,
     "speed_kph": 75,
     "road_class": "primary"
   },
   {
-    "edge_id": 2154832358897,
+    "edge_id": 2010145376392,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2010212756977,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2011487553672,
+    "speed_kph": 75,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2014608115848,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2014742605297,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2017863167473,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2020748576904,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2023567420913,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2023667812488,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2023835584648,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2024271792264,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2024406009992,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2024540227720,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2024942880904,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2025177761928,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2025311979656,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2025345534088,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2027090364552,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2027627507185,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2029036521608,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2029103630472,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2031184005256,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2031519549576,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2033063053448,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2034103240840,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2034371676296,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2034505894024,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2034539448456,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2035143428232,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2035210537096,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2036452051080,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2039237068936,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2039773939848,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2040679909512,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2040780572808,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2040814127240,
+    "speed_kph": 72,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2041149671560,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2041619433608,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2041753923057,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2044807104648,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2044807376369,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2044908039665,
     "speed_kph": 50,
     "road_class": "secondary"
   },
   {
-    "edge_id": 2158120693233,
+    "edge_id": 2045176203400,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2045813737608,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2047357241480,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2047558568072,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2047592122504,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2048196374001,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2048430983304,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2055645457905,
     "speed_kph": 40,
     "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2056249165960,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2057088298481,
+    "speed_kph": 60,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2058732193928,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2064402892936,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2066215103985,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2070744952305,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2071219075794,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 2075073474033,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2076784750065,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2077019631089,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2077992709617,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2078864853128,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2089065672177,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2090877611505,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2094400826865,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2094434381297,
+    "speed_kph": 63,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2110037192177,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2111178042865,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2114432551048,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2125375917522,
+    "speed_kph": 20,
+    "road_class": "service_other"
+  },
+  {
+    "edge_id": 2135706332657,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2135874104817,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2139229548017,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2140101963249,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2140269735409,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2142786046088,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2143927168497,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2143960722929,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2171508911601,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2172683316721,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2172750425585,
+    "speed_kph": 94,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2175636106737,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
     "edge_id": 2179700554458,
@@ -2340,39 +6240,124 @@
     "road_class": "service_other"
   },
   {
-    "edge_id": 2184997793265,
+    "edge_id": 2180904152561,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2180937706993,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2184964238833,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 2198989991409,
+    "edge_id": 2190567828977,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 2200936148465,
+    "edge_id": 2190601383409,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 2204325146097,
+    "edge_id": 2217612701169,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2219458194929,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2224625577457,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2228786327025,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2229960732145,
     "speed_kph": 40,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 2204358700529,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 2233920155121,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
-    "edge_id": 2300492148209,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 2234423471601,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
-    "edge_id": 2300592811505,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 2235061005809,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2235899866609,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2237074271729,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2243550277105,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2255730535921,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2257206930929,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2260092612081,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2267373923825,
+    "speed_kph": 25,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2271769554417,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2281902992881,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2283312279025,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2301129682417,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
     "edge_id": 2301704469202,
@@ -2380,139 +6365,1064 @@
     "road_class": "residential"
   },
   {
-    "edge_id": 2327537020401,
-    "speed_kph": 49,
-    "road_class": "secondary"
+    "edge_id": 2309752899720,
+    "speed_kph": 90,
+    "road_class": "trunk"
   },
   {
-    "edge_id": 2329382514161,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2345824185841,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2353474596337,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2365654855153,
-    "speed_kph": 40,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2367131250161,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2377298243057,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2381693873649,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2411624426993,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2427898326513,
-    "speed_kph": 40,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2428032544241,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2436958023153,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2437796883953,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2438165982705,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2458231533041,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2461016550897,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2475679837681,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2477256895985,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2485880385009,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2497758382216,
+    "edge_id": 2310155552904,
     "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 2497959708808,
-    "speed_kph": 75,
+    "edge_id": 2312605026440,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2314047867016,
+    "speed_kph": 57,
     "road_class": "primary"
   },
   {
-    "edge_id": 2560505441777,
-    "speed_kph": 49,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2582819139057,
+    "edge_id": 2317671745672,
     "speed_kph": 60,
-    "road_class": "secondary"
+    "road_class": "trunk"
   },
   {
-    "edge_id": 2590335331825,
+    "edge_id": 2318477052040,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2318946814088,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2320154773640,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2320490317960,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2321899875825,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 2595737595377,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2618386836977,
+    "edge_id": 2324986883569,
     "speed_kph": 40,
     "road_class": "tertiary"
   },
   {
-    "edge_id": 2633989647857,
+    "edge_id": 2326563670152,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2327033703921,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2327872564721,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2328241663473,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2328610490504,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2328778534385,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2331026681329,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2331798433265,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2332335032456,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2333442600433,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2334180526216,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2336260901000,
+    "speed_kph": 37,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2338274166920,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2339314626033,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2339381734897,
     "speed_kph": 50,
     "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2339549507057,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2339583061489,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2339616615921,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2339985442952,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2340555868296,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2341260511368,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2341394729096,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2342636243080,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2343475103880,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2346998590961,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2347065699825,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2348307213809,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2351092231665,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2351394221553,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2356762658952,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2357098203272,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2357232421000,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2358373271688,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2359614785672,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2360084547720,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2360185211016,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2360252319880,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2360923408520,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2361393170568,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2361527388296,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2361628051592,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2362299140232,
+    "speed_kph": 37,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2362534021256,
+    "speed_kph": 37,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2363406436488,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2363439990920,
+    "speed_kph": 72,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2365755518449,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2367332576753,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2367432968328,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2368607373448,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2368942917768,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2370452867208,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2371191064712,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2373674092680,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2375956065777,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2378673703048,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2379881662600,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2382163363976,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2382800898184,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2383874640008,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2399544559752,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2401591380104,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2401926924424,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2402061142152,
+    "speed_kph": 40,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2406859425928,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2406993643656,
+    "speed_kph": 40,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2410416195720,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2419039956465,
+    "speed_kph": 113,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2424341556721,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2424676829320,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2429609602545,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2430146201736,
+    "speed_kph": 40,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2430414637192,
+    "speed_kph": 40,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2432360794248,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2433770080392,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2434575386760,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2434676050056,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2435649128584,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2438434146440,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2450581122545,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2451218656753,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2457828879857,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2457862434289,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2458063760881,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2458097315313,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2460378744968,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2460512962696,
+    "speed_kph": 40,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2460546517128,
+    "speed_kph": 40,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2460949170312,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2464505940104,
+    "speed_kph": 29,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2465244137608,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2467895209457,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2468633406961,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2475075586184,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2475344021640,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2475377576072,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2475679565960,
+    "speed_kph": 50,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2475713120392,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2475880892552,
+    "speed_kph": 72,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2480411012593,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2481149210097,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2481752918152,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2482155571336,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2482189125768,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2482256234632,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2483900401800,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2485074806920,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2485813276145,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2486786082952,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2487792715912,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2488128260232,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2488262477960,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2489101338760,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2490141526152,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2491416866289,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2491617921160,
+    "speed_kph": 50,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2493899622536,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2494067394696,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2496785575409,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2497322174600,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2503597125105,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2504737975793,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2506851905009,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2508462517745,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2509200715249,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2517455105521,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2518260411889,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2518931500529,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2523293304968,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2524065328625,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2525541451912,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2525910550664,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2526548084872,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2526581639304,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2527622098417,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2527655381128,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2527655652849,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2527689207281,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2529467320456,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2529735755912,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2530071300232,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2530205517960,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2530675280008,
+    "speed_kph": 60,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2532319447176,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2532587882632,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2537621047432,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2538594125960,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2539164551304,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2540204738696,
+    "speed_kph": 77,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2540272119281,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2540876099057,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2541513633265,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2541547187697,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2541647850993,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2544466423281,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2544499977713,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2544533532145,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2544768141448,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2544835250312,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2545405675656,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2545472784520,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2545573447816,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2545674382833,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2545707937265,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2545741491697,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2545775046129,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2545808600561,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2547385658865,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2550036458993,
+    "speed_kph": 60,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2550371731592,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2556981954696,
+    "speed_kph": 57,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2561511803016,
+    "speed_kph": 90,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2563458231793,
+    "speed_kph": 60,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2565940988040,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2566041651336,
+    "speed_kph": 40,
+    "road_class": "primary"
+  },
+  {
+    "edge_id": 2566276532360,
+    "speed_kph": 80,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2567551872497,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2570437553649,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2577148168328,
+    "speed_kph": 73,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2577215277192,
+    "speed_kph": 60,
+    "road_class": "trunk"
+  },
+  {
+    "edge_id": 2577718865393,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2578490617329,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2578557726193,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2580000566769,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2581476961777,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2587516759537,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2588422729201,
+    "speed_kph": 60,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2589228035569,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2593422339569,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2600837869041,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2602649808369,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2609494912497,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2617346649585,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2617413758449,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2623990427121,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2625970138609,
+    "speed_kph": 50,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2629896007153,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2629963116017,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2634526518769,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2636170685937,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2637982625265,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2643015790065,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
     "edge_id": 2644899199698,
@@ -2520,108 +7430,28 @@
     "road_class": "residential"
   },
   {
-    "edge_id": 2655598702065,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 2649227721426,
+    "speed_kph": 35,
+    "road_class": "residential"
   },
   {
-    "edge_id": 2655632256497,
-    "speed_kph": 40,
-    "road_class": "tertiary"
+    "edge_id": 2649294830290,
+    "speed_kph": 35,
+    "road_class": "residential"
   },
   {
-    "edge_id": 2655665810929,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2655699365361,
-    "speed_kph": 40,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2655732919793,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2659960778225,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2673382551025,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2687643184625,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2688414936561,
-    "speed_kph": 25,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2688482045425,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2689924886001,
-    "speed_kph": 30,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2698347048433,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2703346658801,
+    "edge_id": 2830819945969,
     "speed_kph": 60,
     "road_class": "secondary"
   },
   {
-    "edge_id": 2712574127601,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2727338077681,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2733914746353,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2734149627377,
-    "speed_kph": 60,
+    "edge_id": 2849442655729,
+    "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 2735860903409,
-    "speed_kph": 60,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2735894457841,
-    "speed_kph": 60,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 2736867536369,
-    "speed_kph": 43,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 2739820326385,
-    "speed_kph": 50,
+    "edge_id": 2859878084081,
+    "speed_kph": 40,
     "road_class": "tertiary"
   },
   {
@@ -2640,9 +7470,39 @@
     "road_class": "secondary"
   },
   {
+    "edge_id": 2872259669489,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
     "edge_id": 2872997866993,
     "speed_kph": 40,
     "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2876890181105,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2877024398833,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2877057953265,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2877695487473,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2890613943793,
+    "speed_kph": 49,
+    "road_class": "secondary"
   },
   {
     "edge_id": 2909672861169,
@@ -2660,8 +7520,28 @@
     "road_class": "secondary"
   },
   {
-    "edge_id": 2927892917745,
+    "edge_id": 2926886284785,
     "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2927288937969,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2927658036721,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2927993581041,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2928027135473,
+    "speed_kph": 60,
     "road_class": "secondary"
   },
   {
@@ -2670,7 +7550,32 @@
     "road_class": "tertiary"
   },
   {
+    "edge_id": 2928194907633,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2928295570929,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2928530451953,
+    "speed_kph": 51,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2928865996273,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
     "edge_id": 2929469976049,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2933295181297,
     "speed_kph": 50,
     "road_class": "tertiary"
   },
@@ -2700,13 +7605,48 @@
     "road_class": "secondary"
   },
   {
+    "edge_id": 2946549181937,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
     "edge_id": 2946884726257,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
-    "edge_id": 3001142242801,
-    "speed_kph": 51,
+    "edge_id": 2988458667505,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2988492221937,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2988525776369,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 2996209741297,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 2997551918577,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3002987736561,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 3018556993009,
+    "speed_kph": 60,
     "road_class": "secondary"
   },
   {
@@ -2715,9 +7655,39 @@
     "road_class": "secondary"
   },
   {
+    "edge_id": 3062211309041,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 3074861329905,
+    "speed_kph": 94,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3075196874225,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 3090195705329,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
     "edge_id": 3111737650673,
     "speed_kph": 40,
     "road_class": "tertiary"
+  },
+  {
+    "edge_id": 3138916740593,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3143580806641,
+    "speed_kph": 60,
+    "road_class": "secondary"
   },
   {
     "edge_id": 3145258528241,
@@ -2727,6 +7697,11 @@
   {
     "edge_id": 3146835586545,
     "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3147003358705,
+    "speed_kph": 60,
     "road_class": "secondary"
   },
   {
@@ -2745,7 +7720,52 @@
     "road_class": "residential"
   },
   {
+    "edge_id": 3181799304689,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3182000631281,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3182034185713,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3182738828785,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3182772383217,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3182839492081,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3183812570609,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3183846125041,
+    "speed_kph": 60,
+    "road_class": "secondary"
+  },
+  {
     "edge_id": 3187537112561,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3188107537905,
     "speed_kph": 49,
     "road_class": "secondary"
   },
@@ -2770,6 +7790,56 @@
     "road_class": "secondary"
   },
   {
+    "edge_id": 3223541018097,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3231090765297,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3268201967089,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 3301655735793,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 3330617572050,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 3339941342705,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 3346249575921,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 3346853555697,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 3346987773425,
+    "speed_kph": 50,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 3349844261586,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
     "edge_id": 3355946806769,
     "speed_kph": 50,
     "road_class": "tertiary"
@@ -2777,11 +7847,6 @@
   {
     "edge_id": 3363966316017,
     "speed_kph": 60,
-    "road_class": "secondary"
-  },
-  {
-    "edge_id": 3364368969201,
-    "speed_kph": 49,
     "road_class": "secondary"
   },
   {
@@ -2795,18 +7860,98 @@
     "road_class": "secondary"
   },
   {
-    "edge_id": 3380475096561,
-    "speed_kph": 50,
-    "road_class": "tertiary"
-  },
-  {
-    "edge_id": 3415740804593,
+    "edge_id": 3388427496945,
     "speed_kph": 49,
     "road_class": "secondary"
   },
   {
+    "edge_id": 3388494605809,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3395310516946,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 3396010798577,
+    "speed_kph": 40,
+    "road_class": "tertiary"
+  },
+  {
+    "edge_id": 3408325275121,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3415673695729,
+    "speed_kph": 49,
+    "road_class": "secondary"
+  },
+  {
+    "edge_id": 3670591065554,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 3778971892434,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
     "edge_id": 3819371417042,
     "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 6172073982674,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 6172107537106,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 6206500829906,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 6214319012562,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 6214352566994,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 6215426308818,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 6425309280978,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 6545400593114,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 6545534810842,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 6545870355162,
+    "speed_kph": 30,
     "road_class": "residential"
   },
   {
@@ -2825,12 +7970,72 @@
     "road_class": "service_other"
   },
   {
+    "edge_id": 8157019962066,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 8171649694418,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 8172018793170,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 8847603727058,
+    "speed_kph": 25,
+    "road_class": "service_other"
+  },
+  {
+    "edge_id": 8847637281490,
+    "speed_kph": 25,
+    "road_class": "service_other"
+  },
+  {
+    "edge_id": 9322264722130,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
     "edge_id": 9349376703186,
     "speed_kph": 35,
     "road_class": "residential"
   },
   {
+    "edge_id": 9435578038994,
+    "speed_kph": 50,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 9435611593426,
+    "speed_kph": 50,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 9474702506706,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 9849539066578,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
     "edge_id": 9975133305554,
+    "speed_kph": 30,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 10297188743890,
+    "speed_kph": 35,
+    "road_class": "residential"
+  },
+  {
+    "edge_id": 10936400673490,
     "speed_kph": 30,
     "road_class": "residential"
   },
