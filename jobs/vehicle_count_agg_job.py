@@ -43,7 +43,7 @@ REDIS_CHANNEL          = os.getenv("REDIS_CHANNEL",          "traffic:events")
 # TOTAL_EDGES lấy từ cameras_with_zones_merged.json (COPY cùng jobs/ vào image
 # — xem Dockerfile). File này có edge_id thật (Valhalla) nằm trong "zones",
 # khác cameras.json cũ (đã bỏ, edge_id giả nằm trong "edges").
-BATCH_WINDOW_MS        = int(os.getenv("BATCH_WINDOW_MS",    str(30_000)))
+BATCH_WINDOW_MS        = int(os.getenv("BATCH_WINDOW_MS",    str(300_000)))
 
 _CAMERAS_FILE = Path(__file__).parent / "cameras_with_zones_merged.json"
 with open(_CAMERAS_FILE, encoding="utf-8") as _f:
@@ -51,17 +51,15 @@ with open(_CAMERAS_FILE, encoding="utf-8") as _f:
 
 
 def _extract_edge_id(zone: dict) -> str | None:
-    # Phải khớp CHÍNH XÁC logic config.py:_extract_edge_id — dùng GraphId đầy
-    # đủ (edge_id_full.value) làm edge_id, KHÔNG dùng "id" ngắn (chỉ là số
-    # thứ tự cục bộ trong 1 tile, không xác định duy nhất 1 con đường toàn
-    # thành phố). consumer_ai.py giờ publish edge_id = GraphId đầy đủ, nên
-    # TOTAL_EDGES ở đây phải đếm đúng cùng không gian ID đó.
-    eid = zone.get("edge_id")
-    if isinstance(eid, dict):
-        value = eid.get("value")
-    else:
-        full = zone.get("edge_id_full") or {}
-        value = full.get("value")
+    # Phải khớp CHÍNH XÁC logic config.py:_extract_edge_id — lấy GraphId đầy
+    # đủ từ zone["mapped_edge"]["edge_id"]["value"] (edge do Valhalla
+    # map-matching trả về, đồng nhất 1 schema ở mọi zone), KHÔNG dùng "id"
+    # ngắn (chỉ là số thứ tự cục bộ trong 1 tile, không xác định duy nhất 1
+    # con đường toàn thành phố). consumer_ai.py publish edge_id = GraphId đầy
+    # đủ, nên TOTAL_EDGES ở đây phải đếm đúng cùng không gian ID đó.
+    mapped = zone.get("mapped_edge") or {}
+    eid = mapped.get("edge_id") or {}
+    value = eid.get("value")
     return str(value) if value is not None else None
 
 
