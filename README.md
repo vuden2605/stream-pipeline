@@ -121,7 +121,7 @@ docker compose down
 ### Sơ đồ tổng thể
 
 ```
-cameras_with_zones_merged.json (611 camera thật, ~1730 edge_id thật từ Valhalla graph)
+cameras_with_zones_merged.json (611 camera thật, 1609 edge_id thật từ Valhalla graph)
         │
         ▼
 ┌─────────────────────┐
@@ -177,10 +177,10 @@ cameras_with_zones_merged.json (611 camera thật, ~1730 edge_id thật từ Val
    - Nếu ≥ 85%: so `HCI/hciMax` → ≥0.9 → TWF=0.1 (kẹt nặng, phạt chi phí route ×10); ≥0.8 → TWF=0.5 (ùn nhẹ, ×2); còn lại → TWF=1.0.
 9. **`speed_kmh = TWF × base_speed_kmh`** — tính **riêng cho từng edge** của camera (không dùng chung 1 giá trị cho cả camera nữa):
    - `base_speed_kmh` = tốc độ mặc định (free-flow) của **chính edge đó**, tra trong `default_traffic.json` bằng đúng `edge_id` (xem điểm quan trọng bên dưới về định dạng `edge_id`).
-   - Nếu edge không có trong `default_traffic.json` (~66% trường hợp, file chỉ phủ 598/1769 edge) → fallback về `TWF_MAX_SPEED_KMH` (mặc định 50km/h, cấu hình qua env).
+   - Nếu edge không có trong `default_traffic.json` → fallback về `TWF_MAX_SPEED_KMH` (mặc định 50km/h, cấu hình qua env). Với dữ liệu hiện tại, toàn bộ 1609/1609 edge đều có mặt trong `default_traffic.json` nên nhánh fallback gần như không kích hoạt — vẫn giữ lại làm lưới an toàn cho camera/edge mới thêm sau này chưa kịp cập nhật vào `default_traffic.json`.
    - Vì mỗi edge của cùng 1 camera có thể thuộc `road_class` khác nhau (ví dụ 1 hướng là đường chính tốc độ 90km/h, hướng kia là hẻm 40km/h), 2 edge của cùng 1 frame/1 TWF có thể ra `speed_kmh` khác nhau dù cùng mức độ kẹt.
 
-**Điểm quan trọng — định dạng `edge_id`:** mỗi zone trong `cameras_with_zones_merged.json` có 2 dạng ID: `edge_id_full.id` (số ngắn, chỉ là thứ tự cục bộ trong 1 tile bản đồ, KHÔNG duy nhất toàn thành phố) và `edge_id_full.value` (GraphId đầy đủ của Valhalla, gộp `tile_id+level+id`, duy nhất toàn cục). `config.py:_extract_edge_id` dùng **`edge_id_full.value`** làm `edge_id` xuyên suốt toàn bộ pipeline (Kafka, Redis, Flink) — khớp đúng định dạng `default_traffic.json` dùng (đã verify khớp 568/568 khi đối chiếu 2 file).
+**Điểm quan trọng — định dạng `edge_id`:** mỗi zone trong `cameras_with_zones_merged.json` có field `mapped_edge` — edge do Valhalla map-matching trả về, đồng nhất 1 schema ở mọi zone (khác với `zone["edge_id"]`/`zone["edge_id_full"]` ở cấp trên, vốn không đồng nhất giữa các zone: ~68% là dict lồng, ~32% là số ngắn). `config.py:_extract_edge_id` lấy `zone["mapped_edge"]["edge_id"]["value"]` làm `edge_id` xuyên suốt toàn bộ pipeline (Kafka, Redis, Flink) — đây là GraphId đầy đủ (gộp `tile_id+level+id`, duy nhất toàn cục), KHÔNG dùng `id` ngắn (chỉ là số thứ tự cục bộ trong 1 tile bản đồ, không xác định duy nhất 1 con đường toàn thành phố). Khớp đúng định dạng `default_traffic.json` dùng (đã verify khớp 1609/1609 khi đối chiếu 2 file).
 10. Với mỗi `edge_id` thuộc camera đó (1 camera có thể phủ nhiều edge): publish lên `traffic_events` với `source_type: "gps"` (mượn nhánh EWMA-speed sẵn có của Flink, vì hệ thống chưa có nguồn GPS thật), `confidence: 1.0` (cố định, placeholder).
 
 ### 3. Flink job — `jobs/vehicle_count_agg_job.py`
@@ -191,7 +191,7 @@ Chạy trên cluster Docker riêng (`Dockerfile` build từ `flink:1.18-scala_2.
 - **`ParseAndFilterMessage`** (FlatMap) — chuẩn hoá schema camera/gps về 1 dạng chung, parse JSON đúng 1 lần, sinh `dedup_key`.
 - **`DeduplicateFunction`** (`key_by(edge_id)`, `MapState` TTL 60s) — loại message trùng do Kafka retry; state gom theo edge (bounded), không phải theo từng fingerprint (tránh OOM).
 - **Nhánh trái — `AdaptiveEwmaFunction`** (`key_by(edge_id)`): cập nhật EWMA tức thì mỗi event, alpha thích ứng theo lưu lượng mẫu gần đây (`ALPHA_MIN=0.1` → `ALPHA_MAX=0.5`, ngưỡng riêng GPS=20/phút vs Camera=6/phút — camera-based speed hiện đang dùng ngưỡng GPS dù tần suất thực tế giống camera hơn, xem "Giới hạn"). Emit mỗi `EMIT_INTERVAL_MS=30s`/edge qua processing-time timer → Kafka `traffic_realtime`.
-- **`RedisBatchPublisher`** (`key_by("ALL")`, 1 instance, `set_parallelism(1)`): gom nhiều edge vào 1 `MapState` trước khi ghi Redis, publish khi **đủ `TOTAL_EDGES`** edge khác nhau (tính từ toàn bộ `cameras_with_zones_merged.json` theo GraphId đầy đủ, ~1708) **HOẶC** hết `BATCH_WINDOW_MS=30s` — tuỳ điều kiện nào tới trước (thực tế hầu như luôn là timeout 30s vì 1708 hiếm khi đủ trong 1 batch). Khi flush: `DELETE` sạch `traffic:speeds` rồi `HSET` lại toàn bộ batch (dọn dẹp + ghi mới trong 1 pipeline atomic), `PUBLISH "update"` đúng 1 lần trên `traffic:events`.
+- **`RedisBatchPublisher`** (`key_by("ALL")`, 1 instance, `set_parallelism(1)`): gom nhiều edge vào 1 `MapState` trước khi ghi Redis, publish khi **đủ `TOTAL_EDGES`** edge khác nhau (tính từ toàn bộ `cameras_with_zones_merged.json` qua `mapped_edge.edge_id.value`, hiện là 1609) **HOẶC** hết `BATCH_WINDOW_MS` (mặc định 300s/5 phút) — tuỳ điều kiện nào tới trước (thực tế hầu như luôn là timeout vì 1609 hiếm khi đủ trong 1 batch — không phải camera/edge nào cũng có dữ liệu mới liên tục). Khi flush: `DELETE` sạch `traffic:speeds` rồi `HSET` lại toàn bộ batch (dọn dẹp + ghi mới trong 1 pipeline atomic), `PUBLISH "update"` đúng 1 lần trên `traffic:events`.
 - **Nhánh phải — Sliding Window**: `key_by(edge_id)`, cửa sổ event-time 5 phút trượt mỗi 90s (`SlidingEventTimeWindows`), `SumReduce` gộp incremental + `AttachWindow` gắn `window_start`/`window_end` → Kafka `traffic_agg`. Độc lập với nhánh speed/Redis, phục vụ thống kê/báo cáo.
 - Checkpoint mỗi 60s (`min_pause=30s`, `timeout=300s`), state backend RocksDB, TTL state 2h/edge (tự dọn edge không hoạt động).
 
