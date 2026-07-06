@@ -35,10 +35,8 @@ REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
 REDIS_DB   = int(os.getenv("REDIS_DB", "0"))
 
 REDIS_QUEUE_KEY      = os.getenv("REDIS_QUEUE_KEY", "camera_queue")
-REDIS_EMA_KEY        = os.getenv("REDIS_EMA_KEY", "traffic:ema")
 REDIS_SPEEDS_KEY     = os.getenv("REDIS_SPEEDS_KEY", "traffic:speeds")
 REDIS_CHANNEL        = os.getenv("REDIS_CHANNEL", "traffic:events")
-REDIS_STREAK_PREFIX  = os.getenv("REDIS_STREAK_PREFIX", "congestion:streak:")
 
 # Tốc độ free-flow mặc định khi edge không có trong default_traffic.json
 # (dùng làm free_flow[edge] cho công thức Greenshields bên dưới).
@@ -56,16 +54,6 @@ MIN_SPEED_KMH  = float(os.getenv("MIN_SPEED_KMH", "3.0"))
 # lại chưa hiệu chuẩn (xem worker.py:get_meu_max).
 MEU_MAX_DEFAULT = float(os.getenv("MEU_MAX_DEFAULT", "200.0"))
 
-# EMA làm mượt: smooth = alpha*raw + (1-alpha)*prev. Loại outlier nếu
-# |raw - prev| > ngưỡng (dữ liệu nhiễu do YOLO/ảnh lỗi, không phải kẹt xe thật).
-EMA_ALPHA                 = float(os.getenv("EMA_ALPHA", "0.3"))
-EMA_OUTLIER_THRESHOLD_KMH = float(os.getenv("EMA_OUTLIER_THRESHOLD_KMH", "25"))
-
-# Đếm số chu kỳ liên tiếp smooth_speed < ngưỡng kẹt xe — TTL để tự xoá nếu
-# edge hết kẹt trong 1 khoảng thời gian dài mà không có chu kỳ nào DEL kịp.
-JAM_THRESHOLD_KMH             = float(os.getenv("JAM_THRESHOLD_KMH", "15"))
-CONGESTION_STREAK_TTL_SECONDS = int(os.getenv("CONGESTION_STREAK_TTL_SECONDS", "180"))
-
 # traffic_updater.py (bên valhalla-hcm-traffic) chạy NGAY toàn bộ pipeline
 # seed-live-traffic-all + update-live-traffic-from-csv mỗi khi nhận 1 message
 # trên REDIS_CHANNEL — KHÔNG tự debounce (đã đọc source để xác nhận). Nếu mỗi
@@ -75,7 +63,7 @@ CONGESTION_STREAK_TTL_SECONDS = int(os.getenv("CONGESTION_STREAK_TTL_SECONDS", "
 # BỘ worker.py cộng lại chỉ publish tối đa 1 lần mỗi PUBLISH_DEBOUNCE_SECONDS.
 PUBLISH_DEBOUNCE_SECONDS = int(os.getenv("PUBLISH_DEBOUNCE_SECONDS", "10"))
 
-# TTL cho từng field trong traffic:ema/traffic:speeds (HEXPIRE, Redis >= 7.4).
+# TTL cho từng field trong traffic:speeds (HEXPIRE, Redis >= 7.4).
 # Không ảnh hưởng tính đúng đắn — valhalla-traffic-daemon (bên
 # valhalla-hcm-traffic, ngoài repo này) đã tự coi field hết hạn dựa vào
 # timestamp nhúng trong value (speed_ttl_seconds=900) bất kể field còn tồn

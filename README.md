@@ -60,11 +60,10 @@ python worker.py
 
 | Muốn xem | Lệnh |
 |---|---|
-| `worker.py` tính MEU/speed đúng không | log của chính nó — tìm dòng `MEU=... raw=...km/h smooth=...km/h` |
+| `worker.py` tính MEU/speed đúng không | log của chính nó — tìm dòng `MEU=... density=... speed=...km/h` |
 | Hàng đợi camera còn tồn bao nhiêu | `docker exec smart-transport-redis redis-cli LLEN camera_queue` |
 | Số edge đã có tốc độ trong Redis | `docker exec smart-transport-redis redis-cli HLEN traffic:speeds` |
 | Toàn bộ dữ liệu tốc độ | `docker exec smart-transport-redis redis-cli HGETALL traffic:speeds` |
-| Edge nào đang được coi là kẹt liên tục | `docker exec smart-transport-redis redis-cli KEYS "congestion:streak:*"` |
 | Redis publish sự kiện real-time | `docker exec smart-transport-redis redis-cli SUBSCRIBE traffic:events` |
 | `traffic_updater.py` có ghi được vào Valhalla không | `docker logs -f valhalla-traffic-daemon` — tìm `written=N stale=0` |
 
@@ -99,17 +98,13 @@ config.CAMERAS (611 camera thật, 1609 edge_id thật từ Valhalla graph)
 │ 2. worker.py (chạy 2-3 instance song song)      │
 │    1. BLPOP cam_id                                │
 │    2. GET snapshot trực tiếp (RAM, không qua S3)  │
-│    3. YOLO predict (AI/ module)                   │
-│    4. MEU = Σ meu_coefficient[class]              │
+│    3. YOLO predict (AI/ module) → MEU             │
 │    5. Greenshields: raw_speed = free_flow×(1-d^n) │
-│    6. EMA smoothing (chống outlier)               │
-│    7. Streak counter (đếm chu kỳ đang kẹt)         │
-│    8. HSET + HEXPIRE traffic:ema/traffic:speeds    │
+│    8. HSET + HEXPIRE traffic:speeds               │
 └──────────┬─────────────────────────────────────┘
            │
            ▼
-   Redis HASH "traffic:speeds" + "traffic:ema" (mỗi field tự có TTL 1200s)
-   + Redis STRING "congestion:streak:{edge_id}"
+   Redis HASH "traffic:speeds" (mỗi field tự có TTL 1200s)
            │
            │  (worker.py KHÔNG chờ ai đọc — chỉ ghi rồi thôi)
            ▼
@@ -135,20 +130,15 @@ Chạy **nhiều instance song song** (khuyến nghị 2-3, mỗi instance 1 pro
 
 1. **`BLPOP camera_queue`** (timeout 5s) — chờ và lấy đúng 1 `cam_id`; nhiều instance cùng `BLPOP` trên 1 queue tự động chia việc, không cần điều phối thêm.
 2. **`GET` snapshot trực tiếp** từ `{camera_url}&t={now_ms}` bằng `requests.Session` (giữ cookie phiên, header giả lập trình duyệt) — ảnh chỉ tồn tại dưới dạng `bytes` trong RAM, xử lý xong là mất, **không upload S3**.
-3. **YOLO predict** (`AI/src/core/detector.py`, model `AI/weights/best.pt`, ngưỡng `CONFIDENCE=0.3`) → bounding box từng xe.
-4. **MEU** (Motorcycle Equivalent Unit) = tổng hệ số quy đổi theo loại xe (`AI/config/meu_coefficients.json`: motorcycle=1.0, car=3.236, bus=8.568, truck=10).
+3. **YOLO predict** (`AI/src/core/detector.py`, model `AI/weights/best.pt`, ngưỡng `CONFIDENCE=0.3`) → bounding box từng xe, rồi tính **MEU** (Motorcycle Equivalent Unit) = tổng hệ số quy đổi theo loại xe (`AI/config/meu_coefficients.json`: motorcycle=1.0, car=3.236, bus=8.568, truck=10).
 5. **Greenshields → `raw_speed`** (thay hoàn toàn cho TWF/HCI của kiến trúc cũ):
    - `density = min(MEU / MEU_max[cam], 1.0)` — `MEU_max` tra theo `cam_id` trong `AI/config/camera_thresholds.json` (`meuMax`), fallback `MEU_MAX_DEFAULT=200.0` nếu camera chưa hiệu chuẩn (610/611 camera hiện đang dùng fallback — xem "Giới hạn").
    - `raw_speed = free_flow[edge] × (1 - density^n)` — `free_flow[edge]` tra theo `edge_id` trong `default_traffic.json` (`DEFAULT_EDGE_SPEED_KMH`), fallback `FREE_FLOW_DEFAULT_KMH=50` nếu edge không có; `n = GREENSHIELDS_N` (mặc định 1.0 = Greenshields tuyến tính gốc).
    - Chặn dưới: `raw_speed = max(raw_speed, MIN_SPEED_KMH=3.0)` — tránh tốc độ âm/bằng 0 khi density chạm 1.0.
-6. **EMA → `smooth_speed`**: đọc giá trị trước đó qua `HGET traffic:ema {edge_id}`.
-   - Nếu `|raw_speed - prev| > EMA_OUTLIER_THRESHOLD_KMH` (mặc định 25km/h) → coi là nhiễu (ảnh lỗi, YOLO detect sai đột biến), **bỏ qua toàn bộ bước 6-8 cho edge này**, giữ nguyên giá trị cũ trong Redis.
-   - Ngược lại: `smooth = α × raw_speed + (1-α) × prev` (α = `EMA_ALPHA`, mặc định 0.3); nếu chưa có `prev` (edge lần đầu xuất hiện) thì `smooth = raw_speed`.
-7. **Streak counter** — đếm số chu kỳ liên tiếp đang kẹt: nếu `smooth < JAM_THRESHOLD_KMH` (mặc định 15km/h) → `INCR congestion:streak:{edge_id}` (TTL 180s, tự xoá nếu không có chu kỳ nào cập nhật thêm); ngược lại → `DEL congestion:streak:{edge_id}`.
+   - Không làm mượt EMA, không đếm streak kẹt xe — mỗi vòng ghi thẳng `raw_speed` vừa tính, đơn giản hoá tối đa so với thiết kế ban đầu.
 8. **Ghi Redis** (không gom batch, ghi trực tiếp ngay khi tính xong — khác hẳn kiến trúc Flink cũ):
-   - `HSET traffic:ema {edge_id} {smooth}` — lưu giá trị mượt để làm `prev` cho vòng sau.
-   - `HSET traffic:speeds {edge_id} "{smooth}:{timestamp_giây}"` — đúng định dạng daemon bên Valhalla cần.
-   - `HEXPIRE` (Redis ≥ 7.4) đúng field vừa ghi trên cả 2 hash, TTL = `REDIS_FIELD_TTL_SECONDS` (mặc định 1200s) — dọn field nếu camera chết hẳn, không cần cho tính đúng đắn (xem mục 3 bên dưới), chỉ để Redis không phình vô hạn.
+   - `HSET traffic:speeds {edge_id} "{raw_speed}:{timestamp_giây}"` — đúng định dạng daemon bên Valhalla cần.
+   - `HEXPIRE` (Redis ≥ 7.4) đúng field vừa ghi, TTL = `REDIS_FIELD_TTL_SECONDS` (mặc định 1200s) — dọn field nếu camera chết hẳn, không cần cho tính đúng đắn (xem mục 3 bên dưới), chỉ để Redis không phình vô hạn.
    - `PUBLISH traffic:events "update"` (giới hạn tối đa 1 lần/`PUBLISH_DEBOUNCE_SECONDS` bằng khoá `SET NX EX` trên Redis, tránh spam) — **hiện tại không ai lắng nghe kênh này** (xem mục 3), giữ lại phòng khi sau này có consumer event-driven khác.
 
 Camera nào không có `edges` (không map được với Valhalla graph) bị bỏ qua ngay từ đầu `process_camera()`.
@@ -158,9 +148,7 @@ Camera nào không có `edges` (không map được với Valhalla graph) bị b
 #### 3.1. Cấu trúc dữ liệu Redis
 
 - `traffic:speeds` — **HASH**: field = `edge_id`, value = `"{speed_kmh}:{timestamp_giây}"`.
-- `traffic:ema` — **HASH** riêng, chỉ để `worker.py` tự đọc lại làm `prev` cho lần sau — **không phải** dữ liệu daemon Valhalla cần đọc.
-- `congestion:streak:{edge_id}` — **STRING** (dùng như counter qua `INCR`), TTL 180s, phục vụ giám sát/log — chưa có consumer nào đọc field này trong pipeline (chỗ để mở rộng sau, ví dụ cảnh báo kẹt xe kéo dài).
-- Cả `traffic:ema` và `traffic:speeds` đều có **TTL riêng từng field** (`HEXPIRE`, 1200s) — chỉ để dọn field khi camera chết hẳn, không phải cơ chế quyết định "còn tươi hay không" (xem 3.3).
+- Có **TTL riêng từng field** (`HEXPIRE`, 1200s) — chỉ để dọn field khi camera chết hẳn, không phải cơ chế quyết định "còn tươi hay không" (xem 3.3).
 
 #### 3.2. Có 2 bản daemon đọc Redis trong `valhalla-hcm-traffic` — chỉ 1 bản đang chạy
 
@@ -281,12 +269,11 @@ So sánh trực tiếp với kiến trúc Kafka+Flink+S3 cũ (đã kiểm thử 
 |---|---|---|
 | 1 | `MEU_max` chỉ hiệu chuẩn phẳng theo camera, không tách theo giờ trong ngày như thiết kế gốc muốn | 610/611 camera dùng `MEU_MAX_DEFAULT=200.0` — density có thể không phản ánh đúng thực tế theo khung giờ cao/thấp điểm |
 | 2 | `camera_thresholds.json` chỉ có hiệu chuẩn cho `camera_001` | Tương tự #1 — cần thu thập dữ liệu lịch sử để hiệu chuẩn thêm |
-| 3 | `congestion:streak:{edge_id}` chưa có consumer nào đọc | Dữ liệu được ghi nhưng chưa dùng vào việc gì cụ thể (cảnh báo, dashboard...) |
-| 4 | ~3.4% edge publish lên không khớp `traffic.tar` index của Valhalla | Traffic của các edge đó không được áp dụng dù publish thành công về phía Redis |
-| 5 | `old-pipeline/consumer_db.py` | Không chạy được — xem mục 5 ở Phần 2 |
-| 6 | Số instance `worker.py` cần chạy tay theo cấu hình máy, chưa có auto-scaling | Vận hành thủ công phải tự theo dõi độ dài `camera_queue` để quyết định thêm/bớt instance |
-| 7 | Daemon Valhalla (`/app/traffic_updater.py`) nhớ "edge nào đang active" trong RAM, mất hết khi daemon restart | Edge có tốc độ thật ngay trước lúc restart, rồi camera chết ngay sau đó → tốc độ cũ **kẹt vĩnh viễn** trong `traffic.tar`, không tự xoá được nữa (xem Phần 2, mục 3.5). Đề xuất: seed lại toàn bộ định kỳ (vd 3h sáng), **chưa triển khai** — thuộc hạ tầng `valhalla-hcm-traffic`, ngoài phạm vi repo này |
-| 8 | `traffic.tar` hiện chỉ có 1 tile trong index cache của daemon (phát hiện lúc test mục 3.4), oob tăng từ ~3.4% lên ~67% (1046/1567) | Phần lớn edge publish lên không được áp dụng vào Valhalla dù Redis/daemon đều hoạt động đúng — nghi do các lần seed-live-traffic-all của script cũ trước khi bị tắt (mục 3.2), cần rebuild lại `traffic.tar` bên `valhalla-hcm-traffic`, ngoài phạm vi repo này |
+| 3 | ~3.4% edge publish lên không khớp `traffic.tar` index của Valhalla | Traffic của các edge đó không được áp dụng dù publish thành công về phía Redis |
+| 4 | `old-pipeline/consumer_db.py` | Không chạy được — xem mục 5 ở Phần 2 |
+| 5 | Số instance `worker.py` cần chạy tay theo cấu hình máy, chưa có auto-scaling | Vận hành thủ công phải tự theo dõi độ dài `camera_queue` để quyết định thêm/bớt instance |
+| 6 | Daemon Valhalla (`/app/traffic_updater.py`) nhớ "edge nào đang active" trong RAM, mất hết khi daemon restart | Edge có tốc độ thật ngay trước lúc restart, rồi camera chết ngay sau đó → tốc độ cũ **kẹt vĩnh viễn** trong `traffic.tar`, không tự xoá được nữa (xem Phần 2, mục 3.5). Đề xuất: seed lại toàn bộ định kỳ (vd 3h sáng), **chưa triển khai** — thuộc hạ tầng `valhalla-hcm-traffic`, ngoài phạm vi repo này |
+| 7 | `traffic.tar` hiện chỉ có 1 tile trong index cache của daemon (phát hiện lúc test mục 3.4), oob tăng từ ~3.4% lên ~67% (1046/1567) | Phần lớn edge publish lên không được áp dụng vào Valhalla dù Redis/daemon đều hoạt động đúng — nghi do các lần seed-live-traffic-all của script cũ trước khi bị tắt (mục 3.2), cần rebuild lại `traffic.tar` bên `valhalla-hcm-traffic`, ngoài phạm vi repo này |
 
 ## Lưu ý vận hành
 

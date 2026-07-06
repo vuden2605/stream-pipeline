@@ -25,11 +25,10 @@ from config import (
     CAMERAS, CONFIDENCE, AI_MODEL_PATH, BROWSER_HEADERS,
     DEFAULT_EDGE_SPEED_KMH, FREE_FLOW_DEFAULT_KMH,
     GREENSHIELDS_N, MIN_SPEED_KMH, MEU_MAX_DEFAULT,
-    EMA_ALPHA, EMA_OUTLIER_THRESHOLD_KMH,
-    JAM_THRESHOLD_KMH, CONGESTION_STREAK_TTL_SECONDS, PUBLISH_DEBOUNCE_SECONDS,
+    PUBLISH_DEBOUNCE_SECONDS,
     REDIS_FIELD_TTL_SECONDS,
     REDIS_HOST, REDIS_PORT, REDIS_DB,
-    REDIS_QUEUE_KEY, REDIS_EMA_KEY, REDIS_SPEEDS_KEY, REDIS_CHANNEL, REDIS_STREAK_PREFIX,
+    REDIS_QUEUE_KEY, REDIS_SPEEDS_KEY, REDIS_CHANNEL,
 )
 
 REDIS_PUBLISH_LOCK_KEY = "traffic:publish_lock"
@@ -126,48 +125,24 @@ def process_camera(session: requests.Session, r: redis.Redis, camera: dict) -> N
         raw_speed = free_flow * (1 - density ** GREENSHIELDS_N)
         raw_speed = max(raw_speed, MIN_SPEED_KMH)
 
-        # Bước 6: EMA → smooth_speed (chống nhiễu bằng ngưỡng outlier)
-        prev_raw = r.hget(REDIS_EMA_KEY, edge_id)
-        prev = float(prev_raw) if prev_raw is not None else None
-
-        if prev is not None and abs(raw_speed - prev) > EMA_OUTLIER_THRESHOLD_KMH:
-            log.warning(
-                "[%s] edge=%s outlier raw=%.1f prev=%.1f (>%.0fkm/h) — bỏ qua",
-                cam_id, edge_id, raw_speed, prev, EMA_OUTLIER_THRESHOLD_KMH,
-            )
-            continue
-
-        smooth = EMA_ALPHA * raw_speed + (1 - EMA_ALPHA) * prev if prev is not None else raw_speed
-
-        # Bước 7: Streak counter (đếm số chu kỳ liên tiếp đang kẹt)
-        streak_key = f"{REDIS_STREAK_PREFIX}{edge_id}"
-        if smooth < JAM_THRESHOLD_KMH:
-            r.incr(streak_key)
-            r.expire(streak_key, CONGESTION_STREAK_TTL_SECONDS)
-        else:
-            r.delete(streak_key)
-
         # Bước 8: Ghi Redis — kèm HEXPIRE để tự dọn field nếu camera chết hẳn
         # (không worker.py nào ghi lại nữa). TTL >= speed_ttl_seconds bên
         # valhalla-traffic-daemon nên không ảnh hưởng tính đúng đắn, chỉ dọn
         # bộ nhớ (xem config.py:REDIS_FIELD_TTL_SECONDS).
         pipe = r.pipeline()
-        pipe.hset(REDIS_EMA_KEY, edge_id, smooth)
-        pipe.hexpire(REDIS_EMA_KEY, REDIS_FIELD_TTL_SECONDS, edge_id)
-        pipe.hset(REDIS_SPEEDS_KEY, edge_id, f"{smooth:.1f}:{ts}")
+        pipe.hset(REDIS_SPEEDS_KEY, edge_id, f"{raw_speed:.1f}:{ts}")
         pipe.hexpire(REDIS_SPEEDS_KEY, REDIS_FIELD_TTL_SECONDS, edge_id)
         pipe.execute()
 
         log.info(
-            "[%s] edge=%s MEU=%.2f density=%.2f raw=%.1fkm/h smooth=%.1fkm/h",
-            cam_id, edge_id, meu, density, raw_speed, smooth,
+            "[%s] edge=%s MEU=%.2f density=%.2f speed=%.1fkm/h",
+            cam_id, edge_id, meu, density, raw_speed,
         )
 
-    # traffic_updater.py chạy NGAY toàn bộ pipeline (seed toàn bộ về UNKNOWN
-    # rồi mới ghi lại) mỗi khi nhận 1 message — không tự debounce. Dùng SET
-    # NX EX làm khoá phân tán: toàn bộ instance worker.py cộng lại chỉ
-    # publish tối đa 1 lần mỗi PUBLISH_DEBOUNCE_SECONDS, tránh daemon bị gọi
-    # dồn dập và khoảng "toàn bộ edge = UNKNOWN" xảy ra liên tục.
+    # Daemon Valhalla đang dùng (/app/traffic_updater.py) tự poll theo đồng hồ
+    # cố định, không nghe Pub/Sub — PUBLISH này hiện không ai lắng nghe, giữ
+    # lại (đã debounce qua SET NX EX) phòng khi sau này có consumer
+    # event-driven khác cần (xem README Phần 2, mục 3.2).
     if r.set(REDIS_PUBLISH_LOCK_KEY, "1", nx=True, ex=PUBLISH_DEBOUNCE_SECONDS):
         r.publish(REDIS_CHANNEL, "update")
 
