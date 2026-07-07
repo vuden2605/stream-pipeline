@@ -154,15 +154,47 @@ Camera nào không có `edges` (không map được với Valhalla graph) bị b
 
 Khi tìm hiểu kỹ (đọc trực tiếp source bên trong container, vì 2 file này khác nhau và dễ nhầm), phát hiện project `valhalla-hcm-traffic` có **2 cách cập nhật live traffic hoàn toàn khác nhau**:
 
-| | Bản cũ (`scripts/traffic_updater.py`, container `valhalla-hcm`) | Bản đang dùng (`/app/traffic_updater.py`, container `valhalla-traffic-daemon`) |
+| | `scripts/traffic_updater.py` (container `valhalla-hcm`) | `/app/traffic_updater.py` (container `valhalla-traffic-daemon`) |
 |---|---|---|
 | Cách chạy | Subscribe Pub/Sub `traffic:events`, chạy ngay mỗi khi nhận message | **Tự poll theo đồng hồ cố định** (~15s), không quan tâm Pub/Sub |
-| Cách ghi | Gọi subprocess `valhalla_traffic_demo_utils --seed-live-traffic-all` (**reset TOÀN BỘ edge về UNKNOWN**) rồi `--update-live-traffic-from-csv` (ghi lại từ CSV) | Ghi **trực tiếp qua `mmap`** vào `traffic.tar`, chỉ đúng edge nào thay đổi (không reset gì cả) |
-| Vấn đề | Vì `worker.py` publish rất dày (per-camera), mỗi lần publish daemon này chạy `seed-live-traffic-all` → **mọi edge tạm thời về UNKNOWN** trước khi ghi lại — xảy ra gần như liên tục | Không có vấn đề này — ghi từng edge độc lập, không có khoảnh khắc "toàn bộ UNKNOWN" |
+| Cách ghi | Gọi subprocess `valhalla_traffic_demo_utils --seed-live-traffic-all` rồi `--update-live-traffic-from-csv` — dùng **tool chính thức của Valhalla**, tự tính offset đúng | Ghi **trực tiếp qua `mmap`** (tự tính offset bằng tay), incremental — chỉ đúng edge nào thay đổi |
 
-**2 daemon này từng chạy song song, cùng ghi vào 1 file `traffic.tar` → xung đột trực tiếp.** Đã xử lý: sửa `smart-transport/valhalla-hcm-traffic/docker-compose.yml`, gỡ dòng `python3 /scripts/traffic_updater.py &` khỏi container `valhalla-hcm` — giờ chỉ còn `/app/traffic_updater.py` (`valhalla-traffic-daemon`) là nguồn cập nhật live traffic duy nhất.
+**Vấn đề #1 (đã xử lý từ trước):** 2 daemon này từng chạy song song, cùng ghi vào 1 file `traffic.tar` → xung đột trực tiếp — mỗi lần `worker.py` publish, `scripts/traffic_updater.py` lại chạy `seed-live-traffic-all` (reset TOÀN BỘ edge về UNKNOWN) ngay trong lúc `/app` daemon đang ghi incremental. Đã tắt `scripts/traffic_updater.py` (gỡ khỏi `command:` trong `docker-compose.yml`), chỉ giữ `/app/traffic_updater.py` chạy.
 
-**Hệ quả:** `PUBLISH traffic:events` trong `worker.py` giờ **không còn ai lắng nghe** — daemon đang dùng hoàn toàn phớt lờ Pub/Sub. Vẫn giữ lại lời gọi này (đã debounce) trong code vì vô hại, phòng khi sau này có consumer event-driven khác cần.
+**Vấn đề #2 (phát hiện sau, nghiêm trọng hơn):** ngay cả khi chỉ còn `/app/traffic_updater.py` chạy một mình, `/locate` của Valhalla **không bao giờ** hiển thị `live_speed` cho bất kỳ edge nào, dù byte đọc thẳng từ `traffic.tar` (bằng đúng công thức offset của chính daemon) luôn khớp với Redis. Trace vào source thật của Valhalla (`valhalla/baldr/traffictile.h`, đúng commit `9c06fece...` mà Dockerfile build) phát hiện `/app/traffic_updater.py` **tự đoán sai 2 hằng số**:
+
+```cpp
+// Struct thật (valhalla/baldr/traffictile.h):
+struct TrafficTileHeader {
+  uint64_t tile_id; uint64_t last_update;
+  uint32_t directed_edge_count; uint32_t traffic_tile_version;
+  uint32_t spare2; uint32_t spare3;
+};
+static_assert(sizeof(TrafficTileHeader) == sizeof(uint64_t) * 4, ...);  // 32 byte
+
+struct TrafficSpeed {
+  uint64_t overall_encoded_speed : 7;  // bit 0-6
+  uint64_t encoded_speed1 : 7;          // bit 7-13
+  uint64_t encoded_speed2 : 7;          // bit 14-20
+  uint64_t encoded_speed3 : 7;          // bit 21-27
+  uint64_t breakpoint1 : 8;             // bit 28-35
+  uint64_t breakpoint2 : 8;             // bit 36-43
+  ...
+};
+```
+
+`/app/traffic_updater.py` bản gốc dùng `TILE_HDR_SIZE = 40` (đáng lẽ **32**) và đặt `breakpoint1` ngay sau `encoded_speed1` (đáng lẽ phải sau `encoded_speed2`/`encoded_speed3`). Lệch header đúng 8 byte = đúng 1 slot `TrafficSpeed` → **mọi write đều ghi lệch sang slot của edge kế tiếp** (`local_idx + 1`), còn slot thật của edge cần ghi thì không bao giờ được set `breakpoint1` → `speed_valid()` phía Valhalla luôn `false` → `/locate` luôn trả `{}`, bất kể dữ liệu Redis đúng hay daemon "tưởng" mình ghi thành công.
+
+**Đã sửa cả 2 hằng số trong `/app/traffic_updater.py`** (`TILE_HDR_FMT`: `"<QQIIQQ"` → `"<QQIIII"`, và thứ tự bit trong `_speed_u64()`), rồi `docker cp` đè lại vào container (file này không có bản mount từ host — build 1 lần vào image rồi thất lạc khỏi mọi Dockerfile/git history hiện tại, xem thêm ghi chú bên dưới). **Đã kiểm chứng cả ghi lẫn xoá đều đúng qua `/locate` thật** (không chỉ đọc byte bằng tay):
+
+- Ghi: `/locate` trả `{"overall_speed": 70, "speed_0": 70, "speed_1": 70, "speed_2": 70, "breakpoint_0": 1.0, ...}` — khớp 100% với Redis.
+- Xoá (test bằng `HDEL traffic:speeds <edge_id>`): log daemon hiện đúng `cleared=1` ngay chu kỳ edge biến mất, và `/locate` cho edge đó quay lại `{}` (UNKNOWN) ngay sau đó.
+
+Nhờ vậy `/app/traffic_updater.py` (đã sửa) tiếp tục là nguồn cập nhật live traffic **duy nhất** — không cần quay lại `scripts/traffic_updater.py` (giữ tắt, chỉ để tham khảo) và không có khoảng "toàn bộ UNKNOWN" nào cả vì vẫn ghi incremental đúng như thiết kế gốc.
+
+**Lưu ý quan trọng — file này không tồn tại trên host:** `/app/traffic_updater.py` chỉ có bên trong image Docker `valhalla-hcm-traffic-traffic-daemon` (build cách đây nhiều ngày từ 1 `docker-compose.yml`/Dockerfile riêng, không còn trong git history hay trên đĩa của project `valhalla-hcm-traffic` nữa — service `traffic-daemon` đã biến mất khỏi compose file hiện tại). Bản đã sửa được backup tại `smart-transport/valhalla-hcm-traffic/app_daemon_backup/` (`traffic_updater.py`, `traffic_updater_config.yaml`, `traffic_verify.py`) — **nếu container/image này bị xoá, đây là bản duy nhất còn lại**, nên cân nhắc thêm vào Dockerfile của `valhalla-hcm-traffic` để build lại được từ nguồn thay vì phụ thuộc vào 1 image thủ công.
+
+**Hệ quả:** `PUBLISH traffic:events` trong `worker.py` **không còn ai lắng nghe** — daemon đang dùng hoàn toàn phớt lờ Pub/Sub (tự poll cố định). Vẫn giữ lại lời gọi này (đã debounce) trong code vì vô hại, phòng khi sau này có consumer event-driven khác cần.
 
 #### 3.3. Cách daemon đang dùng quyết định "edge nào còn tươi"
 
@@ -216,7 +248,23 @@ Cách test (thực hiện trực tiếp trên môi trường đang chạy, khôn
    ```
    Kết quả thực tế khi test: `127` (UNKNOWN) — đúng như kỳ vọng.
 
-**Lưu ý phát hiện thêm khi test:** lúc này `traffic.tar` chỉ có **đúng 1 tile** trong index cache (`/tmp/traffic_tar_index_cache.json`), khiến ~1046/1567 edge bị `oob` (không tìm thấy trong index) — cao hơn nhiều so với ~54/1567 (~3.4%) ghi nhận lúc mới chuyển sang kiến trúc Redis (mục "Kết quả kiểm thử"). Nhiều khả năng là hệ quả của các lần `--seed-live-traffic-all` từ script cũ (đã tắt, mục 3.2) chạy dồn dập trong lúc 2 daemon xung đột, làm `traffic.tar` bị thu hẹp lại. Cần kiểm tra/rebuild lại `traffic.tar` đầy đủ bên `valhalla-hcm-traffic` — **nằm ngoài phạm vi repo này**, ghi lại để không quên.
+**Cập nhật (đã tự hết):** tại thời điểm test ban đầu, `traffic.tar` chỉ có đúng 1 tile trong index cache, khiến ~67% edge bị `oob`. Sau khi sửa xong bug offset ở mục 3.2 và `traffic.tar` được ghi/rebuild thêm qua thời gian, index hiện đã lên **31 tile**, `oob=0/1581` (0%) — vấn đề này đã tự giải quyết, không cần hành động thêm.
+
+#### 3.4b. Test riêng nhánh "field bị Redis tự xoá" (khác nhánh "stale" ở 3.4)
+
+3.4 test nhánh **stale** (field vẫn còn trong Redis nhưng timestamp quá hạn). Còn nhánh **"field đã bị Redis tự xoá"** (do TTL `HEXPIRE` hết hạn, hoặc camera chết hẳn không còn `worker.py` nào ghi) test bằng cách xoá field trực tiếp thay vì backdate timestamp — cả 2 nhánh đều dẫn tới cùng kết quả ở `process_snapshot()`: edge rớt khỏi `new_active` của chu kỳ đó → daemon ghi UNKNOWN (xem code trích ở 3.3).
+
+Cách test (đã thực hiện thật, không chỉ suy luận):
+
+1. **Dừng hết `queue_feeder.py` và mọi `worker.py`** (Ctrl+C tất cả cửa sổ, hoặc `Stop-Process` theo PID lấy từ `Get-CimInstance Win32_Process -Filter "Name='python.exe'"`) — bắt buộc, nếu không edge sẽ bị ghi lại gần như ngay lập tức (chu kỳ `queue_feeder` chỉ 10s) trước khi daemon kịp phát hiện.
+2. Chọn 1 `edge_id` đang có trong `traffic:speeds` **và nằm trong tile daemon đang index** (không phải `oob`) — kiểm tra bằng cách so `edge_id & 0x1FFFFFF` với các key trong `/tmp/traffic_tar_index_cache.json` (container `valhalla-traffic-daemon`). Ví dụ đã dùng: `3380307324401` (tile `290289`, giá trị trước khi xoá: `47.3 km/h`, `raw_speed_code=24`).
+3. Xoá thẳng field:
+   ```powershell
+   docker exec smart-transport-redis redis-cli HDEL traffic:speeds <edge_id>
+   ```
+4. Đợi 1-2 chu kỳ poll (~30s), rồi đọc thẳng byte đã mã hoá trong `traffic.tar` (theo đúng script ở bước 4 của 3.4) để xác nhận `raw_speed_code == 127`.
+
+**Kết quả thực tế:** `raw_speed_code` chuyển từ `24` → `127` (UNKNOWN) — đúng cơ chế. **Log daemon lại show `cleared=0`** ở toàn bộ chu kỳ quan sát được, dù byte đã đổi đúng — tái xác nhận lưu ý ở 3.4: chu kỳ poll thực sự thực hiện việc "clear" nhiều khả năng xảy ra ngay trước khi bắt đầu tail log (độ trễ vài giây giữa lệnh `HDEL` và lúc chạy `docker logs -f`), nên **đọc byte trực tiếp vẫn là cách kiểm chứng đáng tin duy nhất**, không nên dựa vào đếm `cleared` trong log.
 
 #### 3.5. Rủi ro còn lại — edge "kẹt vĩnh viễn" sau khi daemon restart, và giải pháp seed định kỳ
 
@@ -259,7 +307,7 @@ So sánh trực tiếp với kiến trúc Kafka+Flink+S3 cũ (đã kiểm thử 
 
 **Nguyên nhân kiến trúc cũ thất bại:** `consumer_ai.py` (1 process, `CONCURRENCY=4`) không xử lý kịp lượng ảnh của 611 camera → backlog Kafka phình to → dữ liệu tới Redis luôn mang timestamp cũ hàng giờ → bị `traffic_updater.py` tự động loại bỏ vì vượt `SPEED_TTL_SECONDS=900`. Kiến trúc Redis queue giải quyết bằng cách **chạy nhiều `worker.py` song song** (throughput scale ngang theo số instance, không bị giới hạn bởi 1 process duy nhất) và **bỏ qua bước upload/download S3** (giảm độ trễ mỗi camera).
 
-**Ghi nhận nhỏ, chưa xử lý:** `valhalla-traffic-daemon` log thêm cảnh báo `N edge(s) not found in traffic.tar index` (khoảng 54/1567, ~3.4%) — một số edge publish lên không khớp với bản đồ Valhalla đang chạy (có thể do build đồ thị khác thời điểm với `cameras_with_zones_merged.json`). Không liên quan tới lỗi throughput đã khắc phục, nằm ngoài phạm vi lần sửa này.
+**Cập nhật:** cảnh báo `N edge(s) not found in traffic.tar index` (oob) ghi nhận ban đầu (~54/1567, ~3.4%, sau có lúc tăng lên ~67% do `traffic.tar` bị thu hẹp tạm thời) đã **hết hẳn** sau khi sửa bug offset của `/app/traffic_updater.py` và index được rebuild đầy đủ (xem Phần 2, mục 3.2) — hiện `oob=0/1581`.
 
 ---
 
@@ -269,11 +317,10 @@ So sánh trực tiếp với kiến trúc Kafka+Flink+S3 cũ (đã kiểm thử 
 |---|---|---|
 | 1 | `MEU_max` chỉ hiệu chuẩn phẳng theo camera, không tách theo giờ trong ngày như thiết kế gốc muốn | 610/611 camera dùng `MEU_MAX_DEFAULT=200.0` — density có thể không phản ánh đúng thực tế theo khung giờ cao/thấp điểm |
 | 2 | `camera_thresholds.json` chỉ có hiệu chuẩn cho `camera_001` | Tương tự #1 — cần thu thập dữ liệu lịch sử để hiệu chuẩn thêm |
-| 3 | ~3.4% edge publish lên không khớp `traffic.tar` index của Valhalla | Traffic của các edge đó không được áp dụng dù publish thành công về phía Redis |
-| 4 | `old-pipeline/consumer_db.py` | Không chạy được — xem mục 5 ở Phần 2 |
-| 5 | Số instance `worker.py` cần chạy tay theo cấu hình máy, chưa có auto-scaling | Vận hành thủ công phải tự theo dõi độ dài `camera_queue` để quyết định thêm/bớt instance |
-| 6 | Daemon Valhalla (`/app/traffic_updater.py`) nhớ "edge nào đang active" trong RAM, mất hết khi daemon restart | Edge có tốc độ thật ngay trước lúc restart, rồi camera chết ngay sau đó → tốc độ cũ **kẹt vĩnh viễn** trong `traffic.tar`, không tự xoá được nữa (xem Phần 2, mục 3.5). Đề xuất: seed lại toàn bộ định kỳ (vd 3h sáng), **chưa triển khai** — thuộc hạ tầng `valhalla-hcm-traffic`, ngoài phạm vi repo này |
-| 7 | `traffic.tar` hiện chỉ có 1 tile trong index cache của daemon (phát hiện lúc test mục 3.4), oob tăng từ ~3.4% lên ~67% (1046/1567) | Phần lớn edge publish lên không được áp dụng vào Valhalla dù Redis/daemon đều hoạt động đúng — nghi do các lần seed-live-traffic-all của script cũ trước khi bị tắt (mục 3.2), cần rebuild lại `traffic.tar` bên `valhalla-hcm-traffic`, ngoài phạm vi repo này |
+| 3 | `old-pipeline/consumer_db.py` | Không chạy được — xem mục 5 ở Phần 2 |
+| 4 | Số instance `worker.py` cần chạy tay theo cấu hình máy, chưa có auto-scaling | Vận hành thủ công phải tự theo dõi độ dài `camera_queue` để quyết định thêm/bớt instance |
+| 5 | Daemon Valhalla (`/app/traffic_updater.py`) nhớ "edge nào đang active" trong RAM, mất hết khi daemon restart | Edge có tốc độ thật ngay trước lúc restart, rồi camera chết ngay sau đó → tốc độ cũ **kẹt vĩnh viễn** trong `traffic.tar`, không tự xoá được nữa (xem Phần 2, mục 3.5). Đề xuất: seed lại toàn bộ định kỳ (vd 3h sáng), **chưa triển khai** — thuộc hạ tầng `valhalla-hcm-traffic`, ngoài phạm vi repo này |
+| 6 | `/app/traffic_updater.py` chỉ tồn tại bên trong image Docker đã build sẵn, không có trong git history/Dockerfile hiện tại của `valhalla-hcm-traffic` | Nếu image/container bị xoá mà chưa backup, mất code daemon — đã backup bản đã sửa vào `smart-transport/valhalla-hcm-traffic/app_daemon_backup/` (xem Phần 2, mục 3.2), nhưng nên đưa vào Dockerfile chính thức để build lại được từ nguồn |
 
 ## Lưu ý vận hành
 
