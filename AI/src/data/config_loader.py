@@ -32,7 +32,7 @@ def getCameraThresholds(cameraId):
     return data.get(cameraId, defaultThresholds)
 
 
-def logTrafficMetrics(cameraId, preciseOccupancy, rawOccupancy, meu, hci, twf):
+def logTrafficMetrics(cameraId, preciseOccupancy, meu, twf):
     """
     Hàm lưu trữ lại các chỉ số giao thông sau mỗi lần predict vào file CSV lịch sử.
     Tự động tạo file và chèn hàng tiêu đề (Header) nếu file chạy lần đầu tiên.
@@ -50,13 +50,11 @@ def logTrafficMetrics(cameraId, preciseOccupancy, rawOccupancy, meu, hci, twf):
         "timestamp": currentTimestamp,
         "cameraId": cameraId,
         "preciseOccupancy": round(preciseOccupancy, 2),
-        "rawOccupancy": round(rawOccupancy, 2),
         "meu": round(meu, 2),
-        "hci": round(hci, 2),
         "twf": round(twf, 2)
     }
     
-    fieldnames = ["timestamp", "cameraId", "preciseOccupancy", "rawOccupancy", "meu", "hci", "twf"]
+    fieldnames = ["timestamp", "cameraId", "preciseOccupancy", "meu", "twf"]
     
     # Mở file ở chế độ 'a' (Append - ghi tiếp vào cuối file), mã hóa utf-8
     with open(logFilePath, mode='a', newline='', encoding='utf-8') as f:

@@ -1,3 +1,2 @@
-timestamp,cameraId,preciseOccupancy,rawOccupancy,meu,hci,twf
-2026-06-30 20:21:49,camera_001,100.0,22.91,58.12,0.47,1.0
-2026-06-30 20:26:34,camera_001,100.0,22.91,58.12,0.47,1.0
+timestamp,cameraId,preciseOccupancy,meu,twf
+2026-07-07 20:22:43,camera_001,100.0,58.12,0.29

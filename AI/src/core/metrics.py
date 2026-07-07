@@ -164,7 +164,52 @@ def calculateHybridCongestionIndex(meu, occupancyRatio, meuMax, orMax, weights):
     return (weights["w1"] * (meu / meuMax)) + (weights["w2"] * (occupancyRatio / orMax))
 
 
-def calculateTrafficWeightFactor(preciseOccupancyRatio, r, cameraId, meuCoefficients, hciWeights, cameraThresholds):
+# def calculateTrafficWeightFactor(preciseOccupancyRatio, r, cameraId, meuCoefficients, hciWeights, cameraThresholds):
+#     """
+#     Hàm tính toán hệ số trọng số đường đi (Traffic Weight Factor) ứng dụng tiền điều kiện Road Mask.
+#     - Tiền điều kiện: preciseOccupancyRatio phải >= 85% mới xét phạt.
+#     - Dưới 85%: Bỏ qua hoàn toàn, trả về trọng số bình thường (1.0).
+#     """
+#     # --------------------------------------------------------------------------
+#     # BƯỚC 1: KIỂM TRA TIỀN ĐIỀU KIỆN (GATEKEEPER)
+#     # --------------------------------------------------------------------------
+#     if preciseOccupancyRatio < 85.0:
+#         print(f"[Thuật toán] Mật độ đường thực tế ({preciseOccupancyRatio:.2f}%) < 85%. Tuyến đường thông thoáng -> Bỏ qua phạt.")
+#         return 1.0  # Trả về ngay trọng số bình thường, thuật toán định tuyến giữ nguyên chi phí đường
+
+#     print(f"[Thuật toán] 🚨 CẢNH BÁO: Mật độ đường thực tế ({preciseOccupancyRatio:.2f}%) >= 85%!")
+#     print(f"[Thuật toán] Kích hoạt Tầng 2: Tính toán trọng số phạt dựa trên diện tích thô và tải trọng MEU...")
+
+#     # --------------------------------------------------------------------------
+#     # BƯỚC 2: TÍNH TOÁN KHI ĐÃ ĐẠT TIỀN ĐIỀU KIỆN
+#     # --------------------------------------------------------------------------
+#     # 2.1 Lấy lại hàm tính diện tích Bounding Box thô (bao gồm cả overlap xe đè nhau) từ file gốc của em
+#     rawOccupancyRatio = calculateOccupancyRatio(r) 
+    
+#     # 2.2 Tính tổng tải trọng xe quy đổi (MEU)
+#     meu = calculateMotorcycleEquivalentUnit(r, meuCoefficients)
+    
+#     # 2.3 Lấy các ngưỡng cấu hình lịch sử của camera
+#     meuMax = cameraThresholds.get("meuMax", 1.0)
+#     orMax = cameraThresholds.get("orMax", 1.0)
+#     maxHci = cameraThresholds.get("hciMax", 1.0)
+    
+#     # 2.4 Tính chỉ số kẹt xe hỗn hợp HCI (Sử dụng rawOccupancyRatio của diện tích thô)
+#     currentHci = calculateHybridCongestionIndex(meu, rawOccupancyRatio, meuMax, orMax, hciWeights)
+    
+#     if maxHci <= 0:
+#         return 1.0
+
+#     # 2.5 Quyết định mức độ phạt dựa trên tỷ lệ vượt ngưỡng HCI
+#     ratio = currentHci / maxHci
+#     if ratio >= 0.9:
+#         return 0.1  # Kẹt xe rất nghiêm trọng, tăng chi phí đường lên gấp 10 lần để né đường này
+#     if ratio >= 0.8:
+#         return 0.5  # Ùn ứ nhẹ, tăng chi phí đường gấp đôi
+        
+#     return 1.0
+
+def calculateTrafficWeightFactor(preciseOccupancyRatio, r, cameraId, meuCoefficients, cameraThresholds):
     """
     Hàm tính toán hệ số trọng số đường đi (Traffic Weight Factor) ứng dụng tiền điều kiện Road Mask.
     - Tiền điều kiện: preciseOccupancyRatio phải >= 85% mới xét phạt.
@@ -178,33 +223,16 @@ def calculateTrafficWeightFactor(preciseOccupancyRatio, r, cameraId, meuCoeffici
         return 1.0  # Trả về ngay trọng số bình thường, thuật toán định tuyến giữ nguyên chi phí đường
 
     print(f"[Thuật toán] 🚨 CẢNH BÁO: Mật độ đường thực tế ({preciseOccupancyRatio:.2f}%) >= 85%!")
-    print(f"[Thuật toán] Kích hoạt Tầng 2: Tính toán trọng số phạt dựa trên diện tích thô và tải trọng MEU...")
+    print(f"[Thuật toán] Kích hoạt Tầng 2: Tính toán trọng số phạt dựa trên tải trọng MEU...")
 
     # --------------------------------------------------------------------------
     # BƯỚC 2: TÍNH TOÁN KHI ĐÃ ĐẠT TIỀN ĐIỀU KIỆN
     # --------------------------------------------------------------------------
-    # 2.1 Lấy lại hàm tính diện tích Bounding Box thô (bao gồm cả overlap xe đè nhau) từ file gốc của em
-    rawOccupancyRatio = calculateOccupancyRatio(r) 
     
-    # 2.2 Tính tổng tải trọng xe quy đổi (MEU)
+    # Tính tổng tải trọng xe quy đổi (MEU)
     meu = calculateMotorcycleEquivalentUnit(r, meuCoefficients)
     
     # 2.3 Lấy các ngưỡng cấu hình lịch sử của camera
     meuMax = cameraThresholds.get("meuMax", 1.0)
-    orMax = cameraThresholds.get("orMax", 1.0)
-    maxHci = cameraThresholds.get("hciMax", 1.0)
     
-    # 2.4 Tính chỉ số kẹt xe hỗn hợp HCI (Sử dụng rawOccupancyRatio của diện tích thô)
-    currentHci = calculateHybridCongestionIndex(meu, rawOccupancyRatio, meuMax, orMax, hciWeights)
-    
-    if maxHci <= 0:
-        return 1.0
-
-    # 2.5 Quyết định mức độ phạt dựa trên tỷ lệ vượt ngưỡng HCI
-    ratio = currentHci / maxHci
-    if ratio >= 0.9:
-        return 0.1  # Kẹt xe rất nghiêm trọng, tăng chi phí đường lên gấp 10 lần để né đường này
-    if ratio >= 0.8:
-        return 0.5  # Ùn ứ nhẹ, tăng chi phí đường gấp đôi
-        
-    return 1.0
+    return meu / meuMax if meuMax > 0 else 1.0
