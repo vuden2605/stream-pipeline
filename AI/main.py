@@ -36,14 +36,14 @@ def main():
 
     # 4. Tính toán các chỉ số giao thông mở rộng
     meu = metrics.calculateMotorcycleEquivalentUnit(r0, meuCoefficients)
-    rawOccupancyRatio = metrics.calculateOccupancyRatio(r0) # Tính thêm diện tích thô để in báo cáo
+    # rawOccupancyRatio = metrics.calculateOccupancyRatio(r0) # Tính thêm diện tích thô để in báo cáo
     
     meuMax = cameraThresholds.get("meuMax", 1.0)
-    orMax = cameraThresholds.get("orMax", 1.0)
-    hciWeights = config_loader.getHciWeights()
+    # orMax = cameraThresholds.get("orMax", 1.0)
+    # hciWeights = config_loader.getHciWeights()
     
     # Chỉ số HCI tổng hợp hiển thị trên báo cáo
-    hci = metrics.calculateHybridCongestionIndex(meu, rawOccupancyRatio, meuMax, orMax, hciWeights)
+    # hci = metrics.calculateHybridCongestionIndex(meu, rawOccupancyRatio, meuMax, orMax, hciWeights)
 
     # GỌI HÀM TÍNH TRỌNG SỐ PHẠT VỚI TIỀN ĐIỀU KIỆN ROAD MASK
     trafficWeightFactor = metrics.calculateTrafficWeightFactor(
@@ -51,7 +51,6 @@ def main():
         r=r0,
         cameraId=cameraId,
         meuCoefficients=meuCoefficients,
-        hciWeights=hciWeights,
         cameraThresholds=cameraThresholds
     )
 
@@ -60,9 +59,7 @@ def main():
     config_loader.logTrafficMetrics(
         cameraId=cameraId,
         preciseOccupancy=preciseOccupancyRatio,
-        rawOccupancy=rawOccupancyRatio,
         meu=meu,
-        hci=hci,
         twf=trafficWeightFactor
     )
     # ======================================================================
@@ -73,9 +70,7 @@ def main():
     print("="*50)
     print(f"Mã số Camera                    : {cameraId}")
     print(f"Mật độ lòng đường (Road Mask)   : {preciseOccupancyRatio:.2f}% (Tiền điều kiện)")
-    print(f"Tỷ lệ diện tích thô (Bbox thô)  : {rawOccupancyRatio:.2f}% (Bao gồm overlap)")
     print(f"Tổng tải trọng quy đổi (MEU)     : {meu:.2f}")
-    print(f"Chỉ số ùn tắc tổng hợp (HCI)     : {hci:.2f}")
     print(f"--------------------------------------------------")
     print(f"TRỌNG SỐ ĐIỀU HƯỚNG ĐỊNH TUYẾN (TWF): {trafficWeightFactor:.2f}")
     print("="*50)
