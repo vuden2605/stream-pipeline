@@ -23,9 +23,55 @@ CONFIDENCE    = float(os.getenv("CONFIDENCE", 0.3))
 AI_MODEL_PATH = os.getenv("AI_MODEL_PATH", str(Path(__file__).parent / "AI" / "weights" / "best.pt"))
 
 # speed_kmh = TWF (Traffic Weight Factor, 0-1, xem AI/src/core/metrics.py) x tốc độ free-flow giả định
+# [LEGACY] chỉ còn dùng bởi consumer_ai.py/jobs/ (giữ lại, không phải pipeline
+# đang chạy — xem worker.py cho pipeline Redis-queue hiện hành).
 TWF_MAX_SPEED_KMH = float(os.getenv("TWF_MAX_SPEED_KMH", "50"))
 
 INTERVAL_SECONDS = 10
+
+# ── Redis (worker.py / queue_feeder.py — pipeline hiện hành) ─────────────────
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+REDIS_DB   = int(os.getenv("REDIS_DB", "0"))
+
+REDIS_QUEUE_KEY      = os.getenv("REDIS_QUEUE_KEY", "camera_queue")
+REDIS_SPEEDS_KEY     = os.getenv("REDIS_SPEEDS_KEY", "traffic:speeds")
+REDIS_CHANNEL        = os.getenv("REDIS_CHANNEL", "traffic:events")
+
+# Tốc độ free-flow mặc định khi edge không có trong default_traffic.json
+# (dùng làm free_flow[edge] cho công thức Greenshields bên dưới).
+FREE_FLOW_DEFAULT_KMH = float(os.getenv("FREE_FLOW_DEFAULT_KMH", "50"))
+
+# raw_speed = free_flow[edge] x (1 - density^n) — Greenshields tổng quát hoá,
+# n=1 = Greenshields gốc (quan hệ speed-density tuyến tính).
+GREENSHIELDS_N = float(os.getenv("GREENSHIELDS_N", "1.0"))
+MIN_SPEED_KMH  = float(os.getenv("MIN_SPEED_KMH", "3.0"))
+
+# MEU tối đa để chuẩn hoá density = min(MEU/MEU_max, 1.0). Thiết kế gốc muốn
+# MEU_max theo từng (camera, giờ trong ngày), nhưng camera_thresholds.json
+# hiện chỉ có hiệu chuẩn phẳng theo camera (meuMax, không tách theo giờ) và
+# chỉ phủ camera_001 — nên MEU_MAX_DEFAULT là fallback cho 610/611 camera còn
+# lại chưa hiệu chuẩn (xem worker.py:get_meu_max).
+MEU_MAX_DEFAULT = float(os.getenv("MEU_MAX_DEFAULT", "200.0"))
+
+# traffic_updater.py (bên valhalla-hcm-traffic) chạy NGAY toàn bộ pipeline
+# seed-live-traffic-all + update-live-traffic-from-csv mỗi khi nhận 1 message
+# trên REDIS_CHANNEL — KHÔNG tự debounce (đã đọc source để xác nhận). Nếu mỗi
+# worker.py publish sau mỗi camera (611 cam x nhiều worker), daemon đó sẽ bị
+# gọi liên tục, khiến khoảng "toàn bộ edge = UNKNOWN" (giữa seed và reapply)
+# xảy ra gần như không ngừng. Dùng khoá phân tán trên Redis để đảm bảo TOÀN
+# BỘ worker.py cộng lại chỉ publish tối đa 1 lần mỗi PUBLISH_DEBOUNCE_SECONDS.
+PUBLISH_DEBOUNCE_SECONDS = int(os.getenv("PUBLISH_DEBOUNCE_SECONDS", "10"))
+
+# TTL cho từng field trong traffic:speeds (HEXPIRE, Redis >= 7.4).
+# Không ảnh hưởng tính đúng đắn — valhalla-traffic-daemon (bên
+# valhalla-hcm-traffic, ngoài repo này) đã tự coi field hết hạn dựa vào
+# timestamp nhúng trong value (speed_ttl_seconds=900) bất kể field còn tồn
+# tại trong Redis hay không. TTL ở đây chỉ để dọn bộ nhớ cho camera chết hẳn
+# (không còn worker.py nào ghi nữa). PHẢI >= speed_ttl_seconds bên daemon đó
+# để không bao giờ xoá field sớm hơn ngưỡng daemon tự áp dụng — chọn dư
+# 300s làm đệm.
+REDIS_FIELD_TTL_SECONDS = int(os.getenv("REDIS_FIELD_TTL_SECONDS", "1200"))
 
 # Load danh sách camera + edge_id thật (đã map-match với Valhalla graph) từ
 # cameras_with_zones_merged.json — thay cho cameras.json cũ (edge_id giả).
