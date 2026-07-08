@@ -212,17 +212,17 @@ def calculateHybridCongestionIndex(meu, occupancyRatio, meuMax, orMax, weights):
 def calculateTrafficWeightFactor(preciseOccupancyRatio, r, cameraId, meuCoefficients, cameraThresholds):
     """
     Hàm tính toán hệ số trọng số đường đi (Traffic Weight Factor) ứng dụng tiền điều kiện Road Mask.
-    - Tiền điều kiện: preciseOccupancyRatio phải >= 85% mới xét phạt.
-    - Dưới 85%: Bỏ qua hoàn toàn, trả về trọng số bình thường (1.0).
+    - Tiền điều kiện: preciseOccupancyRatio phải >= 80% mới xét phạt.
+    - Dưới 80%: Bỏ qua hoàn toàn, trả về trọng số bình thường (0.0).
     """
     # --------------------------------------------------------------------------
     # BƯỚC 1: KIỂM TRA TIỀN ĐIỀU KIỆN (GATEKEEPER)
     # --------------------------------------------------------------------------
-    if preciseOccupancyRatio < 85.0:
-        print(f"[Thuật toán] Mật độ đường thực tế ({preciseOccupancyRatio:.2f}%) < 85%. Tuyến đường thông thoáng -> Bỏ qua phạt.")
-        return 1.0  # Trả về ngay trọng số bình thường, thuật toán định tuyến giữ nguyên chi phí đường
+    if preciseOccupancyRatio < 80.0:
+        print(f"[Thuật toán] Mật độ đường thực tế ({preciseOccupancyRatio:.2f}%) < 80%. Tuyến đường thông thoáng -> Bỏ qua phạt.")
+        return 0.0  # Trả về ngay trọng số bình thường, thuật toán định tuyến giữ nguyên chi phí đường
 
-    print(f"[Thuật toán] 🚨 CẢNH BÁO: Mật độ đường thực tế ({preciseOccupancyRatio:.2f}%) >= 85%!")
+    print(f"[Thuật toán] 🚨 CẢNH BÁO: Mật độ đường thực tế ({preciseOccupancyRatio:.2f}%) >= 80%!")
     print(f"[Thuật toán] Kích hoạt Tầng 2: Tính toán trọng số phạt dựa trên tải trọng MEU...")
 
     # --------------------------------------------------------------------------
@@ -235,4 +235,4 @@ def calculateTrafficWeightFactor(preciseOccupancyRatio, r, cameraId, meuCoeffici
     # 2.3 Lấy các ngưỡng cấu hình lịch sử của camera
     meuMax = cameraThresholds.get("meuMax", 1.0)
     
-    return meu / meuMax if meuMax > 0 else 1.0
+    return meu / meuMax if meuMax > 0 else 0.0
