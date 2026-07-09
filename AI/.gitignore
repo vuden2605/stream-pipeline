@@ -1,5 +1,6 @@
 /.github
 *.npy
+!*_road_mask.npy
 runs/
 __pycache__/
 *.pyc
