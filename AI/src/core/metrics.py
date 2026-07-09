@@ -58,12 +58,15 @@ def generateAndSaveRoadMask(cameraId, threshold=100):
         return None
         
     heatmapMatrix = np.load(heatmapPath)
-    
+
     # Thực hiện ngưỡng hóa nhị phân bằng numpy
     roadMaskMatrix = np.where(heatmapMatrix >= threshold, 1, 0).astype(np.uint8)
-    
-    # Lưu mặt nạ đường đi xuống ổ cứng
-    np.save(maskPath, roadMaskMatrix)
+
+    # Ghi atomic (temp file + os.replace) — tránh pipeline chính (đọc mask này
+    # qua getRoadMaskByCameraId) đọc phải file đang ghi dở dang.
+    tmpMaskPath = maskPath + ".tmp.npy"
+    np.save(tmpMaskPath, roadMaskMatrix)
+    os.replace(tmpMaskPath, maskPath)
     print(f"[Heat Mask] Đã trích xuất và lưu Road Mask cho {cameraId} với ngưỡng >= {threshold}")
     return roadMaskMatrix
 
@@ -211,28 +214,28 @@ def calculateHybridCongestionIndex(meu, occupancyRatio, meuMax, orMax, weights):
 
 def calculateTrafficWeightFactor(preciseOccupancyRatio, r, cameraId, meuCoefficients, cameraThresholds):
     """
-    Hàm tính toán hệ số trọng số đường đi (Traffic Weight Factor) ứng dụng tiền điều kiện Road Mask.
-    - Tiền điều kiện: preciseOccupancyRatio phải >= 80% mới xét phạt.
-    - Dưới 80%: Bỏ qua hoàn toàn, trả về trọng số bình thường (0.0).
+    Hàm tính Traffic Weight Factor (TWF) — dùng trực tiếp làm density cho Greenshields
+    (raw_speed = free_flow * (1 - TWF^N)), thay vì neo vào meuMax hiệu chuẩn lịch sử.
+    Quyết định kẹt/không kẹt neo vào occupancy đo trực tiếp từ ảnh, nên meuMax bị đặt
+    thấp hơn thực tế (đường chưa từng kẹt trong dữ liệu lịch sử) không còn gây báo kẹt giả.
+
+    - occupancy <= 70%: đường thông thoáng -> TWF = 0.0
+    - occupancy >= 90%: mật độ đầy đủ     -> TWF = min(meu/meuMax, 1.0)
+    - 70% < occupancy < 90%: vùng đệm     -> nội suy tuyến tính (rampFactor) để tránh
+      raw_speed giật cục khi occupancy dao động nhẹ quanh ngưỡng giữa các frame.
     """
-    # --------------------------------------------------------------------------
-    # BƯỚC 1: KIỂM TRA TIỀN ĐIỀU KIỆN (GATEKEEPER)
-    # --------------------------------------------------------------------------
-    if preciseOccupancyRatio < 80.0:
-        print(f"[Thuật toán] Mật độ đường thực tế ({preciseOccupancyRatio:.2f}%) < 80%. Tuyến đường thông thoáng -> Bỏ qua phạt.")
-        return 0.0  # Trả về ngay trọng số bình thường, thuật toán định tuyến giữ nguyên chi phí đường
+    LOWER_BOUND = 70.0
+    UPPER_BOUND = 90.0
 
-    print(f"[Thuật toán] 🚨 CẢNH BÁO: Mật độ đường thực tế ({preciseOccupancyRatio:.2f}%) >= 80%!")
-    print(f"[Thuật toán] Kích hoạt Tầng 2: Tính toán trọng số phạt dựa trên tải trọng MEU...")
+    if preciseOccupancyRatio <= LOWER_BOUND:
+        return 0.0
 
-    # --------------------------------------------------------------------------
-    # BƯỚC 2: TÍNH TOÁN KHI ĐÃ ĐẠT TIỀN ĐIỀU KIỆN
-    # --------------------------------------------------------------------------
-    
-    # Tính tổng tải trọng xe quy đổi (MEU)
     meu = calculateMotorcycleEquivalentUnit(r, meuCoefficients)
-    
-    # 2.3 Lấy các ngưỡng cấu hình lịch sử của camera
     meuMax = cameraThresholds.get("meuMax", 1.0)
-    
-    return meu / meuMax if meuMax > 0 else 0.0
+    density = min(meu / meuMax, 1.0) if meuMax > 0 else 0.0
+
+    if preciseOccupancyRatio >= UPPER_BOUND:
+        return density
+
+    rampFactor = (preciseOccupancyRatio - LOWER_BOUND) / (UPPER_BOUND - LOWER_BOUND)
+    return rampFactor * density

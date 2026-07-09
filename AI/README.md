@@ -11,7 +11,7 @@ This system goes beyond basic object detection by translating raw bounding box c
 - **Dynamic Route Optimization:** Calculates adaptive traffic weight factors to feed graph-routing algorithms (e.g., Dijkstra, A*), helping vehicles bypass bottlenecks.
 - **Precise Road Masking (Heatmap-Driven):** Filters out background noise (sidewalks, buildings) and resolves bounding box overlap errors via a time-accumulated pixel historical heatmap.
 - **Motorcycle Equivalent Unit (MEU) Conversion:** Standardizes mixed traffic flows by converting various vehicle types into equivalent motorcycle units, matching local traffic characteristics.
-- **Hybrid Congestion Index (HCI):** Synthesizes physical space occupation and volumetric vehicular payload to score real-time congestion levels.
+- **Traffic Weight Factor (TWF):** Occupancy-gated, ramp-smoothed density factor fed directly into a Greenshields speed model — anchors the congestion decision to image-measured road occupancy rather than historically-calibrated `MEU_max`, so an under-calibrated `MEU_max` (a road that has never actually jammed in the calibration data) can no longer trigger false congestion alarms.
 
 ---
 
@@ -24,7 +24,7 @@ traffic_its_project/
 │
 ├── config/                         # Configuration layer (Mock Database)
 │   ├── meu_coefficients.json       # MEU vehicle conversion factors
-│   ├── hci_weights.json            # Weighted balance between payload and space (w1, w2)
+│   ├── hci_weights.json            # Weighted balance between payload and space (w1, w2) — legacy, unused by TWF
 │   └── camera_thresholds.json      # Historical maximum capacities per Camera ID
 │
 ├── storage/                        # Persistent file storage
@@ -35,7 +35,7 @@ traffic_its_project/
 │   ├── core/                       # Computer Vision & Mathematical Engine
 │   │   ├── __init__.py
 │   │   ├── detector.py             # YOLO wrapper class for inferencing and telemetry
-│   │   └── metrics.py              # Computational formulas (MEU, Road Masking, HCI, TWF)
+│   │   └── metrics.py              # Computational formulas (MEU, Road Masking, TWF; HCI kept as unused legacy helper)
 │   │
 │   └── data/                       # Data Access Layer
 │       ├── __init__.py
@@ -54,7 +54,7 @@ traffic_its_project/
 
 ## 🧠 Algorithmic Framework & Methodology
 
-The core engine deploys a dual-tier cascade validation process to determine traffic routing penalties accurately.
+The core engine anchors the congestion decision to **image-measured road occupancy** (via the Road Mask), not to historically-calibrated `MEU_max` — this is what prevents false congestion alarms when `MEU_max` under-represents a road's true capacity (e.g. a road that never actually jammed during calibration).
 
 ### Mathematical Formulation & Logic Tier
 
@@ -62,17 +62,19 @@ The core engine deploys a dual-tier cascade validation process to determine traf
 | --- | --- | --- |
 | **1. Spatial Accumulation** | $Heatmap_{(x,y)} = \sum_{t=1}^{T} Bbox_{(x,y,t)}$ | Continuously registers pixels occupied by vehicles to isolate active driving lanes over time. |
 | **2. Road Mask Extraction** | $Mask_{(x,y)} = \begin{cases} 1 & \text{if } Heatmap_{(x,y)} \ge \text{threshold} \\ 0 & \text{otherwise} \end{cases}$ | Generates a binary mask of actual road surfaces, eliminating false positives on sidewalks or parking lots. |
-| **3. Precise Occupancy** | $OR_{precise} = \frac{\sum (CurrentVehicleMask \cap Mask_{road})}{\sum Mask_{road}} \times 100\%$ | **Tier 1 (Gatekeeper Control):** Measures exact road coverage. If $OR_{precise} < 85\%$, traffic flows freely; routing penalties are skipped ($TWF = 1.0$). |
-| **4. Volumetric Payload** | $MEU = \sum_{i=1}^{N} Coefficient_{(Class\_ID_i)}$ | Converts diverse vehicle classes into a standardized unit based on actual road space displacement. |
-| **5. Hybrid Congestion** | $HCI = w_1 \cdot \left(\frac{MEU}{MEU_{max}}\right) + w_2 \cdot \left(\frac{OR_{raw}}{OR_{max}}\right)$ | **Tier 2 (Triggered at $\ge 85\%$):** Evaluates overlapping bounding boxes ($OR_{raw}$) alongside MEU to gauge precise bumper-to-bumper density. |
+| **3. Precise Occupancy** | $OR_{precise} = \frac{\sum (CurrentVehicleMask \cap Mask_{road})}{\sum Mask_{road}} \times 100\%$ | **Gatekeeper:** Measures exact road coverage from the image itself — independent of `MEU_max` calibration. Drives the TWF ramp below. |
+| **4. Volumetric Payload** | $MEU = \sum_{i=1}^{N} Coefficient_{(Class\_ID_i)}$ | Converts diverse vehicle classes into a standardized unit; only evaluated once $OR_{precise} > 70\%$. |
+| **5. Density (clamped)** | $Density = \min\left(\frac{MEU}{MEU_{max}}, 1.0\right)$ | Clamped to 1.0 so an under-calibrated `MEU_max` can't push density above 1.0 (which would make Greenshields' raw speed negative). |
 
-### Traffic Penalty Mapping (Traffic Weight Factor - TWF)
+### Traffic Weight Factor (TWF) — occupancy gate + linear ramp
 
-When the road mask occupancy threshold hits the **$\ge 85\%$ critical gatekeeper barrier**, the final routing cost modifier ($TWF$) is generated based on the normalized HCI ratio ($HCI / HCI_{max}$):
+`calculateTrafficWeightFactor` (`src/core/metrics.py`) maps `OR_precise` to `TWF` with a buffered transition around the 70–90% band, instead of a hard step, so `raw_speed` doesn't jitter when occupancy oscillates slightly across frames:
 
-- $\text{Ratio} \ge 0.9$ (Severe Gridlock): $TWF = 0.1$ (Signals graph algorithms to multiply routing cost by 10× to bypass this edge).
-- $\text{Ratio} \ge 0.8$ (Moderate Congestion): $TWF = 0.5$ (Doubles the routing cost).
-- $\text{Ratio} < 0.8$ (Normal/Stable Flow): $TWF = 1.0$ (Standard edge cost).
+- $OR_{precise} \le 70\%$ (free-flowing): $TWF = 0.0$.
+- $OR_{precise} \ge 90\%$ (fully saturated): $TWF = Density = \min(MEU / MEU_{max}, 1.0)$.
+- $70\% < OR_{precise} < 90\%$ (buffer zone): $TWF = rampFactor \times Density$, where $rampFactor = (OR_{precise} - 70) / 20$.
+
+`TWF` is then plugged **directly as density** into a Greenshields speed model (see `worker.py` in the repo root): $raw\_speed = free\_flow \times (1 - TWF^{N})$ — it is not used as a routing-cost multiplier. The old HCI-based tiered cost mapping (0.1× / 0.5× / 1.0×) has been retired; `calculateHybridCongestionIndex` remains in `metrics.py` as an unused legacy helper.
 
 ---
 
@@ -122,13 +124,13 @@ python main.py
 ==================================================
 Mã số Camera                    : camera_001
 Mật độ lòng đường (Road Mask)   : 87.42% (Tiền điều kiện)
-Tỷ lệ diện tích thô (Bbox thô)  : 94.15% (Bao gồm overlap)
 Tổng tải trọng quy đổi (MEU)     : 142.36
-Chỉ số ùn tắc tổng hợp (HCI)     : 0.89
 --------------------------------------------------
-TRỌNG SỐ ĐIỀU HƯỚNG ĐỊNH TUYẾN (TWF): 0.50
+TRỌNG SỐ ĐIỀU HƯỚNG ĐỊNH TUYẾN (TWF): 0.87
 ==================================================
 ```
+
+(Sample TWF above assumes `occupancy=87.42%` falls in the 70–90% ramp band, so `TWF = rampFactor × min(MEU/MEU_max, 1.0)` rather than the raw MEU/MEU_max ratio.)
 
 ---
 

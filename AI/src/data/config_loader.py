@@ -13,7 +13,10 @@ def loadJsonConfig(fileName):
     if not os.path.exists(filePath):
         return {}
     with open(filePath, 'r', encoding='utf-8') as f:
-        return json.load(f)
+        content = f.read().strip()
+        if not content:
+            return {}
+        return json.loads(content)
 
 def getMeuCoefficients():
     """Lấy hệ số MEU và ép kiểu Key sang kiểu int để khớp với lớp của YOLO."""

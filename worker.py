@@ -110,10 +110,14 @@ def process_camera(session: requests.Session, r: redis.Redis, camera: dict) -> N
     # Bước 3: YOLO inference
     result = detector.predict(image, conf=CONFIDENCE, save=False)
 
-    # Bước 4: MEU
-    meu = metrics.calculateMotorcycleEquivalentUnit(result, _MEU_COEFFICIENTS)
-    meu_max = get_meu_max(cam_id)
-    density = min(meu / meu_max, 1.0) if meu_max > 0 else 1.0
+    # Bước 4: TWF (Traffic Weight Factor) — occupancy đo trực tiếp từ ảnh làm gatekeeper,
+    # nên meuMax hiệu chuẩn thấp hơn sức chứa thật không còn gây báo kẹt giả (occupancy
+    # thấp -> TWF = 0 dù meuMax nhỏ). TWF dùng thẳng làm density cho Greenshields.
+    precise_occupancy = metrics.calculatePreciseOccupancyRatio(result, cam_id)
+    camera_thresholds = {"meuMax": get_meu_max(cam_id)}
+    density = metrics.calculateTrafficWeightFactor(
+        precise_occupancy, result, cam_id, _MEU_COEFFICIENTS, camera_thresholds,
+    )
 
     ts = int(time.time())
 
@@ -135,8 +139,8 @@ def process_camera(session: requests.Session, r: redis.Redis, camera: dict) -> N
         pipe.execute()
 
         log.info(
-            "[%s] edge=%s MEU=%.2f density=%.2f speed=%.1fkm/h",
-            cam_id, edge_id, meu, density, raw_speed,
+            "[%s] edge=%s occupancy=%.1f%% TWF=%.2f speed=%.1fkm/h",
+            cam_id, edge_id, precise_occupancy, density, raw_speed,
         )
 
     # Daemon Valhalla đang dùng (/app/traffic_updater.py) tự poll theo đồng hồ

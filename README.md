@@ -60,7 +60,7 @@ python worker.py
 
 | Muốn xem | Lệnh |
 |---|---|
-| `worker.py` tính MEU/speed đúng không | log của chính nó — tìm dòng `MEU=... density=... speed=...km/h` |
+| `worker.py` tính occupancy/TWF/speed đúng không | log của chính nó — tìm dòng `occupancy=...% TWF=... speed=...km/h` |
 | Hàng đợi camera còn tồn bao nhiêu | `docker exec smart-transport-redis redis-cli LLEN camera_queue` |
 | Số edge đã có tốc độ trong Redis | `docker exec smart-transport-redis redis-cli HLEN traffic:speeds` |
 | Toàn bộ dữ liệu tốc độ | `docker exec smart-transport-redis redis-cli HGETALL traffic:speeds` |
@@ -98,7 +98,9 @@ config.CAMERAS (611 camera thật, 1609 edge_id thật từ Valhalla graph)
 │ 2. worker.py (chạy 2-3 instance song song)      │
 │    1. BLPOP cam_id                                │
 │    2. GET snapshot trực tiếp (RAM, không qua S3)  │
-│    3. YOLO predict (AI/ module) → MEU             │
+│    3. YOLO predict (AI/ module) → MEU + occupancy │
+│    4. TWF (occupancy gatekeeper + ramp, thay MEU/  │
+│       meuMax thô) → density cho Greenshields       │
 │    5. Greenshields: raw_speed = free_flow×(1-d^n) │
 │    8. HSET + HEXPIRE traffic:speeds               │
 └──────────┬─────────────────────────────────────┘
@@ -130,11 +132,17 @@ Chạy **nhiều instance song song** (khuyến nghị 2-3, mỗi instance 1 pro
 
 1. **`BLPOP camera_queue`** (timeout 5s) — chờ và lấy đúng 1 `cam_id`; nhiều instance cùng `BLPOP` trên 1 queue tự động chia việc, không cần điều phối thêm.
 2. **`GET` snapshot trực tiếp** từ `{camera_url}&t={now_ms}` bằng `requests.Session` (giữ cookie phiên, header giả lập trình duyệt) — ảnh chỉ tồn tại dưới dạng `bytes` trong RAM, xử lý xong là mất, **không upload S3**.
-3. **YOLO predict** (`AI/src/core/detector.py`, model `AI/weights/best.pt`, ngưỡng `CONFIDENCE=0.3`) → bounding box từng xe, rồi tính **MEU** (Motorcycle Equivalent Unit) = tổng hệ số quy đổi theo loại xe (`AI/config/meu_coefficients.json`: motorcycle=1.0, car=3.236, bus=8.568, truck=10).
-5. **Greenshields → `raw_speed`** (thay hoàn toàn cho TWF/HCI của kiến trúc cũ):
-   - `density = min(MEU / MEU_max[cam], 1.0)` — `MEU_max` tra theo `cam_id` trong `AI/config/camera_thresholds.json` (`meuMax`), fallback `MEU_MAX_DEFAULT=200.0` nếu camera chưa hiệu chuẩn (610/611 camera hiện đang dùng fallback — xem "Giới hạn").
-   - `raw_speed = free_flow[edge] × (1 - density^n)` — `free_flow[edge]` tra theo `edge_id` trong `default_traffic.json` (`DEFAULT_EDGE_SPEED_KMH`), fallback `FREE_FLOW_DEFAULT_KMH=50` nếu edge không có; `n = GREENSHIELDS_N` (mặc định 1.0 = Greenshields tuyến tính gốc).
-   - Chặn dưới: `raw_speed = max(raw_speed, MIN_SPEED_KMH=3.0)` — tránh tốc độ âm/bằng 0 khi density chạm 1.0.
+3. **YOLO predict** (`AI/src/core/detector.py`, model `AI/weights/best.pt`, ngưỡng `CONFIDENCE=0.3`) → bounding box từng xe. Từ đó tính 2 chỉ số độc lập:
+   - **`preciseOccupancyRatio`** (`AI/src/core/metrics.py:calculatePreciseOccupancyRatio`) — % diện tích **Road Mask** (mặt nạ mặt đường tích lũy từ heatmap lịch sử) thực sự bị xe che phủ trong frame hiện tại. Đo trực tiếp từ ảnh, **không phụ thuộc hiệu chuẩn MEU lịch sử**.
+   - **MEU** (Motorcycle Equivalent Unit) = tổng hệ số quy đổi theo loại xe (`AI/config/meu_coefficients.json`: motorcycle=1.0, car=3.236, bus=8.568, truck=10).
+4. **TWF (Traffic Weight Factor)** (`AI/src/core/metrics.py:calculateTrafficWeightFactor`) — thay hoàn toàn cho MEU/meuMax thô dùng làm density trực tiếp. Lý do: nếu `meuMax` được hiệu chuẩn từ dữ liệu lịch sử mà con đường đó chưa từng kẹt thật, `meuMax` sẽ thấp hơn sức chứa thật → báo kẹt giả dù traffic bình thường. TWF neo quyết định "có kẹt hay không" vào `preciseOccupancyRatio` (occupancy đo bằng ảnh) thay vì vào `meuMax`, nên `meuMax` bị đặt sai không còn gây báo kẹt giả:
+   - `occupancy <= 70%` → `TWF = 0.0` (đường thông thoáng, bỏ qua phạt hoàn toàn).
+   - `occupancy >= 90%` → `TWF = min(MEU / MEU_max[cam], 1.0)` — density đầy đủ, clamp về tối đa 1.0 (tránh `MEU_max` hiệu chuẩn thấp khiến tỉ số > 1.0).
+   - `70% < occupancy < 90%` → `TWF = rampFactor × min(MEU / MEU_max[cam], 1.0)`, với `rampFactor = (occupancy - 70) / 20` — dải đệm nội suy tuyến tính, tránh `raw_speed` giật cục khi occupancy dao động nhẹ quanh ngưỡng giữa các frame.
+   - `MEU_max` tra theo `cam_id` trong `AI/config/camera_thresholds.json` (`meuMax`), fallback `MEU_MAX_DEFAULT=200.0` nếu camera chưa hiệu chuẩn (610/611 camera hiện đang dùng fallback — xem "Giới hạn").
+5. **Greenshields → `raw_speed`** — TWF ở bước 4 được cắm thẳng làm density (không phải hệ số nhân tốc độ):
+   - `raw_speed = free_flow[edge] × (1 - TWF^n)` — `free_flow[edge]` tra theo `edge_id` trong `default_traffic.json` (`DEFAULT_EDGE_SPEED_KMH`), fallback `FREE_FLOW_DEFAULT_KMH=50` nếu edge không có; `n = GREENSHIELDS_N` (mặc định 1.0 = Greenshields tuyến tính gốc).
+   - Chặn dưới: `raw_speed = max(raw_speed, MIN_SPEED_KMH=3.0)` — tránh tốc độ âm/bằng 0 khi TWF chạm 1.0.
    - Không làm mượt EMA, không đếm streak kẹt xe — mỗi vòng ghi thẳng `raw_speed` vừa tính, đơn giản hoá tối đa so với thiết kế ban đầu.
 8. **Ghi Redis** (không gom batch, ghi trực tiếp ngay khi tính xong — khác hẳn kiến trúc Flink cũ):
    - `HSET traffic:speeds {edge_id} "{raw_speed}:{timestamp_giây}"` — đúng định dạng daemon bên Valhalla cần.
@@ -315,7 +323,7 @@ So sánh trực tiếp với kiến trúc Kafka+Flink+S3 cũ (đã kiểm thử 
 
 | # | Vấn đề | Ảnh hưởng |
 |---|---|---|
-| 1 | `MEU_max` chỉ hiệu chuẩn phẳng theo camera, không tách theo giờ trong ngày như thiết kế gốc muốn | 610/611 camera dùng `MEU_MAX_DEFAULT=200.0` — density có thể không phản ánh đúng thực tế theo khung giờ cao/thấp điểm |
+| 1 | `MEU_max` chỉ hiệu chuẩn phẳng theo camera, không tách theo giờ trong ngày như thiết kế gốc muốn | 610/611 camera dùng `MEU_MAX_DEFAULT=200.0`. Tác động đã giảm nhẹ so với trước: TWF chỉ dùng `MEU/MEU_max` khi `occupancy > 70%` (gatekeeper neo vào ảnh thực tế), nên `MEU_max` sai lệch không còn tự gây báo kẹt giả khi đường thực sự thông thoáng — nhưng vẫn ảnh hưởng đến **độ chính xác của TWF khi đã kẹt thật** (occupancy > 70%) |
 | 2 | `camera_thresholds.json` chỉ có hiệu chuẩn cho `camera_001` | Tương tự #1 — cần thu thập dữ liệu lịch sử để hiệu chuẩn thêm |
 | 3 | `old-pipeline/consumer_db.py` | Không chạy được — xem mục 5 ở Phần 2 |
 | 4 | Số instance `worker.py` cần chạy tay theo cấu hình máy, chưa có auto-scaling | Vận hành thủ công phải tự theo dõi độ dài `camera_queue` để quyết định thêm/bớt instance |
