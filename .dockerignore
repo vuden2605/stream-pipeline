@@ -1,0 +1,8 @@
+.git
+.idea
+.env
+*.log
+*.err.log
+AI/src/**/__pycache__
+**/__pycache__
+AI/test_images

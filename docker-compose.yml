@@ -1,0 +1,18 @@
+services:
+  queue-feeder:
+    build: .
+    image: smart-transport-ai:latest
+    container_name: ai-queue-feeder
+    command: python -u queue_feeder.py
+    env_file: .env.prod
+    restart: unless-stopped
+
+  worker:
+    build: .
+    image: smart-transport-ai:latest
+    container_name: ai-worker
+    command: python -u worker.py
+    env_file: .env.prod
+    restart: unless-stopped
+    depends_on:
+      - queue-feeder
