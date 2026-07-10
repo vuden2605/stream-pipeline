@@ -50,6 +50,44 @@ _CAMERA_THRESHOLDS = config_loader.loadJsonConfig("camera_thresholds.json")
 
 COOKIE_REFRESH_INTERVAL_SECONDS = 3600
 
+# Ngưỡng hysteresis (Schmitt trigger) trên TWF để suy ra traffic status —
+# ngưỡng vào/ra khác nhau giữa 2 mức để tránh nhấp nháy status khi TWF dao
+# động quanh biên mỗi chu kỳ. Cần hiệu chỉnh lại theo road_class sau khi có
+# dữ liệu TWF thực tế (xem README).
+JAM_ENTER_TWF = 0.75
+JAM_EXIT_TWF = 0.65
+SLOW_ENTER_TWF = 0.40
+SLOW_EXIT_TWF = 0.30
+
+
+def parse_prev_status(raw_val: str | None) -> str | None:
+    """Value cũ format 'speed:ts' (2 phần, chưa có status) hoặc mới
+    'speed:ts:status' (3 phần) — trả None nếu chưa có status để classify()
+    dùng nhánh phân loại lần đầu (không hysteresis)."""
+    if not raw_val:
+        return None
+    parts = raw_val.split(":")
+    if len(parts) < 3 or parts[2] not in ("FREE", "SLOW", "JAM"):
+        return None
+    return parts[2]
+
+
+def classify_traffic_status(twf: float, prev_status: str | None) -> str:
+    if prev_status == "JAM":
+        if twf >= JAM_EXIT_TWF:
+            return "JAM"
+        return "SLOW" if twf >= SLOW_EXIT_TWF else "FREE"
+    if prev_status == "SLOW":
+        if twf >= JAM_ENTER_TWF:
+            return "JAM"
+        return "FREE" if twf < SLOW_EXIT_TWF else "SLOW"
+    if prev_status == "FREE":
+        return "SLOW" if twf >= SLOW_ENTER_TWF else "FREE"
+    # Edge mới hoặc field vừa hết TTL — không có state cũ để hysteresis
+    if twf >= JAM_ENTER_TWF:
+        return "JAM"
+    return "SLOW" if twf >= SLOW_ENTER_TWF else "FREE"
+
 
 def is_valid_jpeg(data: bytes) -> bool:
     return len(data) > 5_000 and data[:2] == b"\xff\xd8" and data[-2:] == b"\xff\xd9"
@@ -129,18 +167,27 @@ def process_camera(session: requests.Session, r: redis.Redis, camera: dict) -> N
         raw_speed = free_flow * (1 - density ** GREENSHIELDS_N)
         raw_speed = max(raw_speed, MIN_SPEED_KMH)
 
+        # Traffic status: đọc status cũ từ chính Redis (không giữ state trong
+        # worker process — nhiều worker instance dùng chung queue, edge này
+        # có thể do worker khác xử lý ở chu kỳ trước) rồi classify có hysteresis.
+        prev_status = parse_prev_status(r.hget(REDIS_SPEEDS_KEY, edge_id))
+        status = classify_traffic_status(density, prev_status)
+
         # Bước 8: Ghi Redis — kèm HEXPIRE để tự dọn field nếu camera chết hẳn
         # (không worker.py nào ghi lại nữa). TTL >= speed_ttl_seconds bên
         # valhalla-traffic-daemon nên không ảnh hưởng tính đúng đắn, chỉ dọn
         # bộ nhớ (xem config.py:REDIS_FIELD_TTL_SECONDS).
+        # Format "speed:ts:status" — status nối vào SAU cùng, giữ "speed:ts"
+        # làm tiền tố ổn định vì daemon bên valhalla-hcm-traffic parse theo
+        # vị trí cột (xem app_daemon_backup/traffic_updater.py đã patch).
         pipe = r.pipeline()
-        pipe.hset(REDIS_SPEEDS_KEY, edge_id, f"{raw_speed:.1f}:{ts}")
+        pipe.hset(REDIS_SPEEDS_KEY, edge_id, f"{raw_speed:.1f}:{ts}:{status}")
         pipe.hexpire(REDIS_SPEEDS_KEY, REDIS_FIELD_TTL_SECONDS, edge_id)
         pipe.execute()
 
         log.info(
-            "[%s] edge=%s occupancy=%.1f%% TWF=%.2f speed=%.1fkm/h",
-            cam_id, edge_id, precise_occupancy, density, raw_speed,
+            "[%s] edge=%s occupancy=%.1f%% TWF=%.2f speed=%.1fkm/h status=%s",
+            cam_id, edge_id, precise_occupancy, density, raw_speed, status,
         )
 
     # Daemon Valhalla đang dùng (/app/traffic_updater.py) tự poll theo đồng hồ
