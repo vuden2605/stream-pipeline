@@ -11,7 +11,7 @@ services:
     build: .
     image: smart-transport-ai:latest
     container_name: ai-worker
-    command: python -u worker.py
+    command: bash -c "python -u worker.py 2>&1 | grep -v NNPACK"
     env_file: .env.prod
     restart: unless-stopped
     depends_on:
