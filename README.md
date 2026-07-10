@@ -141,16 +141,22 @@ Chạy **nhiều instance song song** (khuyến nghị 2-3, mỗi instance 1 pro
    - `70% < occupancy < 90%` → `TWF = rampFactor × min(MEU / MEU_max[cam], 1.0)`, với `rampFactor = (occupancy - 70) / 20` — dải đệm nội suy tuyến tính, tránh `raw_speed` giật cục khi occupancy dao động nhẹ quanh ngưỡng giữa các frame.
    - `MEU_max` tra theo `cam_id` trong `AI/config/camera_thresholds.json` (`meuMax`), fallback `MEU_MAX_DEFAULT=200.0` nếu camera chưa hiệu chuẩn (610/611 camera hiện đang dùng fallback — xem "Giới hạn").
 5. **Greenshields → `raw_speed`** — TWF ở bước 4 được cắm thẳng làm density (không phải hệ số nhân tốc độ):
-   - `raw_speed = free_flow[edge] × (1 - TWF^n)` — `free_flow[edge]` tra theo `edge_id` trong `default_traffic.json` (`DEFAULT_EDGE_SPEED_KMH`), fallback `FREE_FLOW_DEFAULT_KMH=50` nếu edge không có; `n = GREENSHIELDS_N` (mặc định 1.0 = Greenshields tuyến tính gốc).
+   - `raw_speed = free_flow[edge] × (1 - TWF^n)` — `free_flow[edge]` tra theo `edge_id` trong `default_traffic.json` (`DEFAULT_EDGE_SPEED_KMH`), fallback `FREE_FLOW_DEFAULT_KMH=50` nếu edge không có; `n = GREENSHIELDS_N` (mặc định 1.0 = Greenshields tuyến tính gốc — **điều kiện bắt buộc** cho bước 5.5 bên dưới, xem ghi chú).
    - Chặn dưới: `raw_speed = max(raw_speed, MIN_SPEED_KMH=3.0)` — tránh tốc độ âm/bằng 0 khi TWF chạm 1.0.
-   - Không làm mượt EMA, không đếm streak kẹt xe — mỗi vòng ghi thẳng `raw_speed` vừa tính, đơn giản hoá tối đa so với thiết kế ban đầu.
-7.5. **Traffic status** — trước khi ghi, đọc status cũ từ chính field Redis của edge đó (`HGET` — không giữ state trong worker process vì nhiều instance dùng chung queue, edge có thể do worker khác xử lý ở chu kỳ trước), rồi phân loại `TWF` (không phải tỉ lệ `raw_speed/free_flow` — chỉ là biến đổi đơn điệu của TWF nên dùng thẳng TWF) qua hysteresis 2 ngưỡng (Schmitt trigger, tránh nhấp nháy status quanh biên):
-   - `FREE ↔ SLOW`: vào SLOW khi TWF ≥ 0.40, về FREE khi TWF < 0.30.
-   - `SLOW ↔ JAM`: vào JAM khi TWF ≥ 0.75, về SLOW khi TWF < 0.65.
-   - Xem `classify_traffic_status()` / `parse_prev_status()` trong `worker.py`. Ngưỡng là điểm khởi đầu, cần hiệu chỉnh theo `road_class` sau khi có dữ liệu TWF thực tế.
+   - `raw_speed` chỉ là giá trị tức thời của riêng chu kỳ này, **không** phải giá trị ghi Redis — xem bước 5.5.
+5.5. **EMA làm mượt `raw_speed` → `speed_ema`** (thay cho "ghi thẳng raw_speed, không làm mượt" của thiết kế đơn giản hoá ban đầu):
+   - Đọc `prev_speed_ema` từ chính cột `speed` cũ trong Redis (`HGET traffic:speeds {edge_id}` — không giữ state trong worker process vì nhiều instance dùng chung queue, edge có thể do worker khác xử lý ở chu kỳ trước). Field mới/hết TTL → không có prev.
+   - `speed_ema = EMA_ALPHA × raw_speed + (1 − EMA_ALPHA) × prev_speed_ema`, `EMA_ALPHA = 0.3` (cửa sổ hiệu dụng ~5-6 mẫu ≈ 60-85s ở nhịp ghi ~10-15s/edge — lọc nhiễu 1-frame như occlusion/detect sai, nhưng vẫn phản ánh kẹt xe thật trong khoảng 1 phút). Cold-start (không có prev): `speed_ema = raw_speed`.
+   - Đây là giá trị **thật sự ghi vào Redis** (cột `speed` trong `traffic:speeds`), không phải `raw_speed`.
+7.5. **Traffic status (GREEN/YELLOW/RED)** — suy từ `speed_ema` (không dùng lại TWF thô), qua 2 bước:
+   - `twf_ngam = 1 − speed_ema / free_flow[edge]` — tương đương TWF đã làm mượt. Phép suy này **chỉ đúng khi `GREENSHIELDS_N = 1.0`** (Greenshields tuyến tính): vì `raw_speed` là hàm tuyến tính của TWF khi `n=1`, và EMA là toán tử tuyến tính, nên "làm mượt speed rồi suy ngược TWF" cho kết quả giống hệt "làm mượt TWF trực tiếp". Nếu sau này đổi `GREENSHIELDS_N` khỏi 1.0, quan hệ này không còn tuyến tính nữa — cần xem lại cách tính `twf_ngam` và hiệu chỉnh lại ngưỡng bên dưới.
+   - Áp hysteresis 2 ngưỡng (Schmitt trigger, tránh nhấp nháy status khi dao động quanh biên) lên `twf_ngam`:
+     - `GREEN ↔ YELLOW`: vào YELLOW khi `twf_ngam ≥ 0.40`, về GREEN khi `twf_ngam < 0.30`.
+     - `YELLOW ↔ RED`: vào RED khi `twf_ngam ≥ 0.75`, về YELLOW khi `twf_ngam < 0.65`.
+   - Xem `classify_traffic_status()` / `parse_prev_value()` trong `worker.py`. Ngưỡng là điểm khởi đầu, cần hiệu chỉnh theo `road_class` sau khi có dữ liệu thực tế.
 8. **Ghi Redis** (không gom batch, ghi trực tiếp ngay khi tính xong — khác hẳn kiến trúc Flink cũ):
-   - `HSET traffic:speeds {edge_id} "{raw_speed}:{timestamp_giây}:{status}"` — status nối thêm ở cuối (`FREE`/`SLOW`/`JAM`). Giữ nguyên `speed:timestamp` làm tiền tố vì daemon bên Valhalla parse theo vị trí cột (xem mục 3.1 — đã vá để bỏ qua cột thừa).
-   - `HEXPIRE` (Redis ≥ 7.4) đúng field vừa ghi, TTL = `REDIS_FIELD_TTL_SECONDS` (mặc định 1200s) — dọn field nếu camera chết hẳn, không cần cho tính đúng đắn (xem mục 3 bên dưới), chỉ để Redis không phình vô hạn.
+   - `HSET traffic:speeds {edge_id} "{speed_ema}:{timestamp_giây}:{status}"` — cột đầu là `speed_ema` (**đã làm mượt**, không phải `raw_speed`), status nối thêm ở cuối (`GREEN`/`YELLOW`/`RED`). Giữ nguyên `speed:timestamp` làm tiền tố vì daemon bên Valhalla parse theo vị trí cột, chỉ dùng 2 cột đầu và bỏ qua cột thừa (xem mục 3.1) — nên đổi nội dung cột status (kể cả đổi tên nhãn FREE/SLOW/JAM → GREEN/YELLOW/RED) **không cần sửa/restart gì bên `valhalla-hcm-traffic`**.
+   - `HEXPIRE` (Redis ≥ 7.4) đúng field vừa ghi, TTL = `REDIS_FIELD_TTL_SECONDS` (mặc định 1200s) — dọn field nếu camera chết hẳn, không cần cho tính đúng đắn (xem mục 3 bên dưới), chỉ để Redis không phình vô hạn. Khi field hết TTL, cả EMA lẫn hysteresis đều mất state, chu kỳ ghi lại tiếp theo coi như cold-start.
    - `PUBLISH traffic:events "update"` (giới hạn tối đa 1 lần/`PUBLISH_DEBOUNCE_SECONDS` bằng khoá `SET NX EX` trên Redis, tránh spam) — **hiện tại không ai lắng nghe kênh này** (xem mục 3), giữ lại phòng khi sau này có consumer event-driven khác.
 
 Camera nào không có `edges` (không map được với Valhalla graph) bị bỏ qua ngay từ đầu `process_camera()`.
@@ -159,7 +165,7 @@ Camera nào không có `edges` (không map được với Valhalla graph) bị b
 
 #### 3.1. Cấu trúc dữ liệu Redis
 
-- `traffic:speeds` — **HASH**: field = `edge_id`, value = `"{speed_kmh}:{timestamp_giây}:{status}"` (status = `FREE`/`SLOW`/`JAM`, xem mục 7.5 ở Phần 1). Daemon Valhalla chỉ đọc 2 cột đầu, cột status bị bỏ qua (xem 3.2).
+- `traffic:speeds` — **HASH**: field = `edge_id`, value = `"{speed_ema_kmh}:{timestamp_giây}:{status}"` (cột đầu là `speed_ema` đã làm mượt EMA, không phải `raw_speed` tức thời; status = `GREEN`/`YELLOW`/`RED`, xem mục 5.5/7.5 ở Phần 1). Daemon Valhalla chỉ đọc 2 cột đầu, cột status bị bỏ qua (xem 3.2) — đổi tên nhãn status không ảnh hưởng daemon.
 - Có **TTL riêng từng field** (`HEXPIRE`, 1200s) — chỉ để dọn field khi camera chết hẳn, không phải cơ chế quyết định "còn tươi hay không" (xem 3.3).
 
 #### 3.2. Có 2 bản daemon đọc Redis trong `valhalla-hcm-traffic` — chỉ 1 bản đang chạy
