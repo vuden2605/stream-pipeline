@@ -1,0 +1,107 @@
+===============================================================
+ HUONG DAN SU DUNG - STREAM PIPELINE (Smart Traffic Stream Pipeline)
+===============================================================
+(Xem HuongDanCaiDat.txt truoc de cai dat day du cong cu/thu vien/moi truong)
+
+GHI CHU: Day la du an Python (ngon ngu thong dich), nen KHONG co buoc
+"bien dich" rieng nhu C/C++/Java. Chi can cai du thu vien (HuongDanCaiDat.txt)
+la co the chay truc tiep bang lenh "python <ten_file>.py".
+
+---------------------------------------------------------------
+BUOC 1 - KHOI DONG HA TANG (REDIS) TRUOC KHI CHAY PIPELINE
+---------------------------------------------------------------
+Mo 1 cua so PowerShell:
+
+    cd C:\Users\<ten_user>\Desktop\smart-transport
+    docker compose up -d
+
+Doi den khi lenh "docker ps" thay container "smart-transport-redis" o
+trang thai "healthy". Khong can build/chay gi them ben repo stream-pipeline
+(khong con dung Kafka/Flink trong pipeline hien hanh).
+
+---------------------------------------------------------------
+BUOC 2 - CHAY PIPELINE CHINH (queue_feeder.py + worker.py)
+---------------------------------------------------------------
+Pipeline chinh gom 2 loai script chay CUNG LUC, moi cai trong 1 cua so
+PowerShell rieng, tat ca deu cd vao thu muc goc cua repo stream-pipeline:
+
+  Cua so 1 - queue_feeder.py (day cam_id vao hang doi Redis moi 10 giay):
+
+      cd C:\Users\<ten_user>\Desktop\stream-pipeline
+      $env:CAMERA_LIMIT = "5"    # gioi han so camera de test nhe; bo dong
+                                 # nay neu muon bat het ~611 camera that
+      python queue_feeder.py
+
+  Cua so 2, 3, 4 - worker.py (chay song song 2-3 instance de du throughput):
+
+      cd C:\Users\<ten_user>\Desktop\stream-pipeline
+      $env:CAMERA_LIMIT = "5"    # PHAI giong voi queue_feeder.py
+      python worker.py
+
+Luu y:
+  - Cu phap dat bien moi truong trong PowerShell la:  $env:TEN = "gia_tri"
+    (khong dung kieu "VAR=value command" nhu trong bash).
+  - Neu sua config.py / cameras_with_zones_merged.json trong luc dang chay,
+    phai Ctrl+C va chay lai TAT CA cac cua so - Python khong tu dong reload
+    code.
+  - Nen chay it nhat 2-3 instance worker.py de xu ly kip ~611 camera (da
+    kiem chung: 1 instance khong du throughput).
+
+---------------------------------------------------------------
+BUOC 3 - KIEM TRA KET QUA DANG CHAY
+---------------------------------------------------------------
+| Muon xem                                  | Lenh                                                      |
+|--------------------------------------------|-----------------------------------------------------------|
+| worker.py tinh occupancy/TWF/speed dung khong | Xem log cua chinh no - tim dong "occupancy=...% TWF=... speed=...km/h" |
+| So camera_id con ton trong hang doi         | docker exec smart-transport-redis redis-cli LLEN camera_queue |
+| So edge da co toc do trong Redis            | docker exec smart-transport-redis redis-cli HLEN traffic:speeds |
+| Toan bo du lieu toc do                      | docker exec smart-transport-redis redis-cli HGETALL traffic:speeds |
+| traffic_updater.py co ghi duoc vao Valhalla khong | docker logs -f valhalla-traffic-daemon (tim dong "written=N stale=0") |
+
+---------------------------------------------------------------
+BUOC 4 - DUNG CHUONG TRINH
+---------------------------------------------------------------
+1. Nhan Ctrl+C o TAT CA cac cua so dang chay queue_feeder.py / worker.py.
+2. Tat ha tang Docker:
+
+       cd C:\Users\<ten_user>\Desktop\smart-transport
+       docker compose down
+
+---------------------------------------------------------------
+CHAY THU MODULE AI RIENG LE (KHONG CAN REDIS) - DE TEST NHANH
+---------------------------------------------------------------
+Neu chi muon thu nghiem phan nhan dien AI tren 1 anh don le (khong chay
+toan bo pipeline Redis), co the dung truc tiep AI/main.py:
+
+    cd C:\Users\<ten_user>\Desktop\stream-pipeline\AI
+    python main.py
+
+Dat anh can test vao thu muc AI/test_images/ va chinh duong dan file trong
+AI/main.py truoc khi chay. Ket qua se in ra CLI theo dinh dang bao cao mat
+do giao thong (Road Mask %, MEU, TWF).
+
+---------------------------------------------------------------
+CHAY CALIBRATION STREAM (HIEU CHUAN HEATMAP + meuMax) - TUY CHON
+---------------------------------------------------------------
+Stream nay doc lap voi pipeline chinh, dung de tich luy heatmap/road mask va
+tinh meuMax lich su cho tung camera. Xem chi tiet trong AI/calibration/README.md.
+Can Redis da chay (giong Buoc 1) va cai them dependency giong pipeline chinh.
+
+  Cua so 1 - calibration_feeder.py (chay 1 lan trong 4 gio, tu goi finalize
+  khi xong):
+
+      cd C:\Users\<ten_user>\Desktop\stream-pipeline\AI\calibration
+      python calibration_feeder.py
+
+  Cua so 2, 3, 4 - calibration_worker.py (2-3 instance song song, phai chay
+  TRUOC hoac CUNG LUC voi feeder):
+
+      cd C:\Users\<ten_user>\Desktop\stream-pipeline\AI\calibration
+      python calibration_worker.py
+
+Sau khi feeder log "Finalize xong...", file AI/config/camera_thresholds.json
+da duoc cap nhat meuMax moi. Luc nay can KHOI DONG LAI worker.py cua pipeline
+chinh (Buoc 2) de ap dung gia tri meuMax vua hieu chuan (worker.py chi doc
+file cau hinh nay 1 lan luc khoi dong).
+
+===============================================================

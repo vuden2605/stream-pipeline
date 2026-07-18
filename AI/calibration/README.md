@@ -14,7 +14,7 @@ Stream **độc lập hoàn toàn** với pipeline chính (`queue_feeder.py` + `
 | | Pipeline chính (root) | Calibration stream (đây) |
 |---|---|---|
 | Redis queue | `camera_queue` | `calibration_queue` (khác hẳn) |
-| Redis state khác | `traffic:speeds`, `traffic:events` | `calibration:meu_max`, `calibration:frame_count`, `calibration:done` |
+| Redis state khác | `traffic:speeds` | `calibration:meu_max`, `calibration:frame_count`, `calibration:done` |
 | Ghi file `.npy` | chỉ **đọc** `{cam}_road_mask.npy` | **ghi** `{cam}_heatmap.npy` liên tục + `{cam}_road_mask.npy` lúc finalize |
 | Ghi `camera_thresholds.json` | không bao giờ ghi | ghi đè field `meuMax` lúc finalize |
 | Danh sách camera | `config.CAMERAS` (root `config.py`, có `edges` cho Valhalla) | đọc thẳng `cameras_with_zones_merged.json` ở root, không cần `edges` |

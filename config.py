@@ -36,7 +36,6 @@ REDIS_DB   = int(os.getenv("REDIS_DB", "0"))
 
 REDIS_QUEUE_KEY      = os.getenv("REDIS_QUEUE_KEY", "camera_queue")
 REDIS_SPEEDS_KEY     = os.getenv("REDIS_SPEEDS_KEY", "traffic:speeds")
-REDIS_CHANNEL        = os.getenv("REDIS_CHANNEL", "traffic:events")
 
 # Tốc độ free-flow mặc định khi edge không có trong default_traffic.json
 # (dùng làm free_flow[edge] cho công thức Greenshields bên dưới).
@@ -53,15 +52,6 @@ MIN_SPEED_KMH  = float(os.getenv("MIN_SPEED_KMH", "3.0"))
 # chỉ phủ camera_001 — nên MEU_MAX_DEFAULT là fallback cho 610/611 camera còn
 # lại chưa hiệu chuẩn (xem worker.py:get_meu_max).
 MEU_MAX_DEFAULT = float(os.getenv("MEU_MAX_DEFAULT", "200.0"))
-
-# traffic_updater.py (bên valhalla-hcm-traffic) chạy NGAY toàn bộ pipeline
-# seed-live-traffic-all + update-live-traffic-from-csv mỗi khi nhận 1 message
-# trên REDIS_CHANNEL — KHÔNG tự debounce (đã đọc source để xác nhận). Nếu mỗi
-# worker.py publish sau mỗi camera (611 cam x nhiều worker), daemon đó sẽ bị
-# gọi liên tục, khiến khoảng "toàn bộ edge = UNKNOWN" (giữa seed và reapply)
-# xảy ra gần như không ngừng. Dùng khoá phân tán trên Redis để đảm bảo TOÀN
-# BỘ worker.py cộng lại chỉ publish tối đa 1 lần mỗi PUBLISH_DEBOUNCE_SECONDS.
-PUBLISH_DEBOUNCE_SECONDS = int(os.getenv("PUBLISH_DEBOUNCE_SECONDS", "10"))
 
 # TTL cho từng field trong traffic:speeds (HEXPIRE, Redis >= 7.4).
 # Không ảnh hưởng tính đúng đắn — valhalla-traffic-daemon (bên

@@ -64,7 +64,6 @@ python worker.py
 | Hàng đợi camera còn tồn bao nhiêu | `docker exec smart-transport-redis redis-cli LLEN camera_queue` |
 | Số edge đã có tốc độ trong Redis | `docker exec smart-transport-redis redis-cli HLEN traffic:speeds` |
 | Toàn bộ dữ liệu tốc độ | `docker exec smart-transport-redis redis-cli HGETALL traffic:speeds` |
-| Redis publish sự kiện real-time | `docker exec smart-transport-redis redis-cli SUBSCRIBE traffic:events` |
 | `traffic_updater.py` có ghi được vào Valhalla không | `docker logs -f valhalla-traffic-daemon` — tìm `written=N stale=0` |
 
 ### 5. Dừng lại
@@ -157,7 +156,6 @@ Chạy **nhiều instance song song** (khuyến nghị 2-3, mỗi instance 1 pro
 8. **Ghi Redis** (không gom batch, ghi trực tiếp ngay khi tính xong — khác hẳn kiến trúc Flink cũ):
    - `HSET traffic:speeds {edge_id} "{speed_ema}:{timestamp_giây}:{status}"` — cột đầu là `speed_ema` (**đã làm mượt**, không phải `raw_speed`), status nối thêm ở cuối (`GREEN`/`YELLOW`/`RED`). Giữ nguyên `speed:timestamp` làm tiền tố vì daemon bên Valhalla parse theo vị trí cột, chỉ dùng 2 cột đầu và bỏ qua cột thừa (xem mục 3.1) — nên đổi nội dung cột status (kể cả đổi tên nhãn FREE/SLOW/JAM → GREEN/YELLOW/RED) **không cần sửa/restart gì bên `valhalla-hcm-traffic`**.
    - `HEXPIRE` (Redis ≥ 7.4) đúng field vừa ghi, TTL = `REDIS_FIELD_TTL_SECONDS` (mặc định 1200s) — dọn field nếu camera chết hẳn, không cần cho tính đúng đắn (xem mục 3 bên dưới), chỉ để Redis không phình vô hạn. Khi field hết TTL, cả EMA lẫn hysteresis đều mất state, chu kỳ ghi lại tiếp theo coi như cold-start.
-   - `PUBLISH traffic:events "update"` (giới hạn tối đa 1 lần/`PUBLISH_DEBOUNCE_SECONDS` bằng khoá `SET NX EX` trên Redis, tránh spam) — **hiện tại không ai lắng nghe kênh này** (xem mục 3), giữ lại phòng khi sau này có consumer event-driven khác.
 
 Camera nào không có `edges` (không map được với Valhalla graph) bị bỏ qua ngay từ đầu `process_camera()`.
 
@@ -212,7 +210,7 @@ Nhờ vậy `/app/traffic_updater.py` (đã sửa) tiếp tục là nguồn cậ
 
 **Cập nhật — đã hết orphan, file giờ sống trên host:** container `valhalla-traffic-daemon` từng là orphan (patch offset chỉ tồn tại trong writable layer qua `docker cp`, mất khi `docker rm`). Đã thêm service `traffic-daemon` chính thức vào `docker-compose.yml` của `valhalla-hcm-traffic`, bind-mount `./app_daemon_backup:/app` — sửa file trên host (`smart-transport/valhalla-hcm-traffic/app_daemon_backup/traffic_updater.py`) có hiệu lực ngay trên đĩa trong container, **không cần `docker cp` nữa**; chỉ cần `docker restart valhalla-traffic-daemon` để process Python nạp lại code (Python không tự hot-reload file đã đổi). Bản vá parser cho phép value 3 cột (`speed:ts:status`) đã áp dụng theo cách này, xem mục 3.1.
 
-**Hệ quả:** `PUBLISH traffic:events` trong `worker.py` **không còn ai lắng nghe** — daemon đang dùng hoàn toàn phớt lờ Pub/Sub (tự poll cố định). Vẫn giữ lại lời gọi này (đã debounce) trong code vì vô hại, phòng khi sau này có consumer event-driven khác cần.
+**Hệ quả:** vì daemon đang dùng hoàn toàn phớt lờ Pub/Sub (tự poll cố định) và không còn consumer nào khác lắng nghe, lời gọi `PUBLISH traffic:events` trong `worker.py` đã được **xoá khỏi code** (cùng với `REDIS_CHANNEL`, `PUBLISH_DEBOUNCE_SECONDS`, khoá `traffic:publish_lock`) — nếu sau này cần một consumer event-driven, thêm lại kênh Pub/Sub lúc đó.
 
 #### 3.3. Cách daemon đang dùng quyết định "edge nào còn tươi"
 

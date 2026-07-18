@@ -25,13 +25,10 @@ from config import (
     CAMERAS, CONFIDENCE, AI_MODEL_PATH, BROWSER_HEADERS,
     DEFAULT_EDGE_SPEED_KMH, FREE_FLOW_DEFAULT_KMH,
     GREENSHIELDS_N, MIN_SPEED_KMH, MEU_MAX_DEFAULT,
-    PUBLISH_DEBOUNCE_SECONDS,
     REDIS_FIELD_TTL_SECONDS,
     REDIS_HOST, REDIS_PORT, REDIS_DB,
-    REDIS_QUEUE_KEY, REDIS_SPEEDS_KEY, REDIS_CHANNEL,
+    REDIS_QUEUE_KEY, REDIS_SPEEDS_KEY,
 )
-
-REDIS_PUBLISH_LOCK_KEY = "traffic:publish_lock"
 
 # Site camera dùng chứng chỉ không hợp lệ (giống hành vi ssl=False của
 # ingestion.py cũ) — tắt cảnh báo lặp lại của urllib3 cho mỗi request.
@@ -221,13 +218,6 @@ def process_camera(session: requests.Session, r: redis.Redis, camera: dict) -> N
             "speed_ema=%.1fkm/h status=%s",
             cam_id, edge_id, precise_occupancy, density, raw_speed, speed_ema, status,
         )
-
-    # Daemon Valhalla đang dùng (/app/traffic_updater.py) tự poll theo đồng hồ
-    # cố định, không nghe Pub/Sub — PUBLISH này hiện không ai lắng nghe, giữ
-    # lại (đã debounce qua SET NX EX) phòng khi sau này có consumer
-    # event-driven khác cần (xem README Phần 2, mục 3.2).
-    if r.set(REDIS_PUBLISH_LOCK_KEY, "1", nx=True, ex=PUBLISH_DEBOUNCE_SECONDS):
-        r.publish(REDIS_CHANNEL, "update")
 
 
 def main():

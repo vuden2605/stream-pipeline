@@ -1,0 +1,76 @@
+===============================================================
+ HUONG DAN CAI DAT - STREAM PIPELINE (Smart Traffic Stream Pipeline)
+===============================================================
+
+1. CONG CU / MOI TRUONG PHAT TRIEN CAN THIET
+---------------------------------------------
+- He dieu hanh: Windows 10/11.
+- Python 3.12 (kiem tra bang lenh: python -c "import sys; print(sys.executable)"
+  neu may co nhieu ban Python cai song song).
+- PowerShell (dung de chay cac lenh vi du trong tai lieu nay).
+- Docker Desktop (dang chay) - de dung Redis va Valhalla thong qua repo ngoai
+  "smart-transport".
+- Git (de clone/quan ly repo).
+- Repo "smart-transport" phai duoc dat CUNG CAP thu muc voi repo nay, vi du:
+      C:\Users\<ten_user>\Desktop\smart-transport
+      C:\Users\<ten_user>\Desktop\stream-pipeline   <-- repo nay
+  Repo "smart-transport" cung cap Redis (va Valhalla) qua docker compose.
+
+2. CAI PYTHON PACKAGE (THU VIEN)
+---------------------------------------------
+Mo PowerShell, cd vao thu muc goc cua repo (stream-pipeline), roi chay:
+
+    python -m pip install ultralytics opencv-python numpy pillow requests redis python-dotenv
+
+Danh sach thu vien va vai tro:
+  - ultralytics   : chay model YOLO (nhan dien phuong tien giao thong).
+  - opencv-python : xu ly anh (cv2), tinh toan road mask / heatmap.
+  - numpy         : xu ly ma tran, luu heatmap/road mask (.npy).
+  - pillow (PIL)  : doc/giai ma anh JPEG tu camera.
+  - requests      : goi HTTP lay snapshot camera.
+  - redis         : ket noi Redis (hang doi + luu tru toc do giao thong).
+  - python-dotenv : doc file cau hinh .env.
+
+(Tuy chon, chi can neu muon chay lai kien truc cu Kafka+Flink+S3 trong
+thu muc old-pipeline/): can cai them boto3, kafka-python, v.v. - xem
+rieng trong old-pipeline/ neu co nhu cau, khong bat buoc cho pipeline
+dang hoat dong hien tai.
+
+3. FILE CAU HINH .env O THU MUC GOC
+---------------------------------------------
+Tao file ".env" o thu muc goc project (cung cap voi config.py) voi noi dung
+toi thieu cho pipeline hien hanh (Redis queue):
+
+    CONFIDENCE=0.3
+    REDIS_HOST=localhost
+    REDIS_PORT=6379
+
+Cac bien khac (AWS_*, KAFKA_BROKER, DB_URL, v.v.) chi can thiet neu muon
+chay song song ban pipeline cu (Kafka/S3), khong bat buoc cho pipeline
+Redis-queue dang chay.
+
+4. DU LIEU / FILE CAU HINH BAT BUOC PHAI CO SAN
+---------------------------------------------
+- AI/weights/best.pt                     : trong so model YOLO da huan luyen.
+- cameras_with_zones_merged.json (o goc) : danh sach camera + zone/edge Valhalla.
+- default_traffic.json (o goc)           : toc do free-flow mac dinh theo edge.
+- AI/config/camera_thresholds.json       : nguong hieu chuan meuMax theo camera.
+- AI/config/meu_coefficients.json        : he so quy doi MEU theo loai xe.
+
+Cac file nay da co san trong repo; khong can tu tao lai tru khi bi thieu/xoa.
+
+5. HA TANG NGOAI (REDIS QUA DOCKER)
+---------------------------------------------
+Sau khi cai xong Python package, can khoi dong ha tang Redis/Valhalla tu
+repo "smart-transport" (xem chi tiet cach chay trong HuongDanSuDung.txt):
+
+    cd C:\Users\<ten_user>\Desktop\smart-transport
+    docker compose up -d
+
+Kiem tra bang lenh "docker ps", phai thay container "smart-transport-redis"
+o trang thai "healthy" thi moi coi la cai dat/ha tang da san sang.
+
+===============================================================
+ Sau khi hoan tat cac buoc tren, xem file HuongDanSuDung.txt de biet
+ cach bien dich/chay chuong trinh.
+===============================================================
