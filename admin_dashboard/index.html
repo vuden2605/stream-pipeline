@@ -24,6 +24,7 @@
   .status-APPROVED { background: #14532d; color: #4ade80; }
   .status-REJECTED { background: #450a0a; color: #f87171; }
   .empty { color: #777; padding: 40px; text-align: center; }
+  .card.highlight { outline: 3px solid #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.25); }
 </style>
 </head>
 <body>
@@ -37,8 +38,21 @@
   <div id="grid" class="grid"></div>
 
   <script>
-    let currentStatus = "PENDING";
+    // Link trong email báo tai nạn trỏ tới /?event=<id> — mở đúng tab "Tất cả"
+    // (vì sự kiện có thể đã được ai đó duyệt/từ chối trước khi admin bấm vào
+    // email) và cuộn/khoanh nổi đúng card đó.
+    const params = new URLSearchParams(location.search);
+    const highlightId = params.get("event");
+    let hasScrolledToHighlight = false;
+
+    let currentStatus = highlightId ? "ALL" : "PENDING";
     const grid = document.getElementById("grid");
+
+    if (highlightId) {
+      document.querySelectorAll(".tabs button").forEach(b => {
+        b.classList.toggle("active", b.dataset.status === "ALL");
+      });
+    }
 
     document.querySelectorAll(".tabs button").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -68,7 +82,7 @@
       }
 
       grid.innerHTML = items.map(it => `
-        <div class="card">
+        <div class="card${it.event_id === highlightId ? " highlight" : ""}" data-event-id="${it.event_id}">
           <img src="/api/accidents/${it.event_id}/image" loading="lazy">
           <div class="body">
             <div class="meta">
@@ -86,6 +100,16 @@
           </div>
         </div>
       `).join("");
+
+      // Chỉ auto-scroll 1 lần lúc mở link từ email — không lặp lại mỗi lần
+      // poll (5s/lần) để tránh giật trang khi admin đang xem card khác.
+      if (highlightId && !hasScrolledToHighlight) {
+        const card = grid.querySelector(`[data-event-id="${highlightId}"]`);
+        if (card) {
+          card.scrollIntoView({ behavior: "smooth", block: "center" });
+          hasScrolledToHighlight = true;
+        }
+      }
     }
 
     load();

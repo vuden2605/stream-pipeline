@@ -3,6 +3,8 @@ import sys
 import time
 import uuid
 import logging
+import smtplib
+from email.mime.text import MIMEText
 from io import BytesIO
 from pathlib import Path
 
@@ -61,8 +63,50 @@ ACCIDENT_COOLDOWN_KEY_PREFIX = "accident:cooldown:"
 
 COOKIE_REFRESH_INTERVAL_SECONDS = 3600
 
+# ── Email báo admin khi có sự kiện mới — optional, tự bỏ qua nếu chưa cấu
+# hình (không làm crash worker vì đây chỉ là thông báo, không phải core logic
+# phát hiện). Đã có debounce tự nhiên qua streak+cooldown ở process_camera()
+# nên mỗi sự kiện chỉ gửi đúng 1 email, không cần chống spam thêm ở đây.
+SMTP_HOST = os.getenv("SMTP_HOST", "")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SMTP_USER = os.getenv("SMTP_USER", "")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+SMTP_FROM = os.getenv("SMTP_FROM", SMTP_USER)
+ADMIN_EMAILS = [e.strip() for e in os.getenv("ADMIN_EMAILS", "").split(",") if e.strip()]
+DASHBOARD_BASE_URL = os.getenv("DASHBOARD_BASE_URL", "http://localhost:8080")
+
 detector = AccidentDetector(ACCIDENT_MODEL_PATH)
 log.info("Accident model loaded: %s", ACCIDENT_MODEL_PATH)
+
+
+def send_accident_email(event_id: str, cam_id: str, class_name: str, conf: float, ts: int) -> None:
+    if not SMTP_HOST or not ADMIN_EMAILS:
+        log.info("Bỏ qua gửi email (chưa cấu hình SMTP_HOST/ADMIN_EMAILS)")
+        return
+
+    link = f"{DASHBOARD_BASE_URL.rstrip('/')}/?event={event_id}"
+    time_str = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts))
+    body = (
+        f"Phát hiện nghi vấn tai nạn giao thông.\n\n"
+        f"Camera: {cam_id}\n"
+        f"Loại: {class_name} (conf {conf:.2f})\n"
+        f"Thời gian: {time_str}\n\n"
+        f"Xem và duyệt tại: {link}\n"
+    )
+    msg = MIMEText(body, "plain", "utf-8")
+    msg["Subject"] = f"[Cảnh báo tai nạn] Camera {cam_id}"
+    msg["From"] = SMTP_FROM
+    msg["To"] = ", ".join(ADMIN_EMAILS)
+
+    try:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as server:
+            server.starttls()
+            if SMTP_USER:
+                server.login(SMTP_USER, SMTP_PASSWORD)
+            server.sendmail(SMTP_FROM, ADMIN_EMAILS, msg.as_string())
+        log.info("[%s] Đã gửi email báo sự kiện %s tới %s", cam_id, event_id, ADMIN_EMAILS)
+    except Exception as e:
+        log.error("[%s] Gửi email thất bại: %r", cam_id, e)
 
 
 def is_valid_jpeg(data: bytes) -> bool:
@@ -152,6 +196,8 @@ def process_camera(session: requests.Session, r: redis.Redis, camera: dict) -> N
 
     log.warning("[%s] TẠO SỰ KIỆN TAI NẠN event_id=%s class=%s — chờ admin duyệt",
                 cam_id, event_id, best["className"])
+
+    send_accident_email(event_id, cam_id, best["className"], best["conf"], ts)
 
 
 def main():

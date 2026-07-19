@@ -334,7 +334,8 @@ config.CAMERAS (đọc CHUNG với Phần 1-2, chỉ IMPORT — không sửa con
 │       ACCIDENT_STREAK_THRESHOLD=3 chu kỳ LIÊN TIẾP mới        │
 │       tính là nghi vấn thật (chống báo giả 1 frame nhiễu)     │
 │    5. Nếu đủ streak + qua cooldown (300s/camera, chống spam    │
-│       nhiều sự kiện trùng 1 vụ) → tạo event_id, ghi Redis      │
+│       nhiều sự kiện trùng 1 vụ) → tạo event_id, ghi Redis,     │
+│       rồi gửi email báo admin (nếu đã cấu hình SMTP_*)         │
 └──────────────────────┬───────────────────────────────────────┘
                         ▼
      Redis (key riêng, không đụng traffic:speeds/camera_queue):
@@ -343,20 +344,23 @@ config.CAMERAS (đọc CHUNG với Phần 1-2, chỉ IMPORT — không sửa con
        accident:meta:<event_id>  HASH  cam_id/ts/class_name/
                                        confidence/status/decided_at
                         │
-                        ▼
-┌────────────────────────────────────────────────────┐
-│ accident_api.py (FastAPI, container/image RIÊNG —    │
-│ nhẹ, không cần torch/ultralytics)                     │
-│   GET  /api/accidents?status=PENDING|APPROVED|         │
-│        REJECTED|ALL                                   │
-│   GET  /api/accidents/{id}/image                       │
-│   POST /api/accidents/{id}/approve                      │
-│   POST /api/accidents/{id}/reject                        │
-│   GET  /  → phục vụ admin_dashboard/index.html (SPA)      │
-└──────────────────────┬───────────────────────────────────┘
-                        ▼
-            Admin mở http://localhost:8080, xem ảnh + bấm
-            Duyệt/Từ chối → HSET accident:meta:<id> status=...
+                        ├──────────────────────────────┐
+                        ▼                               ▼
+┌────────────────────────────────────────────────────┐  Email tới ADMIN_EMAILS
+│ accident_api.py (FastAPI, container/image RIÊNG —    │  (SMTP, optional — bỏ qua
+│ nhẹ, không cần torch/ultralytics)                     │  nếu chưa cấu hình SMTP_HOST)
+│   GET  /api/accidents?status=PENDING|APPROVED|         │  subject: "[Cảnh báo tai nạn]
+│        REJECTED|ALL                                   │  Camera <cam_id>", body có link
+│   GET  /api/accidents/{id}/image                       │  DASHBOARD_BASE_URL/?event=<id>
+│   POST /api/accidents/{id}/approve                      │            │
+│   POST /api/accidents/{id}/reject                        │            ▼
+│   GET  /  → phục vụ admin_dashboard/index.html (SPA)      │  Admin click link trong mail
+└──────────────────────┬───────────────────────────────────┘            │
+                        ▼                                                │
+            Admin mở http://localhost:8080 (trực tiếp hoặc từ ─────────┘
+            link email — dashboard tự nhận ?event=<id>, chuyển
+            sang tab "Tất cả", cuộn + khoanh nổi đúng card đó),
+            xem ảnh + bấm Duyệt/Từ chối → HSET accident:meta:<id> status=...
 ```
 
 ### 1. Các file liên quan
@@ -382,8 +386,16 @@ config.CAMERAS (đọc CHUNG với Phần 1-2, chỉ IMPORT — không sửa con
 | `ACCIDENT_IMAGE_TTL_SECONDS` | `172800` (48h) | TTL của ảnh JPEG lưu trong Redis — hết hạn thì nút xem ảnh trả 404 dù meta còn |
 | `ACCIDENT_META_TTL_SECONDS` | `604800` (7 ngày) | TTL của metadata sự kiện (camera, class, confidence, status) |
 | `REDIS_ACCIDENT_PENDING_KEY` | `accident:pending` | Tên Redis ZSET index toàn bộ event_id (dùng chung cho mọi trạng thái, lọc theo `status` trong meta hash khi query) |
+| `SMTP_HOST` | *(rỗng)* | Host SMTP để gửi email báo admin. **Rỗng = tắt tính năng gửi email hoàn toàn** (chỉ log, không lỗi) |
+| `SMTP_PORT` | `587` | Port SMTP (STARTTLS) |
+| `SMTP_USER` / `SMTP_PASSWORD` | *(rỗng)* | Tài khoản đăng nhập SMTP (nếu server yêu cầu auth) |
+| `SMTP_FROM` | = `SMTP_USER` | Địa chỉ người gửi |
+| `ADMIN_EMAILS` | *(rỗng)* | Danh sách email nhận báo, phân cách bởi dấu phẩy. Rỗng = không gửi (dù đã có `SMTP_HOST`) |
+| `DASHBOARD_BASE_URL` | `http://localhost:8080` | Base URL chèn vào link trong email (`{DASHBOARD_BASE_URL}/?event=<id>`) — **cần đổi thành URL thật admin truy cập được** nếu deploy (xem Phần 4), không phải `localhost` |
 
 `REDIS_HOST`/`REDIS_PORT`/`REDIS_DB` dùng đúng 3 biến đã có sẵn trong `.env.prod` (đọc lại, không định nghĩa biến mới) — `accident_worker.py` import từ `config.py`, `accident_api.py` tự đọc `os.getenv` (không import `config.py` để tránh nạp `cameras_with_zones_merged.json`/`default_traffic.json` không cần thiết vào image nhẹ).
+
+**Email báo admin:** `accident_worker.py` tự gửi qua `smtplib` (thư viện chuẩn Python, không cần cài thêm package) ngay sau khi tạo sự kiện — không cần cấu hình gì thêm ngoài các biến `SMTP_*`/`ADMIN_EMAILS` ở trên trong `.env.prod`. Vì việc tạo sự kiện đã tự giới hạn qua streak+cooldown (xem sơ đồ), mỗi sự kiện chỉ gửi đúng 1 email — không cần chống spam thêm. Nếu gửi lỗi (sai SMTP, mất mạng...) chỉ log lỗi, không làm crash worker hay chặn việc ghi sự kiện vào Redis.
 
 ### 3. Cách chạy
 
@@ -402,6 +414,8 @@ Mở `http://localhost:8080` để xem dashboard. Chạy độc lập với `que
 | 3 | Ảnh sự kiện lưu trong Redis (không phải file/S3), có TTL 48h | Sự kiện cũ hơn 48h vẫn hiện trong danh sách (meta TTL 7 ngày) nhưng bấm xem ảnh sẽ lỗi 404 |
 | 4 | `accident_worker.py` tự fetch camera riêng, không qua `queue_feeder.py` | Tải lên `giaothong.hochiminhcity.gov.vn` tăng gấp đôi so với chỉ chạy Phần 1-2 (xem "Nguyên tắc thiết kế" ở đầu Phần 3) |
 | 5 | Streak/cooldown/threshold hiện là giá trị mặc định đoán, chưa hiệu chỉnh bằng dữ liệu thực tế | Cần tinh chỉnh `ACCIDENT_STREAK_THRESHOLD`/`ACCIDENT_CONFIDENCE`/`ACCIDENT_COOLDOWN_SECONDS` sau khi chạy thử dài hạn với camera thật |
+| 6 | Gửi email **tắt mặc định** (`SMTP_HOST`/`ADMIN_EMAILS` rỗng) | Nếu không tự thêm biến `SMTP_*`/`ADMIN_EMAILS` vào `.env.prod`, sự kiện vẫn tạo/ghi Redis bình thường nhưng admin sẽ không nhận được email — phải tự vào dashboard kiểm tra |
+| 7 | `DASHBOARD_BASE_URL` mặc định `http://localhost:8080` | Nếu không đổi giá trị này khi deploy (Phần 4), link trong email sẽ trỏ về `localhost` của máy chạy `accident_worker.py` — vô dụng với admin ở máy khác |
 
 ---
 
