@@ -10,4 +10,7 @@ RUN pip install --no-cache-dir \
 COPY accident_api.py .
 COPY admin_dashboard/ ./admin_dashboard/
 
-CMD ["uvicorn", "accident_api:app", "--host", "0.0.0.0", "--port", "8000"]
+# Render (và nhiều PaaS khác) tự gán cổng qua biến PORT lúc runtime, khác
+# cổng cố định khi chạy local qua docker-compose (map "8080:8000") — dùng
+# shell form + ${PORT:-8000} để tương thích cả 2 mà không cần sửa gì thêm.
+CMD ["sh", "-c", "uvicorn accident_api:app --host 0.0.0.0 --port ${PORT:-8000}"]

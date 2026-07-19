@@ -17,6 +17,7 @@
   .card .meta b { color: #eee; }
   .actions { display: flex; gap: 8px; }
   .actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+  .actions button:disabled { opacity: 0.5; cursor: not-allowed; }
   .approve { background: #16a34a; color: #fff; }
   .reject { background: #dc2626; color: #fff; }
   .status-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
@@ -67,9 +68,19 @@
       return new Date(ts * 1000).toLocaleString("vi-VN");
     }
 
-    async function decide(eventId, action) {
-      await fetch(`/api/accidents/${eventId}/${action}`, { method: "POST" });
-      load();
+    async function decide(eventId, action, btn) {
+      // Render free tier có thể mất vài giây (cold-start hoặc CPU yếu) để
+      // trả lời — vô hiệu hoá + đổi chữ nút ngay lúc bấm để không giống như
+      // bấm không ăn, tránh admin bấm lại nhiều lần chồng request.
+      const actions = btn.closest(".actions");
+      actions.querySelectorAll("button").forEach(b => (b.disabled = true));
+      btn.textContent = "Đang xử lý...";
+
+      try {
+        await fetch(`/api/accidents/${eventId}/${action}`, { method: "POST" });
+      } finally {
+        await load();
+      }
     }
 
     async function load() {
@@ -93,8 +104,8 @@
             </div>
             ${it.status === "PENDING" ? `
               <div class="actions">
-                <button class="approve" onclick="decide('${it.event_id}','approve')">Duyệt</button>
-                <button class="reject" onclick="decide('${it.event_id}','reject')">Từ chối</button>
+                <button class="approve" onclick="decide('${it.event_id}','approve', this)">Duyệt</button>
+                <button class="reject" onclick="decide('${it.event_id}','reject', this)">Từ chối</button>
               </div>
             ` : ""}
           </div>
@@ -102,7 +113,7 @@
       `).join("");
 
       // Chỉ auto-scroll 1 lần lúc mở link từ email — không lặp lại mỗi lần
-      // poll (5s/lần) để tránh giật trang khi admin đang xem card khác.
+      // poll (60s/lần) để tránh giật trang khi admin đang xem card khác.
       if (highlightId && !hasScrolledToHighlight) {
         const card = grid.querySelector(`[data-event-id="${highlightId}"]`);
         if (card) {
@@ -113,7 +124,7 @@
     }
 
     load();
-    setInterval(load, 5000);
+    setInterval(load, 60000);
   </script>
 </body>
 </html>

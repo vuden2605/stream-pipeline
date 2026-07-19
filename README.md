@@ -370,7 +370,7 @@ config.CAMERAS (đọc CHUNG với Phần 1-2, chỉ IMPORT — không sửa con
 | `AI/src/core/accident_detector.py` | Class `AccidentDetector` bọc YOLO (`AI/accident-detection/weights/best.pt`), `extractIncidentBoxes()` lọc box `*_incident` |
 | `accident_worker.py` | Vòng lặp fetch + detect + streak/cooldown + ghi sự kiện vào Redis |
 | `accident_api.py` | FastAPI — CRUD sự kiện qua Redis, phục vụ luôn `admin_dashboard/` |
-| `admin_dashboard/index.html` | SPA thuần HTML/JS (không framework), poll API mỗi 5s, có tab Chờ duyệt/Đã duyệt/Đã từ chối/Tất cả |
+| `admin_dashboard/index.html` | SPA thuần HTML/JS (không framework), poll API mỗi 60s, có tab Chờ duyệt/Đã duyệt/Đã từ chối/Tất cả |
 | `Dockerfile.api` | Image riêng cho `accident_api.py` (chỉ `fastapi`, `uvicorn`, `redis` — không cài torch/ultralytics như `Dockerfile` chính) |
 | `AI/accident-detection/` | Model + ảnh mẫu, clone từ `github.com/caogiabao0909/accident-detection` (đã gỡ `.git` lồng bên trong để track trực tiếp trong repo này) |
 
