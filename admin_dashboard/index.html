@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Duyệt sự kiện tai nạn</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #111; color: #eee; margin: 0; padding: 24px; }
+  h1 { font-size: 20px; margin-bottom: 16px; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tabs button { background: #222; color: #ccc; border: 1px solid #333; padding: 6px 14px; border-radius: 6px; cursor: pointer; }
+  .tabs button.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .card { background: #1b1b1b; border: 1px solid #2a2a2a; border-radius: 10px; overflow: hidden; }
+  .card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: #000; }
+  .card .body { padding: 10px 12px; }
+  .card .meta { font-size: 13px; color: #aaa; margin-bottom: 10px; line-height: 1.5; }
+  .card .meta b { color: #eee; }
+  .actions { display: flex; gap: 8px; }
+  .actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+  .approve { background: #16a34a; color: #fff; }
+  .reject { background: #dc2626; color: #fff; }
+  .status-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+  .status-PENDING { background: #78350f; color: #fbbf24; }
+  .status-APPROVED { background: #14532d; color: #4ade80; }
+  .status-REJECTED { background: #450a0a; color: #f87171; }
+  .empty { color: #777; padding: 40px; text-align: center; }
+</style>
+</head>
+<body>
+  <h1>Sự kiện tai nạn cần duyệt</h1>
+  <div class="tabs">
+    <button data-status="PENDING" class="active">Chờ duyệt</button>
+    <button data-status="APPROVED">Đã duyệt</button>
+    <button data-status="REJECTED">Đã từ chối</button>
+    <button data-status="ALL">Tất cả</button>
+  </div>
+  <div id="grid" class="grid"></div>
+
+  <script>
+    let currentStatus = "PENDING";
+    const grid = document.getElementById("grid");
+
+    document.querySelectorAll(".tabs button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentStatus = btn.dataset.status;
+        load();
+      });
+    });
+
+    function fmtTime(ts) {
+      return new Date(ts * 1000).toLocaleString("vi-VN");
+    }
+
+    async function decide(eventId, action) {
+      await fetch(`/api/accidents/${eventId}/${action}`, { method: "POST" });
+      load();
+    }
+
+    async function load() {
+      const res = await fetch(`/api/accidents?status=${currentStatus}`);
+      const items = await res.json();
+
+      if (items.length === 0) {
+        grid.innerHTML = `<div class="empty">Không có sự kiện nào</div>`;
+        return;
+      }
+
+      grid.innerHTML = items.map(it => `
+        <div class="card">
+          <img src="/api/accidents/${it.event_id}/image" loading="lazy">
+          <div class="body">
+            <div class="meta">
+              Camera: <b>${it.cam_id}</b><br>
+              Loại: <b>${it.class_name}</b> (conf ${Number(it.confidence).toFixed(2)})<br>
+              Thời gian: ${fmtTime(it.ts)}<br>
+              Trạng thái: <span class="status-badge status-${it.status}">${it.status}</span>
+            </div>
+            ${it.status === "PENDING" ? `
+              <div class="actions">
+                <button class="approve" onclick="decide('${it.event_id}','approve')">Duyệt</button>
+                <button class="reject" onclick="decide('${it.event_id}','reject')">Từ chối</button>
+              </div>
+            ` : ""}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    load();
+    setInterval(load, 5000);
+  </script>
+</body>
+</html>
