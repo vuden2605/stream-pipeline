@@ -60,6 +60,10 @@
         document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         currentStatus = btn.dataset.status;
+        // Xoá grid ngay khi đổi tab — nếu không, dữ liệu của tab cũ vẫn còn
+        // hiện cho tới khi fetch xong (Render free tier có thể mất vài giây),
+        // trông như bấm tab không ăn / vẫn đứng ở tab cũ.
+        grid.innerHTML = `<div class="empty">Đang tải...</div>`;
         load();
       });
     });
