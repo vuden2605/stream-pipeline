@@ -27,7 +27,7 @@ AI_MODEL_PATH = os.getenv("AI_MODEL_PATH", str(Path(__file__).parent / "AI" / "w
 # đang chạy — xem worker.py cho pipeline Redis-queue hiện hành).
 TWF_MAX_SPEED_KMH = float(os.getenv("TWF_MAX_SPEED_KMH", "50"))
 
-INTERVAL_SECONDS = 10
+INTERVAL_SECONDS = 20
 
 # ── Redis (worker.py / queue_feeder.py — pipeline hiện hành) ─────────────────
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")

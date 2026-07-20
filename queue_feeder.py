@@ -9,6 +9,8 @@ from config import (
     REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_QUEUE_KEY,
 )
 
+CYCLE_SENTINEL = "__CYCLE_END__"
+
 if sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
@@ -40,8 +42,9 @@ def main():
             pipe = r.pipeline()
             for cam in CAMERAS:
                 pipe.rpush(REDIS_QUEUE_KEY, cam["id"])
+            pipe.rpush(REDIS_QUEUE_KEY, CYCLE_SENTINEL)
             pipe.execute()
-            log.info("Đã đẩy %d camera_id vào queue (tồn trước đó: %d)", total, qlen_before)
+            log.info("Đã đẩy %d camera_id + sentinel vào queue (tồn trước đó: %d)", total, qlen_before)
 
         elapsed = time.time() - t0
         time.sleep(max(0, INTERVAL_SECONDS - elapsed))

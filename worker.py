@@ -1,21 +1,19 @@
 import sys
 import time
+import asyncio
 import logging
 from io import BytesIO
 from pathlib import Path
 
+import aiohttp
 import numpy as np
 import redis
-import requests
-import urllib3
 from PIL import Image
 
 if sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-# Thư mục AI/ có package riêng (src/core, src/data) import kiểu tương đối —
-# cần thêm AI/ vào sys.path để dùng được từ worker.py chạy ở root repo.
 sys.path.insert(0, str(Path(__file__).parent / "AI"))
 from src.core.detector import TrafficDetector
 from src.core import metrics
@@ -25,14 +23,26 @@ from config import (
     CAMERAS, CONFIDENCE, AI_MODEL_PATH, BROWSER_HEADERS,
     DEFAULT_EDGE_SPEED_KMH, FREE_FLOW_DEFAULT_KMH,
     GREENSHIELDS_N, MIN_SPEED_KMH, MEU_MAX_DEFAULT,
+    PUBLISH_DEBOUNCE_SECONDS,
     REDIS_FIELD_TTL_SECONDS,
     REDIS_HOST, REDIS_PORT, REDIS_DB,
-    REDIS_QUEUE_KEY, REDIS_SPEEDS_KEY,
+    REDIS_QUEUE_KEY, REDIS_SPEEDS_KEY, REDIS_CHANNEL,
 )
 
-# Site camera dùng chứng chỉ không hợp lệ (giống hành vi ssl=False của
-# ingestion.py cũ) — tắt cảnh báo lặp lại của urllib3 cho mỗi request.
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+REDIS_PUBLISH_LOCK_KEY = "traffic:publish_lock"
+CYCLE_SENTINEL = "__CYCLE_END__"
+
+# Drain tối đa bao nhiêu camera mỗi vòng lặp
+BATCH_SIZE = 100
+# Số request HTTP đồng thời tối đa (semaphore + connector pool)
+SEMAPHORE_LIMIT = 50
+
+# Cookies lưu dạng dict, truyền vào mỗi ClientSession khi tạo — tránh khởi
+# tạo CookieJar ở module level (yêu cầu event loop đang chạy).
+_cookies: dict[str, str] = {}
+
+_FETCH_TIMEOUT = aiohttp.ClientTimeout(total=10, connect=5)
+_COOKIE_TIMEOUT = aiohttp.ClientTimeout(total=15, connect=5)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("worker")
@@ -47,15 +57,8 @@ _CAMERA_THRESHOLDS = config_loader.loadJsonConfig("camera_thresholds.json")
 
 COOKIE_REFRESH_INTERVAL_SECONDS = 3600
 
-# EMA làm mượt raw_speed qua các chu kỳ (lọc nhiễu 1-frame như occlusion/detect
-# sai) — alpha=0.3 ~ cửa sổ hiệu dụng 5-6 mẫu ~ 60-85s ở nhịp ghi ~10-15s/edge.
-# Cần hiệu chỉnh lại sau khi có dữ liệu thực tế.
 EMA_ALPHA = 0.3
 
-# Ngưỡng hysteresis (Schmitt trigger) — áp lên TWF_ngầm = 1 - speed_ema/free_flow
-# (tương đương TWF đã làm mượt, xem ghi chú ở classify_traffic_status()). Ngưỡng
-# vào/ra khác nhau giữa 2 mức để tránh nhấp nháy status khi dao động quanh biên.
-# Cần hiệu chỉnh lại theo road_class sau khi có dữ liệu thực tế (xem README).
 RED_ENTER_TWF = 0.75
 RED_EXIT_TWF = 0.65
 YELLOW_ENTER_TWF = 0.40
@@ -65,9 +68,6 @@ _STATUS_VALUES = ("GREEN", "YELLOW", "RED")
 
 
 def parse_prev_value(raw_val: str | None) -> tuple[float | None, str | None]:
-    """Value cũ format 'speed:ts' (2 phần, bản trước khi có EMA/status) hoặc
-    'speed:ts:status' (3 phần, bản hiện tại — cột speed đã là speed_ema).
-    Trả (None, None) nếu chưa có gì để dùng làm state cũ (edge mới / hết TTL)."""
     if not raw_val:
         return None, None
     parts = raw_val.split(":")
@@ -82,10 +82,6 @@ def parse_prev_value(raw_val: str | None) -> tuple[float | None, str | None]:
 
 
 def classify_traffic_status(twf: float, prev_status: str | None) -> str:
-    """twf ở đây là TWF_ngầm suy từ speed_ema (1 - speed_ema/free_flow), KHÔNG
-    phải TWF thô — phép suy này chỉ chính xác khi GREENSHIELDS_N=1.0 (Greenshields
-    tuyến tính, xem README mục 7.5). Nếu sau này đổi GREENSHIELDS_N, cần xem lại
-    ngưỡng bên dưới vì quan hệ speed<->TWF không còn tuyến tính nữa."""
     if prev_status == "RED":
         if twf >= RED_EXIT_TWF:
             return "RED"
@@ -96,7 +92,6 @@ def classify_traffic_status(twf: float, prev_status: str | None) -> str:
         return "GREEN" if twf < YELLOW_EXIT_TWF else "YELLOW"
     if prev_status == "GREEN":
         return "YELLOW" if twf >= YELLOW_ENTER_TWF else "GREEN"
-    # Edge mới hoặc field vừa hết TTL — không có state cũ để hysteresis
     if twf >= RED_ENTER_TWF:
         return "RED"
     return "YELLOW" if twf >= YELLOW_ENTER_TWF else "GREEN"
@@ -106,149 +101,236 @@ def is_valid_jpeg(data: bytes) -> bool:
     return len(data) > 5_000 and data[:2] == b"\xff\xd8" and data[-2:] == b"\xff\xd9"
 
 
-def refresh_cookie(session: requests.Session) -> None:
-    try:
-        resp = session.get(
-            "https://giaothong.hochiminhcity.gov.vn/",
-            headers=BROWSER_HEADERS, timeout=15, verify=False,
-        )
-        log.info("Session cookie refreshed (HTTP %d)", resp.status_code)
-    except Exception as e:
-        log.warning("Cookie refresh failed: %r", e)
-
-
-def fetch_snapshot(session: requests.Session, camera: dict) -> bytes | None:
-    """Bước 2: GET snapshot trực tiếp, giữ bytes trong RAM — không upload S3."""
-    url = f"{camera['url']}&t={int(time.time() * 1000)}"
-    try:
-        resp = session.get(url, headers=BROWSER_HEADERS, timeout=10, verify=False)
-    except Exception as e:
-        log.warning("[%s] fetch lỗi: %r", camera["id"], e)
-        return None
-
-    if resp.status_code != 200:
-        log.warning("[%s] HTTP %d", camera["id"], resp.status_code)
-        return None
-
-    data = resp.content
-    if not is_valid_jpeg(data):
-        log.warning("[%s] Not JPEG", camera["id"])
-        return None
-    return data
-
-
 def get_meu_max(cam_id: str) -> float:
-    """
-    Bước 5 cần MEU_max[cam][hour] — nhưng camera_thresholds.json hiện chỉ có
-    hiệu chuẩn phẳng theo camera (không tách giờ) và chỉ phủ camera_001, nên
-    610/611 camera còn lại dùng MEU_MAX_DEFAULT làm fallback.
-    """
     return _CAMERA_THRESHOLDS.get(cam_id, {}).get("meuMax", MEU_MAX_DEFAULT)
 
 
-def process_camera(session: requests.Session, r: redis.Redis, camera: dict) -> None:
-    cam_id = camera["id"]
-    edges = camera.get("edges", [])
-    if not edges:
-        return
+# ── Async fetch layer ─────────────────────────────────────────────────────────
 
-    image_data = fetch_snapshot(session, camera)
-    if image_data is None:
-        return
+async def _refresh_cookie_async() -> None:
+    jar = aiohttp.CookieJar(unsafe=True)
+    connector = aiohttp.TCPConnector(ssl=False)
+    async with aiohttp.ClientSession(
+        connector=connector,
+        headers=BROWSER_HEADERS,
+        cookie_jar=jar,
+    ) as session:
+        try:
+            async with session.get(
+                "https://giaothong.hochiminhcity.gov.vn/",
+                timeout=_COOKIE_TIMEOUT,
+            ) as resp:
+                for morsel in jar:
+                    _cookies[morsel.key] = morsel.value
+                log.info("Cookie refreshed (HTTP %d)", resp.status)
+        except Exception as e:
+            log.warning("Cookie refresh failed: %r", e)
 
-    image = np.array(Image.open(BytesIO(image_data)).convert("RGB"))
 
-    # Bước 3: YOLO inference
-    result = detector.predict(image, conf=CONFIDENCE, save=False)
+def refresh_cookie() -> None:
+    asyncio.run(_refresh_cookie_async())
 
-    # Bước 4: TWF (Traffic Weight Factor) — occupancy đo trực tiếp từ ảnh làm gatekeeper,
-    # nên meuMax hiệu chuẩn thấp hơn sức chứa thật không còn gây báo kẹt giả (occupancy
-    # thấp -> TWF = 0 dù meuMax nhỏ). TWF dùng thẳng làm density cho Greenshields.
-    precise_occupancy = metrics.calculatePreciseOccupancyRatio(result, cam_id)
-    camera_thresholds = {"meuMax": get_meu_max(cam_id)}
-    density = metrics.calculateTrafficWeightFactor(
-        precise_occupancy, result, cam_id, _MEU_COEFFICIENTS, camera_thresholds,
-    )
 
-    ts = int(time.time())
+async def _fetch_one(
+    session: aiohttp.ClientSession,
+    camera: dict,
+    sem: asyncio.Semaphore,
+) -> tuple[dict, np.ndarray | None]:
+    url = f"{camera['url']}&t={int(time.time() * 1000)}"
+    async with sem:
+        try:
+            async with session.get(url, timeout=_FETCH_TIMEOUT) as resp:
+                if resp.status != 200:
+                    log.debug("[%s] HTTP %d", camera["id"], resp.status)
+                    return camera, None
+                data = await resp.read()
+        except Exception as e:
+            log.debug("[%s] fetch error: %r", camera["id"], e)
+            return camera, None
 
-    for edge in edges:
-        edge_id = edge["edge_id"]
+    if not is_valid_jpeg(data):
+        log.debug("[%s] not JPEG", camera["id"])
+        return camera, None
+    try:
+        img = np.array(Image.open(BytesIO(data)).convert("RGB"))
+        return camera, img
+    except Exception as e:
+        log.debug("[%s] decode error: %r", camera["id"], e)
+        return camera, None
 
-        # Bước 5: Greenshields → raw_speed
-        free_flow = DEFAULT_EDGE_SPEED_KMH.get(edge_id, FREE_FLOW_DEFAULT_KMH)
-        raw_speed = free_flow * (1 - density ** GREENSHIELDS_N)
-        raw_speed = max(raw_speed, MIN_SPEED_KMH)
 
-        # Đọc state cũ từ chính Redis (không giữ state trong worker process —
-        # nhiều worker instance dùng chung queue, edge này có thể do worker
-        # khác xử lý ở chu kỳ trước) — cột speed cũ (đã là speed_ema) làm bộ
-        # nhớ EMA, khỏi cần thêm field riêng.
-        prev_speed_ema, prev_status = parse_prev_value(r.hget(REDIS_SPEEDS_KEY, edge_id))
-
-        # EMA làm mượt raw_speed qua các chu kỳ — cold-start (edge mới/hết TTL)
-        # thì speed_ema = raw_speed, chưa có gì để trộn.
-        if prev_speed_ema is None:
-            speed_ema = raw_speed
-        else:
-            speed_ema = EMA_ALPHA * raw_speed + (1 - EMA_ALPHA) * prev_speed_ema
-
-        # Traffic status suy từ speed_ema (không phải TWF thô) — twf_ngam tương
-        # đương TWF đã làm mượt vì GREENSHIELDS_N=1.0 (tuyến tính, xem README).
-        twf_ngam = 1 - speed_ema / free_flow
-        status = classify_traffic_status(twf_ngam, prev_status)
-
-        # Bước 8: Ghi Redis — kèm HEXPIRE để tự dọn field nếu camera chết hẳn
-        # (không worker.py nào ghi lại nữa). TTL >= speed_ttl_seconds bên
-        # valhalla-traffic-daemon nên không ảnh hưởng tính đúng đắn, chỉ dọn
-        # bộ nhớ (xem config.py:REDIS_FIELD_TTL_SECONDS).
-        # Format "speed:ts:status" — speed ở đây là speed_ema (đã làm mượt,
-        # không phải raw_speed), status nối SAU cùng. Giữ "speed:ts" làm tiền
-        # tố ổn định vì daemon bên valhalla-hcm-traffic parse theo vị trí cột
-        # (xem app_daemon_backup/traffic_updater.py đã patch) — giá trị GREEN/
-        # YELLOW/RED chỉ là nội dung chuỗi, daemon bỏ qua cột này hoàn toàn nên
-        # không cần đổi gì bên valhalla-hcm-traffic.
-        pipe = r.pipeline()
-        pipe.hset(REDIS_SPEEDS_KEY, edge_id, f"{speed_ema:.1f}:{ts}:{status}")
-        pipe.hexpire(REDIS_SPEEDS_KEY, REDIS_FIELD_TTL_SECONDS, edge_id)
-        pipe.execute()
-
-        log.info(
-            "[%s] edge=%s occupancy=%.1f%% TWF=%.2f raw_speed=%.1fkm/h "
-            "speed_ema=%.1fkm/h status=%s",
-            cam_id, edge_id, precise_occupancy, density, raw_speed, speed_ema, status,
+async def _fetch_all(cameras: list[dict]) -> list[tuple[dict, np.ndarray | None]]:
+    sem = asyncio.Semaphore(SEMAPHORE_LIMIT)
+    connector = aiohttp.TCPConnector(ssl=False, limit=SEMAPHORE_LIMIT)
+    async with aiohttp.ClientSession(
+        connector=connector,
+        headers=BROWSER_HEADERS,
+        cookies=_cookies,
+    ) as session:
+        return await asyncio.gather(
+            *[_fetch_one(session, cam, sem) for cam in cameras],
+            return_exceptions=False,
         )
 
 
+# ── Queue helpers ─────────────────────────────────────────────────────────────
+
+def drain_queue(r: redis.Redis, max_items: int) -> list[str]:
+    """Block trên item đầu tiên (5s timeout), sau đó drain thêm non-blocking."""
+    item = r.blpop(REDIS_QUEUE_KEY, timeout=5)
+    if item is None:
+        return []
+    _, first_id = item
+    ids = [first_id]
+    for _ in range(max_items - 1):
+        val = r.lpop(REDIS_QUEUE_KEY)
+        if val is None:
+            break
+        ids.append(val)
+    return ids
+
+
+# ── Core processing ───────────────────────────────────────────────────────────
+
+def process_batch(r: redis.Redis, cameras: list[dict]) -> tuple[int, int]:
+    """
+    Stage 1 — aiohttp + Semaphore: fetch đồng thời, giới hạn SEMAPHORE_LIMIT connections
+    Stage 2 — batch YOLO inference (1 GPU forward pass)
+    Stage 3 — hmget: đọc toàn bộ edge states trong 1 Redis round-trip
+    Stage 4 — pipeline: gom toàn bộ writes trong 1 Redis round-trip
+
+    Trả (ok, fail).
+    """
+    if not cameras:
+        return 0, 0
+
+    # Stage 1: async fetch
+    raw: list[tuple[dict, np.ndarray | None]] = asyncio.run(_fetch_all(cameras))
+    pairs = [(cam, img) for cam, img in raw if img is not None]
+
+    fail = len(cameras) - len(pairs)
+    if not pairs:
+        return 0, fail
+
+    # Stage 2: batch YOLO inference
+    try:
+        results = detector.predict_batch([img for _, img in pairs], conf=CONFIDENCE)
+    except Exception as e:
+        log.error("Batch inference error: %r", e)
+        return 0, len(cameras)
+
+    # Stage 3: batch Redis read — 1 round-trip cho toàn bộ edges
+    all_edge_ids = [
+        edge["edge_id"]
+        for cam, _ in pairs
+        for edge in cam.get("edges", [])
+    ]
+    prev_map: dict[str, str | None] = {}
+    if all_edge_ids:
+        prev_values = r.hmget(REDIS_SPEEDS_KEY, all_edge_ids)
+        prev_map = dict(zip(all_edge_ids, prev_values))
+
+    # Stage 4: compute + gom toàn bộ writes vào 1 pipeline
+    ts = int(time.time())
+    pipe = r.pipeline()
+    ok = 0
+
+    for (camera, _), result in zip(pairs, results):
+        cam_id = camera["id"]
+        edges = camera.get("edges", [])
+        if not edges:
+            ok += 1
+            continue
+        try:
+            precise_occupancy = metrics.calculatePreciseOccupancyRatio(result, cam_id)
+            camera_thresholds = {"meuMax": get_meu_max(cam_id)}
+            density = metrics.calculateTrafficWeightFactor(
+                precise_occupancy, result, cam_id, _MEU_COEFFICIENTS, camera_thresholds,
+            )
+            for edge in edges:
+                edge_id = edge["edge_id"]
+                free_flow = DEFAULT_EDGE_SPEED_KMH.get(edge_id, FREE_FLOW_DEFAULT_KMH)
+                raw_speed = max(free_flow * (1 - density ** GREENSHIELDS_N), MIN_SPEED_KMH)
+
+                prev_speed_ema, prev_status = parse_prev_value(prev_map.get(edge_id))
+                speed_ema = (
+                    raw_speed if prev_speed_ema is None
+                    else EMA_ALPHA * raw_speed + (1 - EMA_ALPHA) * prev_speed_ema
+                )
+                twf_ngam = 1 - speed_ema / free_flow
+                status = classify_traffic_status(twf_ngam, prev_status)
+
+                pipe.hset(REDIS_SPEEDS_KEY, edge_id, f"{speed_ema:.1f}:{ts}:{status}")
+                pipe.hexpire(REDIS_SPEEDS_KEY, REDIS_FIELD_TTL_SECONDS, edge_id)
+
+            ok += 1
+        except Exception as e:
+            log.debug("[%s] processing error: %r", cam_id, e)
+            fail += 1
+
+    pipe.execute()
+
+    if r.set(REDIS_PUBLISH_LOCK_KEY, "1", nx=True, ex=PUBLISH_DEBOUNCE_SECONDS):
+        r.publish(REDIS_CHANNEL, "update")
+
+    return ok, fail
+
+
+# ── Main loop ─────────────────────────────────────────────────────────────────
+
 def main():
     r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, decode_responses=True)
-    session = requests.Session()
-    refresh_cookie(session)
+    refresh_cookie()
     last_cookie_refresh = time.time()
 
-    log.info("Worker started — %d camera trong config | chờ queue '%s'", len(CAMERAS), REDIS_QUEUE_KEY)
+    log.info(
+        "Worker started — %d cameras | queue='%s' | batch=%d semaphore=%d",
+        len(CAMERAS), REDIS_QUEUE_KEY, BATCH_SIZE, SEMAPHORE_LIMIT,
+    )
+
+    cycle_ok = 0
+    cycle_fail = 0
+    cycle_start = time.time()
 
     while True:
         if time.time() - last_cookie_refresh > COOKIE_REFRESH_INTERVAL_SECONDS:
-            refresh_cookie(session)
+            refresh_cookie()
             last_cookie_refresh = time.time()
 
-        # Bước 1: BLPOP cam_id từ Redis queue (chờ tối đa 5s rồi lặp lại để
-        # vẫn kiểm tra refresh cookie định kỳ dù queue rỗng lâu)
-        item = r.blpop(REDIS_QUEUE_KEY, timeout=5)
-        if item is None:
+        ids = drain_queue(r, BATCH_SIZE)
+        if not ids:
             continue
-        _, cam_id = item
 
-        camera = CAMERA_BY_ID.get(cam_id)
-        if camera is None:
-            log.warning("cam_id=%s không có trong config.CAMERAS — bỏ qua", cam_id)
-            continue
+        sentinel_found = CYCLE_SENTINEL in ids
+        cam_ids = [i for i in ids if i != CYCLE_SENTINEL]
+
+        cameras = []
+        for cam_id in cam_ids:
+            cam = CAMERA_BY_ID.get(cam_id)
+            if cam is None:
+                log.debug("cam_id=%s không có trong config — bỏ qua", cam_id)
+                cycle_fail += 1
+            else:
+                cameras.append(cam)
 
         try:
-            process_camera(session, r, camera)
+            ok, fail = process_batch(r, cameras)
+            cycle_ok += ok
+            cycle_fail += fail
         except Exception as e:
-            log.error("[%s] lỗi xử lý: %r", cam_id, e)
+            log.error("Batch error: %r", e)
+            cycle_fail += len(cameras)
+
+        if sentinel_found:
+            elapsed = time.time() - cycle_start
+            queue_remaining = r.llen(REDIS_QUEUE_KEY)
+            log.info(
+                "Cycle %.1fs | ok=%d fail=%d total=%d queue_remaining=%d",
+                elapsed, cycle_ok, cycle_fail, cycle_ok + cycle_fail, queue_remaining,
+            )
+            cycle_ok = 0
+            cycle_fail = 0
+            cycle_start = time.time()
 
 
 if __name__ == "__main__":

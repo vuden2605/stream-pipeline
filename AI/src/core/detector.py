@@ -10,6 +10,12 @@ class TrafficDetector:
         results = self.model.predict(source=imageSource, conf=conf, save=save)
         return results[0]
 
+    def predict_batch(self, images: list, conf: float = 0.3):
+        """Batch inference — trả list Results cùng thứ tự input."""
+        if not images:
+            return []
+        return self.model.predict(source=images, conf=conf, save=False)
+
     @staticmethod
     def printResultsDetails(r):
         """In thông tin chi tiết các trường dữ liệu và bounding box thu được."""

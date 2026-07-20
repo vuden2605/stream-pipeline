@@ -16,6 +16,7 @@ RUN pip install --no-cache-dir \
     requests \
     redis \
     python-dotenv \
-    urllib3
+    urllib3 \
+    aiohttp
 
 COPY . .
