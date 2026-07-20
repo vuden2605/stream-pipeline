@@ -219,23 +219,14 @@ def calculateTrafficWeightFactor(preciseOccupancyRatio, r, cameraId, meuCoeffici
     Quyết định kẹt/không kẹt neo vào occupancy đo trực tiếp từ ảnh, nên meuMax bị đặt
     thấp hơn thực tế (đường chưa từng kẹt trong dữ liệu lịch sử) không còn gây báo kẹt giả.
 
-    - occupancy <= 70%: đường thông thoáng -> TWF = 0.0
-    - occupancy >= 90%: mật độ đầy đủ     -> TWF = min(meu/meuMax, 1.0)
-    - 70% < occupancy < 90%: vùng đệm     -> nội suy tuyến tính (rampFactor) để tránh
-      raw_speed giật cục khi occupancy dao động nhẹ quanh ngưỡng giữa các frame.
+    - occupancy <= 80%: đường thông thoáng -> TWF = 0.0
+    - occupancy > 80%:  TWF = min(meu/meuMax, 1.0)
     """
-    LOWER_BOUND = 70.0
-    UPPER_BOUND = 90.0
+    LOWER_BOUND = 20.0
 
     if preciseOccupancyRatio <= LOWER_BOUND:
         return 0.0
 
     meu = calculateMotorcycleEquivalentUnit(r, meuCoefficients)
     meuMax = cameraThresholds.get("meuMax", 1.0)
-    density = min(meu / meuMax, 1.0) if meuMax > 0 else 0.0
-
-    if preciseOccupancyRatio >= UPPER_BOUND:
-        return density
-
-    rampFactor = (preciseOccupancyRatio - LOWER_BOUND) / (UPPER_BOUND - LOWER_BOUND)
-    return rampFactor * density
+    return min(meu / meuMax, 1.0) if meuMax > 0 else 0.0
