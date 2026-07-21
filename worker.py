@@ -23,13 +23,11 @@ from config import (
     CAMERAS, CONFIDENCE, AI_MODEL_PATH, BROWSER_HEADERS,
     DEFAULT_EDGE_SPEED_KMH, FREE_FLOW_DEFAULT_KMH,
     GREENSHIELDS_N, MIN_SPEED_KMH, MEU_MAX_DEFAULT,
-    PUBLISH_DEBOUNCE_SECONDS,
     REDIS_FIELD_TTL_SECONDS,
     REDIS_HOST, REDIS_PORT, REDIS_DB,
-    REDIS_QUEUE_KEY, REDIS_SPEEDS_KEY, REDIS_CHANNEL,
+    REDIS_QUEUE_KEY, REDIS_SPEEDS_KEY,
 )
 
-REDIS_PUBLISH_LOCK_KEY = "traffic:publish_lock"
 CYCLE_SENTINEL = "__CYCLE_END__"
 
 # Drain tối đa bao nhiêu camera mỗi vòng lặp
@@ -269,9 +267,6 @@ def process_batch(r: redis.Redis, cameras: list[dict]) -> tuple[int, int]:
             fail += 1
 
     pipe.execute()
-
-    if r.set(REDIS_PUBLISH_LOCK_KEY, "1", nx=True, ex=PUBLISH_DEBOUNCE_SECONDS):
-        r.publish(REDIS_CHANNEL, "update")
 
     return ok, fail
 
