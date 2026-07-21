@@ -146,6 +146,7 @@ def send_fcm_to_tokens(tokens: list[str], cam_id: str, class_name: str, conf: fl
                 body=f"Nghi vấn tai nạn tại {location} lúc {time_str}",
             ),
             data={
+                "type": "accident",
                 "cam_id": cam_id,
                 "class_name": class_name,
                 "confidence": f"{conf:.3f}",
