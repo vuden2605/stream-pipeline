@@ -4,7 +4,7 @@ Hệ thống thu thập ảnh camera giao thông TP.HCM → phân tích mật đ
 
 **Kiến trúc hiện hành: Redis queue (BLPOP) — không Kafka, không S3.** Bản Kafka + Flink + S3 cũ vẫn còn trong repo (xem mục "Kiến trúc cũ") nhưng không còn được dùng.
 
-Repo còn có **1 pipeline thứ hai, độc lập hoàn toàn**: phát hiện tai nạn giao thông + dashboard cho admin duyệt (xem mục "Phần 3 — Accident Detection Pipeline" bên dưới) — không chia sẻ code/Redis key nào với pipeline traffic ở Phần 1-2.
+Repo còn có **1 pipeline thứ hai, độc lập hoàn toàn**: phát hiện tai nạn giao thông + gửi thông báo đẩy (FCM) trực tiếp cho user (xem mục "Phần 3 — Accident Detection Pipeline" bên dưới) — không chia sẻ code/Redis key nào với pipeline traffic ở Phần 1-2.
 
 ---
 
@@ -312,7 +312,7 @@ Không đổi so với trước — import biến không tồn tại (`TOPIC_COU
 
 ## Phần 3 — Accident Detection Pipeline (tách biệt hoàn toàn khỏi Phần 1-2)
 
-**Mục đích:** phát hiện tai nạn giao thông qua camera → tạo sự kiện chờ **admin duyệt qua dashboard web** → KHÔNG tự động hành động gì (model còn train trên tập ảnh mẫu rất nhỏ, chưa đủ tin cậy để tự động hoá — xem "Giới hạn").
+**Mục đích:** phát hiện tai nạn giao thông qua camera → **gửi thẳng thông báo đẩy (FCM) cho toàn bộ user app** — không qua admin duyệt, không có dashboard (bản trước có dashboard/email cho admin duyệt, đã bỏ hẳn — xem "Lịch sử thiết kế" cuối mục này).
 
 **Nguyên tắc thiết kế bắt buộc:** không sửa bất kỳ file nào của pipeline traffic (`worker.py`, `queue_feeder.py`, `config.py`, `AI/src/core/detector.py`, `AI/src/core/metrics.py`), không dùng chung Redis key/queue với pipeline đó. Đánh đổi: `accident_worker.py` tự fetch snapshot camera theo chu kỳ riêng thay vì dùng chung `camera_queue` → **tải lên nguồn ảnh camera (`giaothong.hochiminhcity.gov.vn`) tăng gấp đôi** so với chỉ chạy Phần 1-2 (worker traffic và worker accident cùng fetch độc lập cùng 1 tập camera).
 
@@ -322,45 +322,31 @@ Không đổi so với trước — import biến không tồn tại (`TOPIC_COU
 config.CAMERAS (đọc CHUNG với Phần 1-2, chỉ IMPORT — không sửa config.py)
         │
         ▼
-┌────────────────────────────────────────────────────┐
-│ accident_worker.py — vòng lặp riêng, độc lập worker.py │
-│   for camera in CAMERAS (mỗi ACCIDENT_INTERVAL_SECONDS=10s):│
-│    1. GET snapshot trực tiếp (tự fetch, không qua camera_queue)│
-│    2. YOLO predict (AI/accident-detection/weights/best.pt)   │
-│       → box class: human_incident/human_normal/               │
-│         vehicle_incident/vehicle_normal                       │
-│    3. Lọc box *_incident đạt ACCIDENT_CONFIDENCE (0.4)         │
-│    4. Streak counter/camera (Redis) — cần đủ                  │
-│       ACCIDENT_STREAK_THRESHOLD=3 chu kỳ LIÊN TIẾP mới        │
-│       tính là nghi vấn thật (chống báo giả 1 frame nhiễu)     │
-│    5. Nếu đủ streak + qua cooldown (300s/camera, chống spam    │
-│       nhiều sự kiện trùng 1 vụ) → tạo event_id, ghi Redis,     │
-│       rồi gửi email báo admin (nếu đã cấu hình SMTP_*)         │
-└──────────────────────┬───────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│ accident_worker.py — vòng lặp riêng, độc lập worker.py          │
+│   for camera in CAMERAS (mỗi ACCIDENT_INTERVAL_SECONDS=10s):     │
+│    1. GET snapshot trực tiếp (tự fetch, không qua camera_queue)   │
+│    2. YOLO predict (AI/accident-detection/weights/best.pt)         │
+│       → box class: human_incident/human_normal/                    │
+│         vehicle_incident/vehicle_normal                             │
+│    3. Lọc box *_incident đạt ACCIDENT_CONFIDENCE (0.4)               │
+│    4. Streak counter/camera (Redis) — cần đủ                         │
+│       ACCIDENT_STREAK_THRESHOLD=3 chu kỳ LIÊN TIẾP mới quan trọng     │
+│       hơn trước vì KHÔNG còn ai duyệt lại — đây là tuyến phòng thủ    │
+│       false-positive DUY NHẤT trước khi user thật nhận thông báo      │
+│    5. Nếu đủ streak + qua cooldown (300s/camera, chống spam nhiều      │
+│       thông báo trùng 1 vụ) → gửi FCM ngay                             │
+└──────────────────────┬─────────────────────────────────────────────┘
                         ▼
-     Redis (key riêng, không đụng traffic:speeds/camera_queue):
-       accident:pending          ZSET  member=event_id score=ts
-       accident:image:<event_id> STRING JPEG bytes thô, TTL 48h
-       accident:meta:<event_id>  HASH  cam_id/ts/class_name/
-                                       confidence/status/decided_at
+        firebase_admin.messaging.send(topic=FCM_TOPIC)
+        title: "Cảnh báo tai nạn giao thông"
+        body:  "Nghi vấn tai nạn tại {description camera} lúc {giờ}"
                         │
-                        ├──────────────────────────────┐
-                        ▼                               ▼
-┌────────────────────────────────────────────────────┐  Email tới ADMIN_EMAILS
-│ accident_api.py (FastAPI, container/image RIÊNG —    │  (SMTP, optional — bỏ qua
-│ nhẹ, không cần torch/ultralytics)                     │  nếu chưa cấu hình SMTP_HOST)
-│   GET  /api/accidents?status=PENDING|APPROVED|         │  subject: "[Cảnh báo tai nạn]
-│        REJECTED|ALL                                   │  Camera <cam_id>", body có link
-│   GET  /api/accidents/{id}/image                       │  DASHBOARD_BASE_URL/?event=<id>
-│   POST /api/accidents/{id}/approve                      │            │
-│   POST /api/accidents/{id}/reject                        │            ▼
-│   GET  /  → phục vụ admin_dashboard/index.html (SPA)      │  Admin click link trong mail
-└──────────────────────┬───────────────────────────────────┘            │
-                        ▼                                                │
-            Admin mở http://localhost:8080 (trực tiếp hoặc từ ─────────┘
-            link email — dashboard tự nhận ?event=<id>, chuyển
-            sang tab "Tất cả", cuộn + khoanh nổi đúng card đó),
-            xem ảnh + bấm Duyệt/Từ chối → HSET accident:meta:<id> status=...
+                        ▼
+        Firebase Cloud Messaging → mọi thiết bị đã subscribe
+        topic FCM_TOPIC (client app tự gọi
+        messaging().subscribeToTopic(...) — NẰM NGOÀI REPO NÀY,
+        thuộc app st-client)
 ```
 
 ### 1. Các file liên quan
@@ -368,10 +354,7 @@ config.CAMERAS (đọc CHUNG với Phần 1-2, chỉ IMPORT — không sửa con
 | File | Vai trò |
 |---|---|
 | `AI/src/core/accident_detector.py` | Class `AccidentDetector` bọc YOLO (`AI/accident-detection/weights/best.pt`), `extractIncidentBoxes()` lọc box `*_incident` |
-| `accident_worker.py` | Vòng lặp fetch + detect + streak/cooldown + ghi sự kiện vào Redis |
-| `accident_api.py` | FastAPI — CRUD sự kiện qua Redis, phục vụ luôn `admin_dashboard/` |
-| `admin_dashboard/index.html` | SPA thuần HTML/JS (không framework), poll API mỗi 60s, có tab Chờ duyệt/Đã duyệt/Đã từ chối/Tất cả |
-| `Dockerfile.api` | Image riêng cho `accident_api.py` (chỉ `fastapi`, `uvicorn`, `redis` — không cài torch/ultralytics như `Dockerfile` chính) |
+| `accident_worker.py` | Vòng lặp fetch + detect + streak/cooldown + gửi FCM broadcast |
 | `AI/accident-detection/` | Model + ảnh mẫu, clone từ `github.com/caogiabao0909/accident-detection` (đã gỡ `.git` lồng bên trong để track trực tiếp trong repo này) |
 
 ### 2. Biến môi trường (tất cả đều optional, có default)
@@ -381,56 +364,55 @@ config.CAMERAS (đọc CHUNG với Phần 1-2, chỉ IMPORT — không sửa con
 | `ACCIDENT_MODEL_PATH` | `AI/accident-detection/weights/best.pt` | Đường dẫn model YOLO tai nạn |
 | `ACCIDENT_CONFIDENCE` | `0.4` | Ngưỡng confidence tối thiểu cho box `*_incident` |
 | `ACCIDENT_INTERVAL_SECONDS` | `10` | Chu kỳ quét lại toàn bộ camera |
-| `ACCIDENT_STREAK_THRESHOLD` | `3` | Số chu kỳ liên tiếp phải thấy incident trên cùng 1 camera trước khi tạo sự kiện |
-| `ACCIDENT_COOLDOWN_SECONDS` | `300` | Sau khi tạo 1 sự kiện cho 1 camera, tạm ngưng tạo thêm sự kiện mới cho camera đó |
-| `ACCIDENT_IMAGE_TTL_SECONDS` | `172800` (48h) | TTL của ảnh JPEG lưu trong Redis — hết hạn thì nút xem ảnh trả 404 dù meta còn |
-| `ACCIDENT_META_TTL_SECONDS` | `604800` (7 ngày) | TTL của metadata sự kiện (camera, class, confidence, status) |
-| `REDIS_ACCIDENT_PENDING_KEY` | `accident:pending` | Tên Redis ZSET index toàn bộ event_id (dùng chung cho mọi trạng thái, lọc theo `status` trong meta hash khi query) |
-| `SMTP_HOST` | *(rỗng)* | Host SMTP để gửi email báo admin. **Rỗng = tắt tính năng gửi email hoàn toàn** (chỉ log, không lỗi) |
-| `SMTP_PORT` | `587` | Port SMTP (STARTTLS) |
-| `SMTP_USER` / `SMTP_PASSWORD` | *(rỗng)* | Tài khoản đăng nhập SMTP (nếu server yêu cầu auth) |
-| `SMTP_FROM` | = `SMTP_USER` | Địa chỉ người gửi |
-| `ADMIN_EMAILS` | *(rỗng)* | Danh sách email nhận báo, phân cách bởi dấu phẩy. Rỗng = không gửi (dù đã có `SMTP_HOST`) |
-| `DASHBOARD_BASE_URL` | `http://localhost:8080` | Base URL chèn vào link trong email (`{DASHBOARD_BASE_URL}/?event=<id>`) — **cần đổi thành URL thật admin truy cập được** nếu deploy (xem Phần 4), không phải `localhost` |
+| `ACCIDENT_STREAK_THRESHOLD` | `3` | Số chu kỳ liên tiếp phải thấy incident trên cùng 1 camera trước khi gửi thông báo |
+| `ACCIDENT_COOLDOWN_SECONDS` | `300` | Sau khi gửi 1 thông báo cho 1 camera, tạm ngưng gửi thêm cho camera đó |
+| `FCM_TOPIC` | `accident_alerts` | Tên topic FCM broadcast — **app client (st-client) phải tự subscribe đúng tên này** (`messaging().subscribeToTopic(...)`), nếu không sẽ không ai nhận được dù `accident_worker.py` gửi thành công |
+| `FIREBASE_SERVICE_ACCOUNT_B64` | *(rỗng)* | Service account key Firebase (file `.json` gốc, đã `base64.b64encode(json.dumps(...))`) — **rỗng = tắt gửi FCM hoàn toàn** (chỉ log, không lỗi). **Không bao giờ lưu file `.json` thật trong repo** — xem `.gitignore` (`*firebase-adminsdk*.json`, `*serviceAccount*.json`) |
 
-`REDIS_HOST`/`REDIS_PORT`/`REDIS_DB` dùng đúng 3 biến đã có sẵn trong `.env.prod` (đọc lại, không định nghĩa biến mới) — `accident_worker.py` import từ `config.py`, `accident_api.py` tự đọc `os.getenv` (không import `config.py` để tránh nạp `cameras_with_zones_merged.json`/`default_traffic.json` không cần thiết vào image nhẹ).
+`REDIS_HOST`/`REDIS_PORT`/`REDIS_DB` dùng đúng 3 biến đã có sẵn trong `.env.prod` (đọc lại qua `config.py`, không định nghĩa biến mới) — Redis giờ chỉ dùng để lưu 2 key tạm `accident:streak:<cam_id>`/`accident:cooldown:<cam_id>` (chống báo giả/spam), **không còn lưu sự kiện/ảnh** vì không còn ai đọc lại (đã bỏ dashboard).
 
-**Email báo admin:** `accident_worker.py` tự gửi qua `smtplib` (thư viện chuẩn Python, không cần cài thêm package) ngay sau khi tạo sự kiện — không cần cấu hình gì thêm ngoài các biến `SMTP_*`/`ADMIN_EMAILS` ở trên trong `.env.prod`. Vì việc tạo sự kiện đã tự giới hạn qua streak+cooldown (xem sơ đồ), mỗi sự kiện chỉ gửi đúng 1 email — không cần chống spam thêm. Nếu gửi lỗi (sai SMTP, mất mạng...) chỉ log lỗi, không làm crash worker hay chặn việc ghi sự kiện vào Redis.
+**Cách lấy `FIREBASE_SERVICE_ACCOUNT_B64`:** Firebase Console → Project Settings → Service Accounts → Generate new private key (tải về 1 file `.json`) → encode:
+```powershell
+python -c "import json,base64; print(base64.b64encode(json.dumps(json.load(open('path/to/file.json'))).encode()).decode())"
+```
+Dán kết quả vào `.env.prod` làm giá trị `FIREBASE_SERVICE_ACCOUNT_B64` (1 dòng, không xuống dòng).
 
 ### 3. Cách chạy
 
 ```powershell
-docker compose up --build accident-worker accident-api
+docker compose up --build accident-worker
 ```
 
-Mở `http://localhost:8080` để xem dashboard. Chạy độc lập với `queue-feeder`/`worker` (Phần 1-2) — bật/tắt riêng không ảnh hưởng nhau.
+Chạy độc lập với `queue-feeder`/`worker` (Phần 1-2) — bật/tắt riêng không ảnh hưởng nhau. Không có cổng nào cần mở (không còn API/dashboard) — worker chỉ gọi ra ngoài (camera source, Redis, Firebase), không nhận request nào.
 
 ### 4. Giới hạn / lưu ý (đã biết, chưa xử lý)
 
 | # | Vấn đề | Ảnh hưởng |
 |---|---|---|
-| 1 | Model `AI/accident-detection/weights/best.pt` chỉ có ảnh mẫu để test (23 ảnh `image_of_accident/`), không rõ quy mô/chất lượng tập train thật | Dễ **false positive** trên cảnh đông người/xe dừng đèn đỏ bình thường (đã quan sát thực tế) — đây là lý do bắt buộc phải qua admin duyệt, không tự động hoá bất kỳ hành động nào từ kết quả detect |
-| 2 | Dashboard (`accident_api.py`) **không có auth** | Ai truy cập được cổng 8080 cũng duyệt/từ chối được — cần thêm ít nhất basic auth trước khi expose ra ngoài mạng nội bộ/internet |
-| 3 | Ảnh sự kiện lưu trong Redis (không phải file/S3), có TTL 48h | Sự kiện cũ hơn 48h vẫn hiện trong danh sách (meta TTL 7 ngày) nhưng bấm xem ảnh sẽ lỗi 404 |
-| 4 | `accident_worker.py` tự fetch camera riêng, không qua `queue_feeder.py` | Tải lên `giaothong.hochiminhcity.gov.vn` tăng gấp đôi so với chỉ chạy Phần 1-2 (xem "Nguyên tắc thiết kế" ở đầu Phần 3) |
-| 5 | Streak/cooldown/threshold hiện là giá trị mặc định đoán, chưa hiệu chỉnh bằng dữ liệu thực tế | Cần tinh chỉnh `ACCIDENT_STREAK_THRESHOLD`/`ACCIDENT_CONFIDENCE`/`ACCIDENT_COOLDOWN_SECONDS` sau khi chạy thử dài hạn với camera thật |
-| 6 | Gửi email **tắt mặc định** (`SMTP_HOST`/`ADMIN_EMAILS` rỗng) | Nếu không tự thêm biến `SMTP_*`/`ADMIN_EMAILS` vào `.env.prod`, sự kiện vẫn tạo/ghi Redis bình thường nhưng admin sẽ không nhận được email — phải tự vào dashboard kiểm tra |
-| 7 | `DASHBOARD_BASE_URL` mặc định `http://localhost:8080` | Nếu không đổi giá trị này khi deploy (Phần 4), link trong email sẽ trỏ về `localhost` của máy chạy `accident_worker.py` — vô dụng với admin ở máy khác |
+| 1 | Model `AI/accident-detection/weights/best.pt` chỉ có ảnh mẫu để test (23 ảnh `image_of_accident/`), không rõ quy mô/chất lượng tập train thật | Dễ **false positive** trên cảnh đông người/xe dừng đèn đỏ bình thường (đã quan sát thực tế — có camera liên tục báo `vehicle_incident` dù ảnh trông như xe cộ bình thường). **Không còn admin duyệt lại** như bản trước → user thật có thể nhận cảnh báo sai trực tiếp. Đây là đánh đổi được chọn có chủ đích (ưu tiên đơn giản), streak+cooldown là tuyến phòng thủ duy nhất còn lại |
+| 2 | `accident_worker.py` tự fetch camera riêng, không qua `queue_feeder.py` | Tải lên `giaothong.hochiminhcity.gov.vn` tăng gấp đôi so với chỉ chạy Phần 1-2 (xem "Nguyên tắc thiết kế" ở đầu Phần 3) |
+| 3 | Streak/cooldown/threshold hiện là giá trị mặc định đoán, chưa hiệu chỉnh bằng dữ liệu thực tế | Cần tinh chỉnh `ACCIDENT_STREAK_THRESHOLD`/`ACCIDENT_CONFIDENCE`/`ACCIDENT_COOLDOWN_SECONDS` sau khi chạy thử dài hạn với camera thật — quan trọng hơn trước vì ảnh hưởng trực tiếp tới user, không chỉ tới admin |
+| 4 | Gửi FCM **tắt mặc định** (`FIREBASE_SERVICE_ACCOUNT_B64` rỗng) | Nếu không cấu hình, worker vẫn chạy detect bình thường (log ra streak) nhưng không gửi được thông báo nào |
+| 5 | Broadcast toàn bộ user qua 1 topic, không lọc theo vị trí | User ở xa camera xảy ra sự việc vẫn nhận được thông báo — nếu cần lọc theo khu vực/khoảng cách, phải đổi sang gửi theo từng token thiết bị (cần biết vị trí user, lưu ở đâu đó ngoài phạm vi repo này) thay vì topic |
+| 6 | App client phải tự subscribe đúng `FCM_TOPIC` | Việc này nằm ở `st-client` (repo khác), không thuộc phạm vi `stream-pipeline` — nếu app chưa gọi `subscribeToTopic`, gửi thành công nhưng không ai nhận được |
+
+### Lịch sử thiết kế
+
+Bản đầu của Accident Detection Pipeline dùng kiến trúc **admin duyệt qua dashboard web** (`accident_api.py` FastAPI + `admin_dashboard/` SPA, deploy thử trên Render, thông báo qua email có link duyệt) — đã **bỏ hẳn**, thay bằng gửi FCM trực tiếp cho user như mô tả ở trên. Lý do đổi: đơn giản hoá luồng, không cần thêm hạ tầng/không cần con người ở giữa. Đánh đổi chính là mất bước kiểm soát false-positive bằng con người (xem Giới hạn #1).
 
 ---
 
 ## Phần 4 — Chạy toàn bộ stream (traffic + accident) qua Docker Compose
 
-`docker-compose.yml` ở root repo có **4 service độc lập** (2 image khác nhau — `smart-transport-ai` cho 3 service AI nặng, `smart-transport-accident-api` nhẹ riêng cho dashboard):
+`docker-compose.yml` ở root repo có **3 service**, dùng chung 1 image `smart-transport-ai`:
 
-| Service | Image | Việc làm |
-|---|---|---|
-| `queue-feeder` | `smart-transport-ai` | Đẩy `cam_id` vào `camera_queue` mỗi 10s (Phần 1-2) |
-| `worker` | `smart-transport-ai` | Nhận diện mật độ giao thông, ghi `traffic:speeds` (Phần 1-2) |
-| `accident-worker` | `smart-transport-ai` | Nhận diện tai nạn, ghi `accident:*` (Phần 3) |
-| `accident-api` | `smart-transport-accident-api` | API + dashboard duyệt tai nạn, cổng `8080` (Phần 3) |
+| Service | Việc làm |
+|---|---|
+| `queue-feeder` | Đẩy `cam_id` vào `camera_queue` mỗi 10s (Phần 1-2) |
+| `worker` | Nhận diện mật độ giao thông, ghi `traffic:speeds` (Phần 1-2) |
+| `accident-worker` | Nhận diện tai nạn, gửi FCM broadcast (Phần 3) |
 
-Cả 4 service đều đọc `.env.prod` (cùng `REDIS_HOST`/`REDIS_PORT`/`REDIS_DB`) — không cần chạy `smart-transport` cùng máy, khác với cách chạy thủ công ở Phần 1 (vốn giả định Redis local qua `smart-transport`); ở đây Redis là instance đã cấu hình sẵn trong `.env.prod`.
+Cả 3 service đều đọc `.env.prod` (cùng `REDIS_HOST`/`REDIS_PORT`/`REDIS_DB`) — không cần chạy `smart-transport` cùng máy, khác với cách chạy thủ công ở Phần 1 (vốn giả định Redis local qua `smart-transport`); ở đây Redis là instance đã cấu hình sẵn trong `.env.prod`.
 
 ### Chạy tất cả cùng lúc
 
@@ -439,17 +421,14 @@ docker compose up --build -d
 ```
 
 - `-d` chạy nền; bỏ đi nếu muốn xem log trực tiếp trên terminal.
-- Xem log riêng từng service: `docker compose logs -f worker` (hoặc `queue-feeder`/`accident-worker`/`accident-api`).
+- Xem log riêng từng service: `docker compose logs -f worker` (hoặc `queue-feeder`/`accident-worker`).
 - Xem trạng thái: `docker compose ps`.
-- Dashboard duyệt tai nạn: `http://localhost:8080`.
 
 ### Chỉ chạy 1 phần
 
-Compose chỉ build/khởi động đúng service được liệt kê, không đụng service còn lại:
-
 ```powershell
-docker compose up --build queue-feeder worker        # chỉ traffic pipeline
-docker compose up --build accident-worker accident-api  # chỉ accident pipeline (Phần 3)
+docker compose up --build queue-feeder worker   # chỉ traffic pipeline
+docker compose up --build accident-worker       # chỉ accident pipeline (Phần 3)
 ```
 
 ### Dừng lại

@@ -19,24 +19,12 @@ services:
 
   # Pipeline tách biệt hoàn toàn khỏi queue-feeder/worker ở trên — tự fetch
   # camera theo chu kỳ riêng, không dùng chung camera_queue hay Redis key nào
-  # của traffic pipeline (xem accident_worker.py).
+  # của traffic pipeline (xem accident_worker.py). Phát hiện đủ ngưỡng ->
+  # gửi thẳng FCM broadcast, không còn dashboard/API duyệt riêng.
   accident-worker:
     build: .
     image: smart-transport-ai:latest
     container_name: ai-accident-worker
     command: bash -c "python -u accident_worker.py 2>&1 | grep -v NNPACK"
-    env_file: .env.prod
-    restart: unless-stopped
-
-  # API + trang admin duyệt sự kiện tai nạn — image riêng, nhẹ (không cần
-  # torch/ultralytics), chỉ đọc/ghi Redis key accident:* do accident-worker tạo.
-  accident-api:
-    build:
-      context: .
-      dockerfile: Dockerfile.api
-    image: smart-transport-accident-api:latest
-    container_name: ai-accident-api
-    ports:
-      - "8080:8000"
     env_file: .env.prod
     restart: unless-stopped
