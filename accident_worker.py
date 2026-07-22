@@ -4,6 +4,7 @@ import json
 import time
 import base64
 import logging
+import warnings
 import datetime
 from zoneinfo import ZoneInfo
 from io import BytesIO
@@ -16,6 +17,11 @@ import urllib3
 import firebase_admin
 from firebase_admin import credentials, messaging
 from PIL import Image
+
+# Message.fid (thay thế được khuyến nghị cho Message.token) đã test thật và
+# bị lỗi UnregisteredError dù token còn sống — cố ý tiếp tục dùng token=,
+# tắt warning deprecated riêng dòng này cho log sạch (xem send_fcm_to_tokens).
+warnings.filterwarnings("ignore", message="Message.token is deprecated", category=DeprecationWarning)
 
 if sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -61,6 +67,11 @@ ACCIDENT_STREAK_KEY_PREFIX = "accident:streak:"
 ACCIDENT_COOLDOWN_KEY_PREFIX = "accident:cooldown:"
 
 COOKIE_REFRESH_INTERVAL_SECONDS = 3600
+
+# Lưu lại ảnh mỗi khi có nghi vấn (kể cả chưa đủ streak) để test model khác
+# offline — không liên quan tới luồng gửi FCM, chỉ để thu thập dữ liệu.
+TEST_SNAPSHOT_DIR = Path(os.getenv("TEST_SNAPSHOT_DIR", str(Path(__file__).parent / "test")))
+TEST_SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
 
 # ── Firebase Cloud Messaging — gửi theo TỪNG token thiết bị (không còn
 # broadcast topic) — chỉ user có edge_id của camera này trong route hay đi
@@ -152,6 +163,11 @@ def send_fcm_to_tokens(tokens: list[str], cam_id: str, class_name: str, conf: fl
                 "confidence": f"{conf:.3f}",
                 "ts": str(ts),
             },
+            # firebase-admin 7.5 khuyến nghị fid= thay cho token= (chỉ cảnh báo
+            # deprecated), nhưng đã TEST THẬT và fid= bị lỗi UnregisteredError
+            # dù đúng token còn sống (Firebase Console gửi tới token đó thành
+            # công) — token= vẫn là cách DUY NHẤT gửi được, giữ nguyên dù có
+            # warning, không đổi lại theo tài liệu nữa.
             token=token,
         )
         for token in tokens
@@ -163,8 +179,23 @@ def send_fcm_to_tokens(tokens: list[str], cam_id: str, class_name: str, conf: fl
             "[%s] Đã gửi FCM tới %d user (%d thành công, %d lỗi): %s",
             cam_id, len(tokens), response.success_count, response.failure_count, location,
         )
+        # Log rõ lý do từng lần lỗi (token hết hạn/app gỡ cài đặt/sai project...)
+        # thay vì chỉ biết mỗi số lượng — response.responses cùng thứ tự tokens.
+        for token, single in zip(tokens, response.responses):
+            if not single.success:
+                log.error("[%s] Gửi FCM thất bại cho token %s...: %r",
+                          cam_id, token[:12], single.exception)
     except Exception as e:
         log.error("[%s] Gửi FCM thất bại: %r", cam_id, e)
+
+
+def save_test_snapshot(image_data: bytes, cam_id: str, class_name: str, conf: float) -> None:
+    ts = int(time.time())
+    filename = f"{cam_id}_{ts}_{class_name}_{conf:.2f}.jpg"
+    try:
+        (TEST_SNAPSHOT_DIR / filename).write_bytes(image_data)
+    except Exception as e:
+        log.error("[%s] Lưu snapshot test thất bại: %r", cam_id, e)
 
 
 def is_valid_jpeg(data: bytes) -> bool:
@@ -233,6 +264,7 @@ def process_camera(session: requests.Session, r: redis.Redis, camera: dict) -> N
         "[%s] nghi vấn: %s conf=%.2f streak=%d/%d",
         cam_id, best["className"], best["conf"], streak, ACCIDENT_STREAK_THRESHOLD,
     )
+    save_test_snapshot(image_data, cam_id, best["className"], best["conf"])
 
     if streak < ACCIDENT_STREAK_THRESHOLD:
         return

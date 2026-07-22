@@ -6,3 +6,7 @@
 *firebase-adminsdk*.json
 *serviceAccount*.json
 firebase-service-account*.json
+
+# Snapshot camera lưu để test model khác offline — dữ liệu làm việc, không
+# commit vào repo (xem TEST_SNAPSHOT_DIR trong accident_worker.py).
+/test/

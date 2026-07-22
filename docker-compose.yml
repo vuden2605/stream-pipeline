@@ -28,3 +28,7 @@ services:
     command: bash -c "python -u accident_worker.py 2>&1 | grep -v NNPACK"
     env_file: .env.prod
     restart: unless-stopped
+    volumes:
+      # Ảnh nghi vấn (kể cả chưa đủ streak) lưu ra máy host để test model
+      # khác offline — không mất khi container restart/recreate.
+      - ./test:/app/test
