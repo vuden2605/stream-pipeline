@@ -1,0 +1,12 @@
+.env
+.env.*
+
+# Firebase service account keys — không bao giờ commit, phòng khi ai đó lỡ
+# tải file .json thật vào thư mục repo thay vì dùng biến môi trường.
+*firebase-adminsdk*.json
+*serviceAccount*.json
+firebase-service-account*.json
+
+# Snapshot camera lưu để test model khác offline — dữ liệu làm việc, không
+# commit vào repo (xem TEST_SNAPSHOT_DIR trong accident_worker.py).
+/test/
