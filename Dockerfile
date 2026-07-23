@@ -21,7 +21,6 @@ RUN pip install --no-cache-dir \
     redis \
     python-dotenv \
     urllib3 \
-    aiohttp \
-    firebase-admin
+    aiohttp
 
 COPY . .

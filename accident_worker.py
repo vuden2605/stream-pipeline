@@ -2,11 +2,7 @@ import os
 import sys
 import json
 import time
-import base64
 import logging
-import warnings
-import datetime
-from zoneinfo import ZoneInfo
 from io import BytesIO
 from pathlib import Path
 
@@ -14,14 +10,7 @@ import numpy as np
 import redis
 import requests
 import urllib3
-import firebase_admin
-from firebase_admin import credentials, messaging
 from PIL import Image
-
-# Message.fid (thay thế được khuyến nghị cho Message.token) đã test thật và
-# bị lỗi UnregisteredError dù token còn sống — cố ý tiếp tục dùng token=,
-# tắt warning deprecated riêng dòng này cho log sạch (xem send_fcm_to_tokens).
-warnings.filterwarnings("ignore", message="Message.token is deprecated", category=DeprecationWarning)
 
 if sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -60,11 +49,16 @@ ACCIDENT_STREAK_THRESHOLD = int(os.getenv("ACCIDENT_STREAK_THRESHOLD", "3"))
 # đang trong khung hình.
 ACCIDENT_COOLDOWN_SECONDS = int(os.getenv("ACCIDENT_COOLDOWN_SECONDS", "300"))
 
-# ── Redis keys riêng cho accident pipeline (chỉ dùng để chống báo giả/spam,
-# không lưu sự kiện/ảnh nữa — không còn dashboard nào đọc lại) — không trùng
-# key nào của worker.py/queue_feeder.py (camera_queue, traffic:speeds).
+# ── Redis keys riêng cho accident pipeline — không trùng key nào của
+# worker.py/queue_feeder.py (camera_queue, traffic:speeds).
 ACCIDENT_STREAK_KEY_PREFIX = "accident:streak:"
 ACCIDENT_COOLDOWN_KEY_PREFIX = "accident:cooldown:"
+
+# List Redis mà BE (smart-transport) poll để lấy user theo edge + gửi FCM —
+# worker này CHỈ detect + đẩy message, không tự gọi BE API hay Firebase nữa
+# (xem AccidentAlertScheduler.java bên BE). Cùng 1 Redis instance với BE
+# (REDIS_HOST ở .env.prod trỏ thẳng vào Redis đã deploy cùng BE).
+ACCIDENT_ALERT_QUEUE_KEY = "accident:alerts"
 
 COOKIE_REFRESH_INTERVAL_SECONDS = 3600
 
@@ -72,38 +66,6 @@ COOKIE_REFRESH_INTERVAL_SECONDS = 3600
 # offline — không liên quan tới luồng gửi FCM, chỉ để thu thập dữ liệu.
 TEST_SNAPSHOT_DIR = Path(os.getenv("TEST_SNAPSHOT_DIR", str(Path(__file__).parent / "test")))
 TEST_SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
-
-# ── Firebase Cloud Messaging — gửi theo TỪNG token thiết bị (không còn
-# broadcast topic) — chỉ user có edge_id của camera này trong route hay đi
-# mới nhận được. FIREBASE_SERVICE_ACCOUNT_B64 là service account key gốc
-# (dạng JSON) đã base64-encode — không lưu file .json thật trong repo.
-_FIREBASE_CREDS_B64 = os.getenv("FIREBASE_SERVICE_ACCOUNT_B64", "")
-
-# ── API nội bộ bên BE (smart-transport) trả về danh sách fcm_token của user
-# có edge_id nằm trong route hay đi — xem BE:
-# controller/FavoriteRouteController.java#getFcmTokensByEdges.
-BE_USERS_BY_EDGES_URL = os.getenv(
-    "BE_USERS_BY_EDGES_URL",
-    "http://167.172.80.252:8080/api/v1/favorite-routes/internal/users-by-edges",
-)
-INTERNAL_API_KEY = os.getenv("INTERNAL_API_KEY", "")
-
-# Token của tài khoản admin — nhận MỌI cảnh báo thật trên toàn bản đồ, không
-# lọc theo edge (khác với user thường, chỉ nhận khi route hay đi trùng đúng
-# chỗ tai nạn). Nhiều token phân cách bởi dấu phẩy. Không cần đổi gì bên BE.
-ADMIN_FCM_TOKENS = [t.strip() for t in os.getenv("ADMIN_FCM_TOKENS", "").split(",") if t.strip()]
-
-_firebase_ready = False
-if _FIREBASE_CREDS_B64:
-    try:
-        _service_account_info = json.loads(base64.b64decode(_FIREBASE_CREDS_B64))
-        firebase_admin.initialize_app(credentials.Certificate(_service_account_info))
-        _firebase_ready = True
-        log.info("Firebase Admin SDK đã khởi tạo — project_id=%s", _service_account_info.get("project_id"))
-    except Exception as e:
-        log.error("Khởi tạo Firebase Admin SDK thất bại: %r", e)
-else:
-    log.warning("Chưa cấu hình FIREBASE_SERVICE_ACCOUNT_B64 — sẽ không gửi được FCM")
 
 # ── cam_id -> tên địa điểm dễ đọc (VD "Võ Trần Chí - Kênh 10 (2)"), đọc
 # thẳng từ cameras_with_zones_merged.json (giống config.py, nhưng đọc độc
@@ -116,77 +78,20 @@ detector = AccidentDetector(ACCIDENT_MODEL_PATH)
 log.info("Accident model loaded: %s", ACCIDENT_MODEL_PATH)
 
 
-def get_fcm_tokens_for_edges(edge_ids: list[int]) -> list[str]:
-    if not INTERNAL_API_KEY:
-        log.warning("Chưa cấu hình INTERNAL_API_KEY — không gọi được BE để lấy user theo edge")
-        return []
-
+def push_accident_alert(r: redis.Redis, cam_id: str, edge_ids: list[int], class_name: str, conf: float, ts: int) -> None:
+    payload = {
+        "camId": cam_id,
+        "edgeIds": edge_ids,
+        "className": class_name,
+        "confidence": round(conf, 3),
+        "ts": ts,
+        "location": _CAMERA_DESCRIPTIONS.get(cam_id, cam_id),
+    }
     try:
-        resp = requests.post(
-            BE_USERS_BY_EDGES_URL,
-            json={"edgeIds": edge_ids},
-            headers={"X-Internal-Api-Key": INTERNAL_API_KEY},
-            timeout=10,
-        )
-        resp.raise_for_status()
-        return resp.json().get("data") or []
+        r.rpush(ACCIDENT_ALERT_QUEUE_KEY, json.dumps(payload, ensure_ascii=False))
+        log.warning("[%s] Đã đẩy cảnh báo tai nạn vào Redis queue: %s", cam_id, payload)
     except Exception as e:
-        log.error("Gọi BE lấy user theo edge_ids=%s thất bại: %r", edge_ids, e)
-        return []
-
-
-def send_fcm_to_tokens(tokens: list[str], cam_id: str, class_name: str, conf: float, ts: int) -> None:
-    if not _firebase_ready:
-        log.info("[%s] Bỏ qua gửi FCM (Firebase chưa sẵn sàng)", cam_id)
-        return
-    if not tokens:
-        log.info("[%s] Không có user nào đang đi qua đoạn đường này — không gửi FCM", cam_id)
-        return
-
-    location = _CAMERA_DESCRIPTIONS.get(cam_id, cam_id)
-    # time.localtime() dùng giờ hệ thống — container Docker mặc định chạy UTC
-    # (khác giờ Windows host), nên PHẢI ép rõ timezone VN ở đây, không được
-    # dựa vào "giờ local" của máy đang chạy worker (đã gặp bug lệch 7h thật).
-    vn_time = datetime.datetime.fromtimestamp(ts, tz=ZoneInfo("Asia/Ho_Chi_Minh"))
-    time_str = vn_time.strftime("%H:%M %d/%m/%Y")
-
-    messages = [
-        messaging.Message(
-            notification=messaging.Notification(
-                title="Cảnh báo tai nạn giao thông",
-                body=f"Nghi vấn tai nạn tại {location} lúc {time_str}",
-            ),
-            data={
-                "type": "accident",
-                "cam_id": cam_id,
-                "class_name": class_name,
-                "confidence": f"{conf:.3f}",
-                "ts": str(ts),
-            },
-            # firebase-admin 7.5 khuyến nghị fid= thay cho token= (chỉ cảnh báo
-            # deprecated), nhưng đã TEST THẬT và fid= bị lỗi UnregisteredError
-            # dù đúng token còn sống (Firebase Console gửi tới token đó thành
-            # công) — token= vẫn là cách DUY NHẤT gửi được, giữ nguyên dù có
-            # warning, không đổi lại theo tài liệu nữa.
-            token=token,
-        )
-        for token in tokens
-    ]
-
-    try:
-        response = messaging.send_each(messages)
-        log.warning(
-            "[%s] Đã gửi FCM tới %d user (%d thành công, %d lỗi): %s",
-            cam_id, len(tokens), response.success_count, response.failure_count, location,
-        )
-        # Log rõ lý do từng lần lỗi (token hết hạn/app gỡ cài đặt/sai project...)
-        # thay vì chỉ biết mỗi số lượng — response.responses cùng thứ tự tokens.
-        for token, single in zip(tokens, response.responses):
-            if not single.success:
-                log.error("[%s] Gửi FCM thất bại cho token %s...: %r",
-                          cam_id, token[:12], single.exception)
-    except Exception as e:
-        log.error("[%s] Gửi FCM thất bại: %r", cam_id, e)
+        log.error("[%s] Đẩy cảnh báo vào Redis thất bại: %r", cam_id, e)
 
 
 def save_test_snapshot(image_data: bytes, cam_id: str, class_name: str, conf: float) -> None:
@@ -275,11 +180,7 @@ def process_camera(session: requests.Session, r: redis.Redis, camera: dict) -> N
     if not r.set(cooldown_key, "1", nx=True, ex=ACCIDENT_COOLDOWN_SECONDS):
         return
 
-    tokens = get_fcm_tokens_for_edges(edge_ids)
-    # Admin nhận mọi cảnh báo thật, không cần route trùng edge — gộp thêm
-    # vào danh sách, khử trùng phòng khi admin cũng match qua edge thường.
-    all_tokens = list(dict.fromkeys(tokens + ADMIN_FCM_TOKENS))
-    send_fcm_to_tokens(all_tokens, cam_id, best["className"], best["conf"], int(time.time()))
+    push_accident_alert(r, cam_id, edge_ids, best["className"], best["conf"], int(time.time()))
 
 
 def main():
