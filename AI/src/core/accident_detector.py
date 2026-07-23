@@ -25,9 +25,16 @@ class AccidentDetector:
         confs = boxes.conf.cpu().numpy()
         clsIds = boxes.cls.cpu().numpy().astype(int)
 
+        xyxy = boxes.xyxy.cpu().numpy()
+
         incidents = []
         for i in range(len(boxes)):
             className = names.get(int(clsIds[i]), str(clsIds[i]))
             if className in incidentClasses:
-                incidents.append({"className": className, "conf": float(confs[i])})
+                x1, y1, x2, y2 = xyxy[i]
+                incidents.append({
+                    "className": className,
+                    "conf": float(confs[i]),
+                    "bbox": [float(x1), float(y1), float(x2), float(y2)],
+                })
         return incidents

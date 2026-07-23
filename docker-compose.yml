@@ -32,3 +32,16 @@ services:
       # Ảnh nghi vấn (kể cả chưa đủ streak) lưu ra máy host để test model
       # khác offline — không mất khi container restart/recreate.
       - ./test:/app/test
+
+  # REST API on-demand (POST /detect) dùng chung model best.pt với
+  # accident-worker nhưng chạy trong process/container riêng — không đọc
+  # camera_queue, không gửi FCM, không chia sẻ state với accident-worker.
+  accident-api:
+    build: .
+    image: smart-transport-ai:latest
+    container_name: ai-accident-api
+    command: bash -c "python -u -m uvicorn accident_api:app --host 0.0.0.0 --port 8001 2>&1 | grep -v NNPACK"
+    env_file: .env.prod
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
