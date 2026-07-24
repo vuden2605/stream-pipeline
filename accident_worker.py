@@ -36,7 +36,7 @@ ACCIDENT_MODEL_PATH = os.getenv(
     "ACCIDENT_MODEL_PATH",
     str(Path(__file__).parent / "AI" / "accident-detection" / "weights" / "best.pt"),
 )
-ACCIDENT_CONFIDENCE = float(os.getenv("ACCIDENT_CONFIDENCE", "0.4"))
+ACCIDENT_CONFIDENCE = float(os.getenv("ACCIDENT_CONFIDENCE", "0.8"))
 ACCIDENT_INTERVAL_SECONDS = int(os.getenv("ACCIDENT_INTERVAL_SECONDS", "10"))
 
 # Số chu kỳ liên tiếp phải thấy incident trên cùng 1 camera trước khi gửi
