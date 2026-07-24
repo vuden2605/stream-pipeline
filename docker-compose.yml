@@ -41,7 +41,9 @@ services:
     image: smart-transport-ai:latest
     container_name: ai-accident-api
     command: bash -c "python -u -m uvicorn accident_api:app --host 0.0.0.0 --port 8001 2>&1 | grep -v NNPACK"
-    env_file: .env.prod
+    # Không cần env_file: .env.prod — accident_api.py chỉ đọc ACCIDENT_MODEL_PATH/
+    # ACCIDENT_CONFIDENCE/MAX_UPLOAD_SIZE_BYTES, đều có default sẵn trong code,
+    # không đụng Redis/Firebase/internal API key như 3 service traffic kia.
     restart: unless-stopped
     ports:
       - "8001:8001"
