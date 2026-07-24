@@ -22,7 +22,6 @@ RUN pip install --no-cache-dir \
     python-dotenv \
     urllib3 \
     aiohttp \
-    firebase-admin \
     fastapi \
     "uvicorn[standard]" \
     python-multipart \
